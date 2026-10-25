@@ -1,0 +1,5 @@
+{
+  "comment": "Where the first run downloads dictionaries and language models. The asset is built by tools/make_data_zip.py and must be uploaded to the data-v1 release by hand; until it exists, setup falls back to the original sources.",
+  "data_version": "v1",
+  "data_url": "https://github.com/dmytro1253/arg-decoder/releases/download/data-v1/arg-decoder-data-v1.zip"
+}

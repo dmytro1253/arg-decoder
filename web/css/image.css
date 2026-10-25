@@ -1,0 +1,20 @@
+/* Ноды раздела «Изображения»: просмотрщик, статус, дамп. Использует переменные темы из style.css. */
+.imgv { display: flex; flex-direction: column; gap: 4px; }
+.imgv-bar { display: flex; flex-wrap: wrap; gap: 4px; }
+.imgv-bar .btn.active { background: var(--accent-dim); border-color: var(--accent); color: #fff; }
+.imgv-stage {
+  position: relative; width: 100%; min-height: 120px; overflow: hidden; border: 1px solid var(--border); border-radius: 6px;
+  background: repeating-conic-gradient(#1a221e 0% 25%, #121815 0% 50%) 0 0 / 14px 14px; cursor: grab; touch-action: none;
+}
+.imgv-stage:active { cursor: grabbing; }
+.imgv-stage.imgv-selecting { cursor: crosshair; }
+.imgv-canvas { display: block; width: 100%; height: 100%; image-rendering: pixelated; }
+.imgv-info { white-space: pre-line; font-family: var(--font-mono); font-size: 11px; min-height: 1.4em; }
+.imgv-hist { width: 100%; height: 48px; border: 1px solid var(--border); border-radius: 4px; background: #0d1210; }
+.img-status { white-space: pre-line; }
+.img-err { color: var(--danger); }
+.img-dump {
+  margin: 0; max-height: 150px; overflow: auto; padding: 4px 6px; border: 1px solid var(--border); border-radius: 4px;
+  background: #0d1210; font: 11px/1.35 var(--font-mono); white-space: pre; user-select: text;
+}
+.img-dump:empty { display: none; }

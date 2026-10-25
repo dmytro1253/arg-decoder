@@ -1,0 +1,27 @@
+* text=auto
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+*.command text eol=lf
+*.sh text eol=lf
+*.js text eol=lf
+*.py text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.png binary
+*.jpg binary
+*.wav binary
+*.wasm binary
+*.traineddata binary
+*.zip binary
+web/js/lang-data.js linguist-generated=true -diff
+web/vendor/** linguist-vendored
+*.rar binary
+*.7z binary
+*.gz binary
+*.npz binary
+*.mp3 binary
+*.bmp binary
+*.onnx binary
+*.rgba binary

@@ -1,0 +1,12 @@
+/* Ноды «Звук и видео»: холсты спектрограммы, панели кнопок, видео. */
+.media-stack { position: relative; width: 100%; line-height: 0; }
+.media-canvas { width: 100%; height: auto; display: block; border-radius: 6px; background: var(--panel-2); }
+.media-overlay { position: absolute; left: 0; top: 0; background: transparent; cursor: crosshair; touch-action: none; }
+.media-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+.media-bar .btn { min-width: 28px; }
+.media-check { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; color: var(--muted); }
+.media-check input { width: auto; accent-color: var(--accent); }
+.media-hover { min-height: 14px; font-family: var(--font-mono); }
+.media-readout { font-family: var(--font-mono); font-size: 12px; color: var(--accent); }
+.media-video { max-height: 260px; width: 100%; }
+.media-signal { display: flex; flex-direction: column; gap: 4px; white-space: pre-wrap; }

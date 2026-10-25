@@ -1,0 +1,69 @@
+/* ---------- вкладка «Досье» и меню примеров ---------- */
+.dos-picker { display: flex; flex-direction: column; gap: 4px; }
+.dos-select { width: 100%; }
+.dos-toolbar { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 2px; }
+.dos-toolbar .danger { color: var(--danger); border-color: var(--danger); }
+.dos-sticky { position: sticky; bottom: -12px; padding: 8px 0; background: var(--panel); border-top: 1px solid var(--border); z-index: 2; }
+
+.dos-view, .dos-edit { display: flex; flex-direction: column; gap: 6px; }
+.dos-head { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+.dos-title { margin: 0; font-size: 17px; line-height: 1.25; }
+.dos-meta { display: flex; flex-direction: column; gap: 2px; font-size: 12px; }
+.dos-meta-row { display: grid; grid-template-columns: 84px 1fr; gap: 8px; }
+.dos-meta-label { color: var(--muted); }
+.dos-summary { margin: 4px 0; font-size: 12.5px; line-height: 1.55; }
+.dos-section { display: flex; flex-direction: column; gap: 5px; }
+.dos-section h3 { margin-bottom: 0; }
+
+.dos-badge { font-size: 10.5px; padding: 1px 7px; border-radius: 10px; border: 1px solid var(--border-strong); color: var(--muted); white-space: nowrap; }
+.dos-badge.dos-builtin { color: var(--accent); border-color: var(--accent-dim); }
+.dos-badge.dos-custom { color: var(--c-key); border-color: var(--c-key); }
+.dos-badge.rel-very-high, .dos-badge.rel-high { color: var(--accent); border-color: var(--accent-dim); }
+.dos-badge.rel-mid-high, .dos-badge.rel-mid { color: var(--c-join); border-color: var(--c-join); }
+.dos-badge.rel-low-mid, .dos-badge.rel-low { color: var(--warn); border-color: var(--warn); }
+.dos-badge.st-verified { color: var(--accent); border-color: var(--accent-dim); }
+.dos-badge.st-discrepancy { color: var(--warn); border-color: var(--warn); }
+.dos-badge.st-unresolved { color: var(--danger); border-color: var(--danger); }
+.dos-badge.st-noinput, .dos-badge.st-hypothesis { color: var(--c-text); border-color: var(--border-strong); }
+
+.dos-source { padding: 6px 8px; background: var(--panel-2); border-radius: 6px; display: flex; flex-direction: column; gap: 2px; }
+.dos-source-head { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.dos-source-head a { font-size: 12.5px; overflow-wrap: anywhere; }
+
+.dos-stage { padding: 7px 9px; background: var(--panel-2); border-radius: 6px; border-left: 3px solid var(--border-strong); display: flex; flex-direction: column; gap: 4px; }
+.dos-stage.st-verified { border-left-color: var(--accent-dim); }
+.dos-stage.st-discrepancy { border-left-color: var(--warn); }
+.dos-stage.st-unresolved { border-left-color: var(--danger); }
+.dos-stage-head { display: flex; align-items: center; gap: 8px; }
+.dos-stage-no { width: 18px; height: 18px; border-radius: 50%; background: var(--node-head); color: var(--muted); font-size: 11px; display: grid; place-items: center; }
+.dos-flow { display: flex; flex-direction: column; gap: 1px; font-size: 12px; }
+.dos-flow > div { overflow-wrap: anywhere; }
+.dos-flow-arrow { color: var(--accent); line-height: 1; padding-left: 4px; transform: rotate(90deg); transform-origin: 8px 50%; height: 12px; }
+.dos-flow-tech { color: var(--c-shift); }
+.dos-stage-note { font-size: 11.5px; color: var(--muted); }
+.st-discrepancy .dos-stage-note { color: var(--warn); }
+.mono-ish { font-family: var(--font-mono); font-size: 11.5px; }
+
+.dos-link-row { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; width: 100%; text-align: left; padding: 6px 8px; background: var(--panel-2); color: var(--text); border: 1px solid var(--border); border-radius: 6px; cursor: pointer; font: inherit; }
+.dos-link-row:hover { border-color: var(--accent-dim); background: var(--node-head); }
+
+/* ---------- редактор ---------- */
+.dos-form { display: flex; flex-direction: column; gap: 8px; }
+.dos-field { display: flex; flex-direction: column; gap: 3px; }
+.dos-fieldset { border: 1px solid var(--border); border-radius: 6px; padding: 6px 8px 8px; margin: 0; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.dos-fieldset legend { font-size: 11px; color: var(--muted); padding: 0 4px; }
+.dos-rows { display: flex; flex-direction: column; gap: 6px; }
+.dos-row { display: flex; flex-direction: column; gap: 3px; padding: 6px; background: var(--panel-2); border-radius: 6px; position: relative; }
+.dos-row > .icon { position: absolute; top: 2px; right: 2px; }
+.dos-row textarea, .dos-row input, .dos-row select { width: 100%; }
+.dos-picklist { max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 1px; }
+.dos-pick { display: flex; align-items: center; gap: 6px; padding: 2px 4px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+.dos-pick:hover { background: var(--panel-2); }
+.dos-pick input { width: auto; flex: none; }
+
+/* ---------- меню примеров ---------- */
+.ex-search { position: sticky; top: -6px; z-index: 2; width: 100%; margin-bottom: 4px; }
+.ex-group { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.ex-all { font: inherit; font-size: 10.5px; text-transform: none; letter-spacing: 0; color: var(--accent); background: transparent; border: 1px solid var(--accent-dim); border-radius: 10px; padding: 0 8px; cursor: pointer; }
+.ex-all:hover { background: var(--accent-dim); color: var(--text); }
+.ex-empty { padding: 10px 9px; }

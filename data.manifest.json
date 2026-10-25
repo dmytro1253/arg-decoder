@@ -1,0 +1,78 @@
+{
+  "version": "v1",
+  "zip": "arg-decoder-data-v1.zip",
+  "files": [
+    {
+      "name": "corpus_en.txt",
+      "bytes": 85864551,
+      "sha256": "d49ecf8e4da5166c92df451372ea9b1e64f5574cdb0f578740e16a48ef3edc70"
+    },
+    {
+      "name": "corpus_ru.txt",
+      "bytes": 76266464,
+      "sha256": "299696fc21b6f6b6e822207a7321854cfae2c45b8a202e4cc1141b124baa4bd5"
+    },
+    {
+      "name": "corpus_uk.txt",
+      "bytes": 9934908,
+      "sha256": "2f0bde78145f9ccc80603170d96e8dc9d36494af72ada95733313e0b098c82c9"
+    },
+    {
+      "name": "model_en_26_798f42d28f9b.npz",
+      "bytes": 1901990,
+      "sha256": "61882ce038135b3cb2a1ed46670e7e3f3407af2af7ffedf7fe2ca0f39a24a164"
+    },
+    {
+      "name": "model_ru_32_d9e5cf9f20c5.npz",
+      "bytes": 4330574,
+      "sha256": "55a11868a581139354ea5a534987de71f7b8b60853a1a821891236c15978e677"
+    },
+    {
+      "name": "model_ru_33_d9e5cf9f20c5.npz",
+      "bytes": 4892894,
+      "sha256": "3f04a75a32fd0576d19ae9c3be1dbdc9a6b9c845d4bfe4cd386406d54f9f244b"
+    },
+    {
+      "name": "model_uk_32_99ac10e11cb2.npz",
+      "bytes": 4330574,
+      "sha256": "192718f34e09823ee2bb23b924f487973dfb2c5faf6932db704d54363fb2a337"
+    },
+    {
+      "name": "model_uk_33_99ac10e11cb2.npz",
+      "bytes": 4892894,
+      "sha256": "9390f2c8bd45d5b3f870022506fe15711016156f1acd8f419ed3ade958507da2"
+    },
+    {
+      "name": "words_en.txt",
+      "bytes": 4418103,
+      "sha256": "d24b5e0dd977bb9e77e32c842c08008dcd29e9c35079e7a3089952bc8c0ea6b3"
+    },
+    {
+      "name": "words_en_frequent.txt",
+      "bytes": 85808,
+      "sha256": "c4abaa4658aed02e724259b0bc883b4bbbe17327f9d93e950addf8fb05dcd61a"
+    },
+    {
+      "name": "words_ru.txt",
+      "bytes": 36350323,
+      "sha256": "d512f4060f0ae3196aa17f5d1652f8ef86ebda05cb3c12d767ad37d87c2fe7dc"
+    },
+    {
+      "name": "words_ru_frequent.txt",
+      "bytes": 173239,
+      "sha256": "aec07405b3074d071a2d48f04625d58a675530656e27ceebb0fbf2032bbb7e6e"
+    },
+    {
+      "name": "words_uk.txt",
+      "bytes": 83679122,
+      "sha256": "42ea95d93fc4ce5f444d887767f972206906cabaeda6d9d5890e1961cf126634"
+    },
+    {
+      "name": "words_uk_frequent.txt",
+      "bytes": 196074,
+      "sha256": "013f22b83d28b6f4f3add6ea89705e7f987d8db6cf364504a9916c4d3f4c2bbd"
+    }
+  ],
+  "zip_bytes": 81761550,
+  "zip_sha256": "a13ef17635f8514c4d68426cdf7a54dc5a232b0d97e123ca594753dc62e2adf7"
+}

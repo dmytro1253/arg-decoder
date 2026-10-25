@@ -1,0 +1,228 @@
+/* Рабочее пространство: полоса досок, слой рисования, клавиатура SGA, переключатель языка. */
+
+/* ---------- колонка холста и полоса досок ---------- */
+.canvas-col { flex: 1; min-width: 0; display: flex; flex-direction: column; position: relative; }
+.canvas-col > .canvas { flex: 1; min-height: 0; }
+
+.boardbar {
+  flex-shrink: 0;
+  height: 34px;
+  display: flex;
+  align-items: stretch;
+  gap: 2px;
+  padding: 0 6px 0 0;
+  background: #0e1411;
+  border-bottom: 1px solid var(--border);
+}
+.board-tabs { display: flex; align-items: stretch; min-width: 0; overflow-x: auto; overflow-y: hidden; scrollbar-width: thin; }
+.board-tab {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 200px;
+  min-width: 70px;
+  padding: 0 6px 0 12px;
+  color: var(--muted);
+  border-right: 1px solid var(--border);
+  border-top: 2px solid transparent;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  transition: background 0.12s, color 0.12s;
+}
+.board-tab:hover { background: var(--panel-2); color: var(--text); }
+.board-tab.active { background: var(--bg); color: var(--text); border-top-color: var(--accent); }
+.board-tab:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.board-tab.dragging { opacity: 0.45; }
+.board-tab.drop-before { box-shadow: inset 3px 0 0 var(--accent); }
+.board-tab.drop-after { box-shadow: inset -3px 0 0 var(--accent); }
+.bt-name { flex: 1; overflow: hidden; text-overflow: ellipsis; }
+.bt-close {
+  width: 18px;
+  height: 18px;
+  line-height: 16px;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 4px;
+  color: var(--muted);
+  cursor: pointer;
+  opacity: 0.55;
+  flex-shrink: 0;
+}
+.board-tab:hover .bt-close, .board-tab.active .bt-close { opacity: 1; }
+.bt-close:hover { background: rgba(255, 255, 255, 0.1); color: var(--danger); }
+.bt-rename { width: 130px; background: #0c110f; border: 1px solid var(--accent-dim); border-radius: 4px; padding: 2px 5px; outline: none; }
+.bt-btn {
+  align-self: center;
+  width: 26px;
+  height: 24px;
+  margin-left: 2px;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.bt-btn:hover { border-color: var(--border-strong); color: var(--text); background: var(--panel-2); }
+.bt-btn:focus-visible { outline: 2px solid var(--accent); }
+.bt-status { margin-left: auto; align-self: center; padding-left: 10px; font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.bt-status.warn { color: var(--warn); }
+
+.board-menu {
+  position: fixed;
+  z-index: 80;
+  min-width: 210px;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
+}
+.bm-item { text-align: left; background: none; border: none; border-radius: 5px; padding: 6px 10px; cursor: pointer; }
+.bm-item:hover:not(:disabled) { background: var(--panel-2); }
+.bm-item:disabled { color: var(--muted); opacity: 0.5; cursor: default; }
+
+/* ---------- кнопки-переключатели и язык ---------- */
+.btn.toggle.active { background: rgba(94, 224, 140, 0.16); border-color: var(--accent-dim); color: var(--accent); }
+.lang-switch { display: inline-flex; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+.lang-btn { background: var(--panel-2); border: none; padding: 4px 8px; font-size: 11.5px; cursor: pointer; color: var(--muted); }
+.lang-btn + .lang-btn { border-left: 1px solid var(--border); }
+.lang-btn:hover { color: var(--text); }
+.lang-btn.active { background: var(--accent); color: #06150c; font-weight: 700; }
+.lang-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+/* ---------- слой рисования ---------- */
+.annot { position: absolute; left: 0; top: 0; width: 1px; height: 1px; overflow: visible; pointer-events: none; }
+.annot text { user-select: none; }
+/* В режиме рисования ноды неподвижны: события берёт слой аннотаций, а Shift/перетаскивание не цепляют порты. */
+.canvas.draw-mode .node { pointer-events: none; }
+.canvas.draw-mode { cursor: crosshair; }
+.canvas.draw-mode.tool-select { cursor: default; }
+.canvas.draw-mode.tool-hand { cursor: grab; }
+.canvas.draw-mode.tool-hand.panning { cursor: grabbing; }
+.canvas.draw-mode.tool-text { cursor: text; }
+.canvas.draw-mode.tool-eraser { cursor: cell; }
+.canvas.draw-mode::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 2px solid rgba(255, 159, 67, 0.55);
+  pointer-events: none;
+  z-index: 4;
+}
+
+.annot-editor {
+  position: absolute;
+  z-index: 8;
+  margin: 0;
+  padding: 0 2px;
+  min-width: 120px;
+  line-height: 1.25;
+  font-family: "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  background: rgba(11, 15, 13, 0.82);
+  border: 1px dashed var(--accent);
+  border-radius: 3px;
+  outline: none;
+  resize: none;
+  overflow: hidden;
+  white-space: pre;
+}
+
+.annot-toolbar {
+  position: absolute;
+  top: 42px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30;
+  max-width: calc(100% - 20px);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  padding: 5px 9px;
+  background: rgba(17, 23, 20, 0.96);
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.55);
+}
+.at-group { display: flex; align-items: center; gap: 3px; padding-right: 10px; border-right: 1px solid var(--border); }
+.at-group:empty { display: none; }
+.at-btn {
+  min-width: 28px;
+  height: 28px;
+  padding: 0 6px;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  transition: border-color 0.12s, background 0.12s;
+}
+.at-btn:hover:not(:disabled) { border-color: var(--border-strong); background: #1c2621; }
+.at-btn.active { background: rgba(255, 159, 67, 0.2); border-color: #ff9f43; color: #ffc78a; }
+.at-btn:disabled { opacity: 0.4; cursor: default; }
+.at-btn:focus-visible, .at-swatch:focus-visible, .at-art:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.at-done { background: var(--accent); color: #06150c; border-color: var(--accent); font-weight: 600; font-size: 12px; }
+.at-swatch { width: 20px; height: 20px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; padding: 0; box-shadow: 0 0 0 1px var(--border-strong); }
+.at-swatch.active { border-color: var(--bg); box-shadow: 0 0 0 2px var(--accent); }
+.at-color { width: 26px; height: 24px; padding: 0; border: 1px solid var(--border); border-radius: 5px; background: none; cursor: pointer; }
+.at-width { width: auto; padding: 3px 4px; font-size: 12px; }
+.annot-pop {
+  position: absolute;
+  top: 92px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 31;
+  width: min(380px, calc(100% - 20px));
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  background: var(--panel);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
+}
+.at-art-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(86px, 1fr)); gap: 6px; max-height: 220px; overflow-y: auto; }
+.at-art { display: flex; flex-direction: column; gap: 3px; padding: 4px; background: var(--panel-2); border: 1px solid var(--border); border-radius: 6px; cursor: pointer; font-size: 10.5px; color: var(--muted); }
+.at-art:hover { border-color: var(--accent-dim); }
+.at-art img { width: 100%; height: 56px; object-fit: cover; border-radius: 4px; }
+.at-art span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+@media (max-width: 900px) {
+  .bt-status { display: none; }
+  .toolbar .lang-switch { display: inline-flex; }
+}
+
+/* ---------- карточка-гид примера ---------- */
+.preset-guide { position: absolute; top: 44px; right: 12px; z-index: 30; width: min(420px, 42vw); max-height: calc(100% - 70px); overflow-y: auto; background: rgba(17, 23, 20, 0.97); border: 1px solid var(--accent-dim); border-radius: 10px; padding: 10px 12px; box-shadow: 0 14px 34px rgba(0, 0, 0, 0.55); font-size: 12.5px; }
+.preset-guide.collapsed { width: auto; padding: 4px; background: transparent; border: none; box-shadow: none; }
+.guide-head { display: flex; align-items: baseline; gap: 8px; }
+.guide-arg { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); white-space: nowrap; }
+.guide-title { flex: 1; font-size: 14px; }
+.guide-desc { margin: 6px 0; color: var(--text); }
+.guide-sub { margin-top: 8px; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.guide-steps { margin: 4px 0 6px; padding-left: 20px; }
+.guide-step { margin: 3px 0; }
+.guide-step .guide-op { display: block; color: var(--text); }
+.guide-step code, .guide-answer code { font-family: var(--font-mono); font-size: 12px; color: #cfe9d9; word-break: break-all; }
+.guide-step.error code { color: var(--warn); }
+.guide-answer { margin: 6px 0; padding: 6px 8px; border-radius: 6px; background: rgba(94, 224, 140, 0.1); border: 1px solid var(--accent-dim); }
+.guide-answer code { color: var(--accent); font-size: 13px; }
+.guide-manual, .guide-warn, .guide-note { margin: 5px 0; padding: 5px 8px; border-radius: 6px; white-space: pre-wrap; }
+.guide-manual { background: rgba(245, 184, 74, 0.08); border-left: 3px solid var(--warn); }
+.guide-warn { background: rgba(255, 107, 107, 0.08); border-left: 3px solid var(--danger); }
+.guide-note { background: var(--panel-2); color: var(--muted); }
+.guide-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+@media (max-width: 900px) { .preset-guide { right: 8px; width: calc(100% - 16px); } }
+
+.guide-solve { margin: 4px 0 6px; padding: 3px 8px; border-radius: 6px; font-size: 11.5px; background: rgba(94, 224, 140, 0.08); border: 1px solid var(--accent-dim); }
+.guide-solve-key, .guide-solve-context { background: rgba(245, 184, 74, 0.08); border-color: rgba(245, 184, 74, 0.45); }

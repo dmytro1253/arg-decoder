@@ -1,0 +1,12 @@
+{
+  "comment": "Experimental local OCR (RapidOCR 3.10.0, ONNX Runtime). Models are downloaded by setup_ocr.py into data/ocr and checked against these SHA-256 sums. Licence: Apache-2.0 (RapidOCR, PaddleOCR models).",
+  "packages": ["rapidocr==3.10.0", "onnxruntime==1.20.1"],
+  "models": [
+    {"name": "PP-OCRv6_det_small.onnx", "role": "detector", "bytes": 9929594, "sha256": "090f04abcd9d9a7498bc4ebf677e4cb9bdce1fe4197ddb7e529f1ef44e1ff94f",
+     "url": "https://www.modelscope.cn/models/RapidAI/RapidOCR/resolve/v3.10.0/onnx/PP-OCRv6/det/PP-OCRv6_det_small.onnx"},
+    {"name": "en_PP-OCRv5_rec_mobile.onnx", "role": "recognizer en", "bytes": 7872351, "sha256": "c3461add59bb4323ecba96a492ab75e06dda42467c9e3d0c18db5d1d21924be8",
+     "url": "https://www.modelscope.cn/models/RapidAI/RapidOCR/resolve/v3.10.0/onnx/PP-OCRv5/rec/en_PP-OCRv5_rec_mobile.onnx"},
+    {"name": "cyrillic_PP-OCRv5_rec_mobile.onnx", "role": "recognizer cyrillic", "bytes": 8074092, "sha256": "90f761b4bfcce0c8c561c0cb5c887b0971d3ec01c32164bdf7374a35b0982711",
+     "url": "https://www.modelscope.cn/models/RapidAI/RapidOCR/resolve/v3.10.0/onnx/PP-OCRv5/rec/cyrillic_PP-OCRv5_rec_mobile.onnx"}
+  ]
+}

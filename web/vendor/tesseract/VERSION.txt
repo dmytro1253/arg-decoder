@@ -1,0 +1,5 @@
+tesseract.js 5.1.1 (tesseract.min.js, worker.min.js) - Apache-2.0, https://github.com/naptha/tesseract.js
+tesseract.js-core 5.1.1 (core/tesseract-core-lstm.wasm.js, core/tesseract-core-simd-lstm.wasm.js; wasm is embedded in the .js) - Apache-2.0
+tessdata_fast 4.1.0: lang/eng.traineddata, lang/rus.traineddata, lang/ukr.traineddata - Apache-2.0
+Sources: npm (registry.npmjs.org) and https://github.com/tesseract-ocr/tessdata_fast/tree/4.1.0
+Loaded locally via workerPath/corePath/langPath (gzip: false). Needs http(s): Web Workers do not start from file://.

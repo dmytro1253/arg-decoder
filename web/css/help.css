@@ -1,0 +1,46 @@
+/* Карточка справки по ноде («?») и строка подсказки в быстром поиске. */
+.help-card {
+  position: fixed;
+  z-index: 70;
+  width: 380px;
+  max-width: calc(100vw - 20px);
+  max-height: calc(100vh - 20px);
+  overflow-y: auto;
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
+  padding: 12px 14px 12px;
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+.help-head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.help-head h3 { flex: 1; margin: 0; font-size: 14px; color: var(--accent); }
+.help-close { cursor: pointer; background: none; border: 0; color: var(--muted); font-size: 18px; line-height: 1; padding: 2px 6px; border-radius: 4px; }
+.help-close:hover { color: var(--text); background: var(--panel-2); }
+.help-close:focus-visible, .help-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.help-what { margin-bottom: 8px; }
+.help-sec { margin-top: 8px; }
+.help-label { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 2px; }
+.help-text { color: var(--text); }
+.help-fields { margin-top: 3px; color: var(--muted); font-size: 11.5px; }
+.help-ex { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.help-code {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 2px 6px;
+  max-width: 100%;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+.help-arrow { color: var(--accent); }
+.help-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-top: 12px; padding-top: 8px; border-top: 1px solid var(--border); }
+.help-links { display: flex; flex-wrap: wrap; gap: 4px 12px; }
+.help-link { color: var(--accent); text-decoration: none; }
+.help-link:hover { text-decoration: underline; }
+.qa-help { margin-top: 4px; padding: 5px 8px 3px; border-top: 1px solid var(--border); color: var(--muted); font-size: 11.5px; line-height: 1.4; min-height: 1.4em; }
+.qa-help:empty { display: none; }

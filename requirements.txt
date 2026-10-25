@@ -1,0 +1,6 @@
+# Нужен для полного движка подбора ключа Виженера (встроенный подбор Виженера).
+numpy>=1.21
+
+# Необязательно: перебор на видеокарте NVIDIA (CUDA), примерно в 10 раз быстрее.
+# Ставится скриптом «Включить GPU (CUDA).bat» или: python launcher.py --gpu
+#   pip install torch --index-url https://download.pytorch.org/whl/cu121

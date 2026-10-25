@@ -1,0 +1,11 @@
+{
+  "name": "arg-decoder",
+  "version": "1.2.0",
+  "private": true,
+  "description": "Local node-graph workbench for cracking ARG puzzles (ciphers, images, audio, files, hashes) — by Dmytro",
+  "author": "Dmytro",
+  "scripts": {
+    "test": "node --test && python -m unittest discover -s tests -p \"test_*.py\"",
+    "start": "python launcher.py"
+  }
+}

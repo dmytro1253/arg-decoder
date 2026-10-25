@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ARG Decoder</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/files.css">
+  <link rel="stylesheet" href="css/image.css">
+  <link rel="stylesheet" href="css/media.css">
+  <link rel="stylesheet" href="css/help.css">
+  <link rel="stylesheet" href="css/workspace.css">
+  <link rel="stylesheet" href="css/keyboards.css">
+  <link rel="stylesheet" href="css/dossiers.css">
+  <!-- Новые пакеты добавляют свои стили здесь, перед workspace.css -->
+</head>
+<body>
+  <!-- Английский текст элементов задаётся атрибутами data-t (текст), data-t-title, data-t-ph (подсказка в поле), data-t-html. Русский — сам текст. -->
+  <header class="topbar">
+    <div class="logo"><span class="logo-mark">◆</span> ARG Decoder <span class="logo-by">by Dmytro</span></div>
+    <div class="toolbar">
+      <div class="menu-wrap">
+        <button class="btn" id="btn-presets" data-t="Examples ▾" data-t-title="Open an example on a new board" title="Открыть пример на новой доске">Примеры ▾</button>
+        <div class="menu hidden" id="preset-menu"></div>
+      </div>
+      <button class="btn" id="btn-new" data-t="New" data-t-title="New project (the current one is replaced after confirmation)" title="Новый проект (текущий заменяется после подтверждения)">Новый</button>
+      <button class="btn" id="btn-open" data-t="Open" data-t-title="Open a project (.argproj.json) or an old graph (.json)" title="Открыть проект (.argproj.json) или старый граф (.json)">Открыть</button>
+      <button class="btn" id="btn-save" data-t="Save" data-t-title="Save the whole project with attachments to one file (Ctrl+S)" title="Сохранить весь проект с вложениями в один файл (Ctrl+S)">Сохранить</button>
+      <button class="btn" id="btn-undo" data-t-title="Undo (Ctrl+Z)" title="Отменить (Ctrl+Z)">↶</button>
+      <button class="btn" id="btn-redo" data-t-title="Redo (Ctrl+Y)" title="Повторить (Ctrl+Y)">↷</button>
+      <button class="btn" id="btn-layout" data-t="Arrange" data-t-title="Arrange nodes into chains" title="Расставить ноды по цепочкам">Упорядочить</button>
+      <button class="btn" id="btn-fit" data-t="Show all" data-t-title="Show all nodes and drawings" title="Показать все ноды и рисунки">Показать всё</button>
+      <button class="btn toggle" id="btn-draw" aria-pressed="false" data-t="✏ Draw" data-t-title="Drawing mode: pencil, arrows, frames, labels, pictures" title="Режим рисования: карандаш, стрелки, рамки, подписи, картинки">✏ Рисование</button>
+      <button class="btn toggle" id="btn-sga" aria-pressed="false" data-t="⌨ Keyboards" data-t-title="On-screen keyboards: SGA, Braille, Morse, runes, Greek, pigpen, special characters" title="Экранные клавиатуры: SGA, Брайль, Морзе, руны, греческий, пигпен, спецсимволы">⌨ Клавиатуры</button>
+    </div>
+    <div class="spacer"></div>
+    <div class="lang-switch" role="group" aria-label="Язык" data-t-aria="Language">
+      <button class="lang-btn" data-lang="ru" title="Русский">RU</button>
+      <button class="lang-btn" data-lang="en" title="English">EN</button>
+      <button class="lang-btn" data-lang="uk" data-t-title="Ukrainian" title="Українська">UK</button>
+    </div>
+    <span class="pill" id="server-status" data-t="● YouTube check: …">● Проверка YouTube: …</span>
+    <button class="btn" id="btn-side" data-t-title="Hide/show the right panel" title="Скрыть/показать правую панель">☰</button>
+  </header>
+
+  <main class="layout">
+    <aside class="palette">
+      <input id="palette-search" class="search" placeholder="Найти ноду…" data-t-ph="Find a node…" spellcheck="false">
+      <div id="palette-list"></div>
+      <div class="palette-sign">ARG Decoder · by Dmytro</div>
+      <div class="palette-hint" data-t-html="Click — add at the centre, drag — drop where you want. Double-click the canvas — quick search. Wheel — zoom, drag the background — pan.<br><br>Shift+click or Shift+box — select several. Ctrl+C / Ctrl+V / Ctrl+D — copy, paste, duplicate. Ctrl+Z / Ctrl+Y — undo and redo. Delete — remove.<br><br>Ctrl+V with a picture or file creates an artifact node; pasted text creates an Input node.">Клик — добавить в центр, перетащить — в нужное место. Двойной клик по холсту — быстрый поиск. Колёсико — масштаб, перетаскивание фона — сдвиг.<br><br>Shift+клик или Shift+рамка — выделить несколько. Ctrl+C / Ctrl+V / Ctrl+D — копировать, вставить, дублировать. Ctrl+Z / Ctrl+Y — отмена и повтор. Delete — удалить.<br><br>Ctrl+V с картинкой или файлом создаёт ноду-артефакт, вставленный текст — ноду «Ввод».</div>
+    </aside>
+
+    <div class="canvas-col" id="canvas-col">
+      <div id="boardbar"></div>
+      <section id="canvas" class="canvas"></section>
+    </div>
+
+    <aside class="side" id="side">
+      <nav class="tabs">
+        <button class="tab active" data-tab="tab-auto" data-t="⚡ Auto">⚡ Авто</button>
+        <button class="tab" data-tab="tab-dossier" data-t="Profile">Досье</button>
+        <button class="tab" data-tab="tab-keys" data-t="Keys">Ключи</button>
+        <button class="tab" data-tab="tab-debug" data-t="Debug" data-t-title="What is connected and what errors occurred" title="Что подключено и какие были ошибки">Отладка</button>
+      </nav>
+      <div class="tab-pane" id="tab-auto">
+        <label class="field-label" for="side-input" data-t="Cipher">Шифр</label>
+        <textarea id="side-input" rows="4" spellcheck="false" placeholder="Вставь сюда строку из описания, субтитров, книги…" data-t-ph="Paste a string from a description, subtitles, a book…"></textarea>
+        <div class="row">
+          <select id="side-depth" data-t-title="How many operations in a row to try" title="Сколько операций подряд пробовать">
+            <option value="2" data-t="Fast — 2 steps">Быстро — 2 шага</option>
+            <option value="3" data-t="Normal — 3 steps" selected>Обычно — 3 шага</option>
+            <option value="4" data-t="Deep — 4 steps">Глубоко — 4 шага</option>
+          </select>
+          <button class="btn accent grow" id="side-run" data-t="⚡ Decrypt">⚡ Расшифровать</button>
+        </div>
+        <button class="btn" id="side-vig" data-t="🔑 Find the Vigenère key" data-t-title="Find a Vigenère key without hints (built-in solver)" title="Подобрать ключ Виженера без подсказок (встроенный подбор)">🔑 Подобрать ключ Виженера</button>
+        <div class="muted small" id="side-status" data-t="Ctrl+Enter — run. The program tries hex, Base64, URL/CP1251, keyboard layout, reverse, Caesar, Vigenère with the project keys and their combinations.">Ctrl+Enter — запустить. Программа сама пробует hex, Base64, URL/CP1251, раскладку, реверс, Цезаря, Виженера с ключами проекта и их сочетания.</div>
+        <button class="btn small hidden" id="side-check-ids" data-t="Check the found YouTube IDs">Проверить найденные YouTube ID</button>
+        <div id="side-id-results"></div>
+        <div id="side-results" class="auto-list"></div>
+      </div>
+      <div class="tab-pane hidden" id="tab-dossier"></div>
+      <div class="tab-pane hidden" id="tab-debug">
+        <div class="row">
+          <button class="btn small accent" id="debug-refresh" data-t="Check again">Проверить заново</button>
+          <button class="btn small" id="debug-copy" data-t="Copy report" data-t-title="Copy the full report to the clipboard" title="Скопировать полный отчёт в буфер обмена">Скопировать отчёт</button>
+          <button class="btn small" id="debug-clear" data-t="Clear" data-t-title="Clear interface errors" title="Очистить ошибки интерфейса">Очистить</button>
+        </div>
+        <div id="debug-body" class="muted small" data-t="Open the tab to check the program.">Открой вкладку, чтобы проверить программу.</div>
+      </div>
+      <div class="tab-pane hidden" id="tab-keys">
+        <p class="muted small" data-t="Key bank of the project: words that auto-decryption tries for Vigenère, Beaufort and autokey. The keys are saved inside the project file. Add names, video titles, words from hints.">Банк ключей проекта: слова, которые авто-расшифровка пробует для Виженера, Бофора и автоключа. Ключи сохраняются в файле проекта. Добавляй имена, названия роликов, слова из подсказок.</p>
+        <div id="keybank-list" class="keybank-list"></div>
+        <textarea id="keys-input" rows="3" spellcheck="false" placeholder="например: zombie&#10;данни" data-t-ph="for example: zombie&#10;key"></textarea>
+        <div class="row">
+          <button class="btn accent grow" id="keys-save" data-t="Add keys">Добавить ключи</button>
+          <button class="btn" id="keys-clear" data-t="Clear bank" data-t-title="Remove all keys from the project" title="Убрать все ключи проекта">Очистить</button>
+        </div>
+        <p class="muted small"><span data-t="Built in (from the profile):">Встроено (из профиля):</span> <span id="keys-base" class="mono"></span></p>
+      </div>
+    </aside>
+  </main>
+
+  <div id="quickadd" class="quickadd hidden"><input placeholder="Найти ноду…" data-t-ph="Find a node…" spellcheck="false"><div class="qa-list"></div><div class="qa-help"></div></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <input type="file" id="file-open" accept=".json,application/json" hidden>
+
+  <!-- [1] ядро: язык, кодеки, реестр операций -->
+  <script src="js/i18n-uk.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/server-text.js"></script>
+  <script src="js/debug.js"></script>
+  <script src="js/lang-data.js"></script>
+  <script src="js/codec.js"></script>
+  <script src="js/ops.js"></script>
+  <!-- [2] операции: сюда добавляются ops-*.js -->
+  <script src="js/ops-ciphers.js"></script>
+  <script src="js/ops-enigma.js"></script>
+  <script src="js/ops-text.js"></script>
+  <script src="js/ops-arg.js"></script>
+  <script src="js/ops-extra.js"></script>
+  <script src="js/ops-map.js"></script>
+  <script src="js/ops-classic.js"></script>
+  <script src="js/ops-classic2.js"></script>
+  <script src="js/ops-glyphs.js"></script>
+  <script src="js/ops-encodings.js"></script>
+  <script src="js/ops-argtools.js"></script>
+  <script src="js/ops-openssl.js"></script>
+  <script src="js/ops-cases.js"></script>
+  <!-- [3] ссылки, профили, поиск цепочек, связь с сервером -->
+  <script src="js/links.js"></script>
+  <script src="js/profile.js"></script>
+  <script src="js/candidates.js"></script>
+  <script src="js/scorer.js"></script>
+  <script src="js/vigenere-crack.js"></script>
+  <script src="js/vigenere-auto.js"></script>
+  <script src="js/vigenere-python.js"></script>
+  <script src="js/solver-crackers.js"></script>
+  <script src="js/solver-evidence.js"></script>
+  <script src="js/solver-engines.js"></script>
+  <script src="js/solver.js"></script>
+  <script src="js/api.js"></script>
+  <!-- [4] ноды и улики -->
+  <script src="js/node-types.js"></script>
+  <script src="js/artifacts.js"></script>
+  <script src="js/artifact-node.js"></script>
+  <!-- [5] пакеты расширений: файлы, изображения, звук и видео. Новые пакеты добавлять сюда, после artifact-node.js -->
+  <script src="js/files/bytes.js"></script>
+  <script src="js/files/hash.js"></script>
+  <script src="js/files/hash-ops.js"></script>
+  <script src="js/files/inflate.js"></script>
+  <script src="js/files/decompress-ops.js"></script>
+  <script src="js/files/signatures.js"></script>
+  <script src="js/files/hexview.js"></script>
+  <script src="js/files/strings.js"></script>
+  <script src="js/files/classfile.js"></script>
+  <script src="js/files/zip.js"></script>
+  <script src="js/files/archive.js"></script>
+  <script src="js/files/logview.js"></script>
+  <script src="js/files/ui.js"></script>
+  <script src="js/files/node-inspector.js"></script>
+  <script src="js/files/node-strings.js"></script>
+  <script src="js/files/node-archive.js"></script>
+  <script src="js/files/sevenzip.js"></script>
+  <script src="js/files/node-archive7z.js"></script>
+  <script src="js/files/node-log.js"></script>
+  <script src="js/files/node-bytes.js"></script>
+  <script src="js/image/imgproc.js"></script>
+  <script src="js/image/pngenc.js"></script>
+  <script src="data/sga-templates.js"></script>
+  <script src="data/pixel-font-digits.js"></script>
+  <script src="js/image/sga.js"></script>
+  <script src="js/image/pixelfont.js"></script>
+  <script src="js/image/imgmeta.js"></script>
+  <script src="vendor/jsqr/jsQR.js"></script>
+  <script src="js/image/qr.js"></script>
+  <script src="vendor/tesseract/tesseract.min.js"></script>
+  <script src="js/image/ocr.js"></script>
+  <script src="js/image/imgstore.js"></script>
+  <script src="js/image/imgviewer.js"></script>
+  <script src="js/image/nodes-common.js"></script>
+  <script src="js/image/nodes-process.js"></script>
+  <script src="js/image/nodes-recog.js"></script>
+  <script src="js/image/nodes-combine.js"></script>
+  <script src="js/media/dsp.js"></script>
+  <script src="js/media/wav.js"></script>
+  <script src="js/media/spectro-render.js"></script>
+  <script src="js/media/morse-audio.js"></script>
+  <script src="js/media/dtmf.js"></script>
+  <script src="js/media/sstv.js"></script>
+  <script src="js/media/video-math.js"></script>
+  <script src="js/media/audio-io.js"></script>
+  <script src="js/media/ui-util.js"></script>
+  <script src="js/media/spectrogram-node.js"></script>
+  <script src="js/media/signal-nodes.js"></script>
+  <script src="js/media/video-node.js"></script>
+  <script src="js/media/raw-pcm-node.js"></script>
+  <!-- [6] модель графа и вид -->
+  <script src="js/graph.js"></script>
+  <script src="js/graph-view.js"></script>
+  <script src="js/graph-edit.js"></script>
+  <script src="js/presets.js"></script>
+  <!-- примеры по ARG: реестр, строитель, данные -->
+  <script src="js/arg-cases.js"></script>
+  <script src="js/presets-kit.js"></script>
+  <script src="js/presets-arg-a.js"></script>
+  <script src="js/presets-arg-b.js"></script>
+  <script src="js/presets-arg-c.js"></script>
+  <script src="js/presets-auto.js"></script>
+  <script src="js/presets-images.js"></script>
+  <script src="js/samples.js"></script>
+  <!-- досье: модель, встроенные данные -->
+  <script src="js/dossiers.js"></script>
+  <script src="js/dossiers-data-a.js"></script>
+  <script src="js/dossiers-data-b.js"></script>
+  <script src="js/dossiers-data-c.js"></script>
+  <script src="js/dossiers-view.js"></script>
+  <script src="js/dossiers-edit.js"></script>
+  <script src="js/dossiers-ui.js"></script>
+  <script src="js/examples-menu.js"></script>
+  <!-- справка по нодам: данные (help-data*.js), затем карточка (help.js) -->
+  <script src="js/help-data.js"></script>
+  <script src="js/help-data-ciphers.js"></script>
+  <script src="js/help-data-arg.js"></script>
+  <script src="js/help-data-nodes.js"></script>
+  <script src="js/help.js"></script>
+  <!-- [7] рабочее пространство: проект и доски, рисование, клавиатура SGA, вставка из буфера -->
+  <script src="js/annotations-model.js"></script>
+  <script src="js/project.js"></script>
+  <script src="js/annotations.js"></script>
+  <script src="js/annotations-toolbar.js"></script>
+  <script src="js/kb-core.js"></script>
+  <script src="js/sga-keyboard.js"></script>
+  <script src="js/kb-layouts.js"></script>
+  <script src="js/kb-special.js"></script>
+  <script src="js/keyboards.js"></script>
+  <script src="js/clipboard-paste.js"></script>
+  <script src="js/board-tabs.js"></script>
+  <script src="js/preset-guide.js"></script>
+  <script src="js/workspace.js"></script>
+  <!-- [8] приложение -->
+  <script src="js/app.js"></script>
+</body>
+</html>
