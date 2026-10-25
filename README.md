@@ -47,8 +47,8 @@ ARG Decoder is a universal tool for alternate reality games. You paste a string 
 
 | Way | What to do |
 |---|---|
-| **Download a ZIP** (no Git needed) | Download `arg-decoder-X.Y.Z.zip` from the latest [release](https://github.com/dmytro1253/arg-decoder/releases) (it updates itself; **Code → Download ZIP** works too, but without the signed file list). Unpack it anywhere, for example on the Desktop |
-| **Clone with Git** | `git clone https://github.com/dmytro1253/arg-decoder.git` and `cd arg-decoder` |
+| **Download the program** (recommended, no Git needed) | 1. Open the [latest release](https://github.com/dmytro1253/arg-decoder/releases/latest).<br>2. Under **Assets** download **`arg-decoder-X.Y.Z.zip`**: only this file, not "Source code" and not `.build.json` / `.build.sig` (those are for the program itself).<br>3. Unpack it anywhere, for example on the Desktop.<br>This copy updates itself. **Code → Download ZIP** on the main page also works, but without the signed file list it does not know its exact build |
+| **Clone with Git** (if you change the code) | `git clone https://github.com/dmytro1253/arg-decoder.git` and `cd arg-decoder`. Updates with the same button while the clone has no own changes |
 
 **Which file to download from a release.** Only **`arg-decoder-X.Y.Z.zip`**. The other files are not for you:
 
