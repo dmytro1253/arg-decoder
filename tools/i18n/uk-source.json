@@ -1537,9 +1537,9 @@
   ]
  },
  {
-  "key": " — обновляется командой git pull",
+  "key": " — обновляется до подписанных релизов через git",
   "pattern": false,
-  "en": " — updated with git pull",
+  "en": " — updated to signed releases through git",
   "files": [
    "web/js/debug.js"
   ]
@@ -1709,6 +1709,14 @@
   "key": " спец-нод, ",
   "pattern": false,
   "en": " special nodes, ",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": " файлов совпадают с коммитом (проверил git)",
+  "pattern": false,
+  "en": " files match the commit (checked by git)",
   "files": [
    "web/js/debug.js"
   ]
@@ -28434,6 +28442,22 @@
   ]
  },
  {
+  "key": "в клоне есть свои коммиты, которых нет в релизе — обнови вручную: git pull",
+  "pattern": false,
+  "en": "",
+  "files": [
+   "web/js/server-text.js"
+  ]
+ },
+ {
+  "key": "в подписанной сборке нет коммита — клон так не обновить",
+  "pattern": false,
+  "en": "",
+  "files": [
+   "web/js/server-text.js"
+  ]
+ },
+ {
   "key": "в релизе нет подписанного архива обновления — скачай его со страницы релиза",
   "pattern": false,
   "en": "",
@@ -28483,6 +28507,14 @@
  },
  {
   "key": "Изображение не в Base64",
+  "pattern": false,
+  "en": "",
+  "files": [
+   "web/js/server-text.js"
+  ]
+ },
+ {
+  "key": "клон git не на ветке (detached HEAD) — обнови вручную: git pull",
   "pattern": false,
   "en": "",
   "files": [
@@ -28731,6 +28763,14 @@
  },
  {
   "key": "это клон git — обнови командой git pull",
+  "pattern": false,
+  "en": "",
+  "files": [
+   "web/js/server-text.js"
+  ]
+ },
+ {
+  "key": "это клон git, но программа git не найдена — обнови вручную: git pull",
   "pattern": false,
   "en": "",
   "files": [

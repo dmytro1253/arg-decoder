@@ -30,6 +30,7 @@ import zipfile
 from pathlib import Path
 
 import ed25519_ref
+import update_git
 from version import APP_VERSION
 
 ROOT = Path(__file__).resolve().parent
@@ -209,13 +210,21 @@ def build_info():
     if raw is not None:
         return {"kind": "unverified", "version": APP_VERSION, "signed": False, "error": error, "id": build_id(raw)}
     if (ROOT / ".git").exists():
-        return {"kind": "git", "version": APP_VERSION, "commit": _git_commit(ROOT), "signed": False}
+        info = {"kind": "git", "version": APP_VERSION, "commit": _git_commit(ROOT), "signed": False}
+        if update_git.available(ROOT):
+            try:
+                info["tag"] = update_git.run(ROOT, "describe", "--tags", "--exact-match", "HEAD")
+            except update_git.GitError:
+                info["tag"] = None
+        return info
     return {"kind": "source", "version": APP_VERSION, "signed": False}
 
 
 def verify_install():
     """Сверяет каждый файл программы с подписанным списком сборки."""
     manifest, _, error = installed_manifest()
+    if not manifest and update_git.available(ROOT):
+        return _verify_git()
     if not manifest:
         return {"ok": False, "checked": 0, "modified": [], "missing": [],
                 "reason": error or "у этой копии нет подписанного списка файлов (клон git или исходники)"}
@@ -230,10 +239,25 @@ def verify_install():
             "version": manifest["version"]}
 
 
+def _verify_git():
+    """Клон git: файлы сверяет сам git (каждый объект по хешу); здесь — что изменено или удалено относительно коммита."""
+    try:
+        total = len(update_git.run(ROOT, "ls-files").splitlines())
+        lines = update_git.run(ROOT, "status", "--porcelain", "--untracked-files=no").splitlines()
+    except update_git.GitError as exc:
+        return {"ok": False, "checked": 0, "modified": [], "missing": [], "reason": "git не смог проверить файлы: %s" % exc}
+    missing = [line[3:] for line in lines if "D" in line[:2]]
+    modified = [line[3:] for line in lines if "D" not in line[:2]]
+    return {"ok": not lines, "checked": total, "modified": modified, "missing": missing, "version": APP_VERSION, "git": True}
+
+
 def install_mode():
-    """Можно ли обновлять эту копию архивом: ('ok'|'git'|'readonly', пояснение)."""
+    """Как обновлять эту копию: 'ok' — архивом, 'git' — перемоткой клона; иначе причина, почему нельзя."""
     if (ROOT / ".git").exists():
-        return "git", "это клон git — обнови командой git pull"
+        if not update_git.available(ROOT):
+            return "git-missing", "это клон git, но программа git не найдена — обнови вручную: git pull"
+        ok, reason = update_git.ready(ROOT)
+        return ("git", "") if ok else ("git-blocked", reason)
     try:
         UPDATE_DIR.mkdir(parents=True, exist_ok=True)
         probe = ROOT / ".update-write-test"
@@ -298,7 +322,7 @@ def check(force=False, fetch=None):
         newer = rel["ver"] > parse_version(APP_VERSION)
         result.update(status="update" if newer else "current", latest=rel["version"], page=rel["page"], notes=rel["notes"],
                       published=rel["published"], urls=rel["urls"],
-                      can_install=bool(newer and rel["urls"] and mode == "ok"))
+                      can_install=bool(newer and rel["urls"] and mode in ("ok", "git")))
         if newer and not rel["urls"]:
             result["mode_reason"] = "в релизе нет подписанного архива обновления — скачай его со страницы релиза"
     try:
@@ -389,7 +413,7 @@ def extract_verified(zpath, manifest, raw, sig_text, dest):
 def stage(info, fetch_bytes=None, fetch_file=None):
     """Скачивает и проверяет обновление; готовое ждёт в runtime/update/staging до перезапуска."""
     mode, reason = install_mode()
-    if mode != "ok":
+    if mode not in ("ok", "git"):
         raise UpdateError(reason)
     urls = info.get("urls") or {}
     prefix = "https://github.com/%s/releases/download/" % repo()
@@ -403,6 +427,8 @@ def stage(info, fetch_bytes=None, fetch_file=None):
     manifest = verify_manifest(raw, sig_text)
     if manifest["version"] != info.get("latest") or parse_version(manifest["version"]) <= parse_version(APP_VERSION):
         raise UpdateError("подписанная сборка %s не новее установленной %s" % (manifest["version"], APP_VERSION))
+    if mode == "git":
+        return _stage_git(manifest, raw, sig_text)
     _set(phase="downloading")
     zpath = UPDATE_DIR / "download" / ("%s-%s.zip" % (APP_ID, manifest["version"]))
     zpath.parent.mkdir(parents=True, exist_ok=True)
@@ -416,6 +442,32 @@ def stage(info, fetch_bytes=None, fetch_file=None):
     finally:
         zpath.unlink(missing_ok=True)
     pending = {"version": manifest["version"], "build": build_id(raw), "date": time.strftime("%Y-%m-%d %H:%M")}
+    (UPDATE_DIR / "pending.json").write_text(json.dumps(pending), encoding="utf-8")
+    _set(phase="ready")
+    return pending
+
+
+def _stage_git(manifest, raw, sig_text):
+    """Клон: забрать тег релиза и убедиться, что это ровно подписанный коммит и что перемотка возможна."""
+    _set(phase="downloading")
+    tag, commit = "v" + manifest["version"], str(manifest.get("commit") or "")
+    if not update_git.COMMIT.match(commit):
+        raise UpdateError("в подписанной сборке нет коммита — клон так не обновить")
+    try:
+        fetched = update_git.fetch_tag(ROOT, tag)
+    except update_git.GitError as exc:
+        raise UpdateError("git не смог забрать %s: %s" % (tag, exc)) from None
+    _set(phase="verifying")
+    if fetched != commit:
+        raise UpdateError("тег %s указывает не на подписанный коммит — обновление отклонено" % tag)
+    if not update_git.is_ancestor(ROOT, "HEAD", commit):
+        raise UpdateError("в клоне есть свои коммиты, которых нет в релизе — обнови вручную: git pull")
+    staging = UPDATE_DIR / "staging"
+    shutil.rmtree(staging, ignore_errors=True)
+    staging.mkdir(parents=True)
+    (staging / BUILD_FILE).write_bytes(raw)
+    (staging / BUILD_SIG).write_bytes(sig_text.encode("utf-8"))
+    pending = {"version": manifest["version"], "build": build_id(raw), "date": time.strftime("%Y-%m-%d %H:%M"), "git_commit": commit}
     (UPDATE_DIR / "pending.json").write_text(json.dumps(pending), encoding="utf-8")
     _set(phase="ready")
     return pending
@@ -506,7 +558,10 @@ def apply_pending(log=print):
         new = verify_manifest(raw, (staging / BUILD_SIG).read_text(encoding="utf-8"))
         if parse_version(new["version"]) <= parse_version(APP_VERSION):
             raise UpdateError("сборка %s не новее установленной %s" % (new["version"], APP_VERSION))
-        for f in new["files"]:   # повторная сверка: между загрузкой и запуском файлы могли измениться
+        if info.get("git_commit"):
+            if info["git_commit"] != new.get("commit"):
+                raise UpdateError("коммит подготовленного обновления не совпадает с подписанным")
+        for f in [] if info.get("git_commit") else new["files"]:   # повторная сверка: между загрузкой и запуском файлы могли измениться
             p = staging / f["path"]
             if not p.is_file() or p.stat().st_size != f["bytes"] or sha256_file(p) != f["sha256"]:
                 raise UpdateError("подготовленный файл %s изменился" % f["path"])
@@ -515,7 +570,10 @@ def apply_pending(log=print):
         raise UpdateError("подготовленное обновление отклонено: %s" % exc) from None
     log("[*] Устанавливаю обновление %s → %s / Installing update…" % (APP_VERSION, new["version"]))
     try:
-        _apply(new, staging, log)
+        if info.get("git_commit"):
+            _apply_git(new, log)
+        else:
+            _apply(new, staging, log)
     finally:
         discard_pending()   # и после отката: иначе неудачная установка повторялась бы при каждом запуске
     log("[✓] Обновление %s установлено / Update installed" % new["version"])
@@ -568,6 +626,58 @@ def _apply(new, staging, log):
     _prune_backups()
 
 
+def _apply_git(new, log):
+    """Перемотка клона на подписанный коммит. Журнал пишется до перемотки, при ошибке — возврат reset --keep."""
+    ok, reason = update_git.ready(ROOT)
+    if not ok:
+        raise UpdateError(reason)
+    try:
+        start = update_git.head(ROOT)
+    except update_git.GitError as exc:
+        raise UpdateError("git не ответил: %s" % exc) from None
+    target = new["commit"]
+    if not update_git.is_ancestor(ROOT, start, target):
+        raise UpdateError("в клоне есть свои коммиты, которых нет в релизе — обнови вручную: git pull")
+    journal = {"state": "applying", "mode": "git", "from": APP_VERSION, "to": new["version"], "from_commit": start,
+               "to_commit": target, "date": time.strftime("%Y-%m-%d %H:%M")}
+    _write_journal(journal)
+    try:
+        update_git.fast_forward(ROOT, target)
+        if update_git.head(ROOT) != target:
+            raise UpdateError("после перемотки HEAD не на подписанном коммите")
+    except (update_git.GitError, UpdateError) as exc:
+        log("[!] Перемотка не удалась (%s) — возвращаю прошлую версию / rolling back" % exc)
+        try:
+            _restore(journal)
+        except UpdateError as failed:
+            raise UpdateError("перемотка не удалась (%s), и откат тоже: %s" % (exc, failed)) from None
+        raise UpdateError("перемотка не удалась и отменена: %s" % exc) from None
+    _drop_bytecode(update_git.changed(ROOT, start, target))
+    journal["state"] = "done"
+    _write_journal(journal)
+    log("    клон перемотан %s → %s" % (start[:10], target[:10]))
+
+
+def _restore_git(journal):
+    """Откат клона: reset --keep на коммит до обновления, только если поверх обновления ничего не добавлено."""
+    start, target = str(journal.get("from_commit", "")), str(journal.get("to_commit", ""))
+    if not (update_git.COMMIT.match(start) and update_git.COMMIT.match(target)):
+        raise UpdateError("журнал обновления повреждён — откат невозможен")
+    try:
+        now = update_git.head(ROOT)
+        if now != start:
+            if now != target:
+                _restore_failed(journal, "после обновления в клоне появились другие коммиты — откати вручную: git reset --keep " + start[:10], [])
+            update_git.reset_keep(ROOT, start)
+        if update_git.head(ROOT) != start:
+            _restore_failed(journal, "git не вернул коммит " + start[:10], [])
+    except update_git.GitError as exc:
+        _restore_failed(journal, "git не смог вернуть прошлую версию (%s)" % exc, [])
+    _drop_bytecode(update_git.changed(ROOT, start, target))
+    journal.update(state="rolled-back", error=None, bad_files=[])
+    _write_journal(journal)
+
+
 def _journal_ok(journal):
     """Пути журнала — только файлы программы и папка копий внутри runtime/update/backup."""
     backup = str(journal.get("backup", ""))
@@ -581,8 +691,8 @@ def _restore_failed(journal, reason, files):
     """Откат не удался: в журнале остаётся диагностируемое состояние, наружу — понятная ошибка."""
     journal.update(state="rollback-failed", error=reason, bad_files=files[:50])
     _write_journal(journal)
-    raise UpdateError("%s: %s — переустанови программу из архива релиза (данные и проекты не затронуты)"
-                      % (reason, ", ".join(files[:5]) + (" …+%d" % (len(files) - 5) if len(files) > 5 else "")))
+    listed = (": " + ", ".join(files[:5]) + (" …+%d" % (len(files) - 5) if len(files) > 5 else "")) if files else ""
+    raise UpdateError("%s%s — переустанови программу из архива релиза (данные и проекты не затронуты)" % (reason, listed))
 
 
 UNVERIFIABLE_BACKUP = "у копии прошлой версии нет записанных хешей, а подписанный список файлов отсутствует или повреждён — проверить её нельзя, файлы не тронуты"
@@ -610,6 +720,8 @@ def _legacy_hashes(journal, backup, to_restore):
 def _restore(journal):
     """Возвращает файлы прошлой версии. Сначала копия проверяется целиком (есть ли каждый файл и совпадает ли хеш),
     и только потом что-то меняется; после восстановления результат сверяется ещё раз."""
+    if journal.get("mode") == "git":
+        return _restore_git(journal)
     if not _journal_ok(journal):
         raise UpdateError("журнал обновления повреждён — откат невозможен, переустанови программу из релиза")
     backup = ROOT / journal["backup"]
@@ -660,7 +772,7 @@ def rollback(log=print):
     journal = _read_journal()
     if not journal or journal.get("state") != "done":
         raise UpdateError("нет установленного обновления, которое можно откатить")
-    if not (ROOT / journal["backup"]).is_dir():
+    if journal.get("mode") != "git" and not (ROOT / journal["backup"]).is_dir():
         raise UpdateError("копия прошлой версии не найдена: %s" % journal["backup"])
     _restore(journal)
     log("[✓] Возвращена версия %s / Restored version %s" % (journal["from"], journal["from"]))

@@ -7,10 +7,10 @@
 </p>
 
 <p align="center">
-  <img alt="version" src="https://img.shields.io/badge/version-1.3.3-1976d2">
+  <img alt="version" src="https://img.shields.io/badge/version-1.3.4-1976d2">
   <img alt="platforms" src="https://img.shields.io/badge/Windows%20%7C%20macOS%20%7C%20Linux-3b4252">
   <img alt="python" src="https://img.shields.io/badge/python-3.9%2B-3776ab">
-  <img alt="tests" src="https://img.shields.io/badge/tests-595%20passing-2e7d32">
+  <img alt="tests" src="https://img.shields.io/badge/tests-597%20passing-2e7d32">
   <img alt="languages" src="https://img.shields.io/badge/UI-EN%20%C2%B7%20RU%20%C2%B7%20UK-6a1b9a">
   <img alt="offline" src="https://img.shields.io/badge/works-offline-2e7d32">
   <img alt="server" src="https://img.shields.io/badge/server-127.0.0.1%20only-455a64">
@@ -108,7 +108,7 @@ At start the page asks the local server whether a newer release exists (GitHub i
 2. the archive is unpacked into `runtime/update/staging`, and every file is compared with the signed list; extra files, `../` paths and the `data/`, `runtime/`, `.venv/` folders are refused;
 3. **Restart and install**: the launcher copies the files it replaces or deletes into `runtime/update/backup`, writes a journal, installs, and checks every file again. On any error everything is put back; an install interrupted by a power cut is rolled back at the next start. `python launcher.py --rollback` restores the previous version.
 
-Dictionaries, projects, `runtime/` and `.venv/` are never touched. Only files listed in the previous signed build are deleted. A Git clone is not updated from an archive: use `git pull`.
+Dictionaries, projects, `runtime/` and `.venv/` are never touched. Only files listed in the previous signed build are deleted. **A Git clone** gets the same Update button, without an archive: `git fetch` brings the release tag, its commit must equal the commit in the signed `build.json`, and the clone is fast-forwarded (`git merge --ff-only`). Uncommitted changes or own commits on top block the update (the bar says why); rollback is `git reset --keep`.
 
 <details>
 <summary><b>What the launcher does in detail</b></summary>
@@ -272,6 +272,7 @@ setup_data.py              downloads and checks the dictionaries (SHA-256)
 setup_ocr.py / ocr_backend.py   local RapidOCR, installed by the first start (packages in runtime/ocr-python, models in data/ocr)
 server.py / backend.py     local server (127.0.0.1 only) and the Python Vigenère engine jobs
 updater.py / ed25519_ref.py   exact build, update check, signed install with rollback
+update_git.py              the same update for a Git clone (fetch the signed tag, fast-forward)
 tools/release.py           builds and signs a release (author only)
 vigenere/                  built-in Vigenère solver (MIT, by Dmytro)
 data/                      corpora, EN/RU/UK dictionaries, language-model cache (~300 MB, downloaded)

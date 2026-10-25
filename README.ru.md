@@ -7,10 +7,10 @@
 </p>
 
 <p align="center">
-  <img alt="версия" src="https://img.shields.io/badge/%D0%B2%D0%B5%D1%80%D1%81%D0%B8%D1%8F-1.3.3-1976d2">
+  <img alt="версия" src="https://img.shields.io/badge/%D0%B2%D0%B5%D1%80%D1%81%D0%B8%D1%8F-1.3.4-1976d2">
   <img alt="платформы" src="https://img.shields.io/badge/Windows%20%7C%20macOS%20%7C%20Linux-3b4252">
   <img alt="python" src="https://img.shields.io/badge/python-3.9%2B-3776ab">
-  <img alt="тесты" src="https://img.shields.io/badge/%D1%82%D0%B5%D1%81%D1%82%D1%8B-595%20%D0%BF%D1%80%D0%BE%D1%85%D0%BE%D0%B4%D1%8F%D1%82-2e7d32">
+  <img alt="тесты" src="https://img.shields.io/badge/%D1%82%D0%B5%D1%81%D1%82%D1%8B-597%20%D0%BF%D1%80%D0%BE%D1%85%D0%BE%D0%B4%D1%8F%D1%82-2e7d32">
   <img alt="языки" src="https://img.shields.io/badge/UI-EN%20%C2%B7%20RU%20%C2%B7%20UK-6a1b9a">
   <img alt="офлайн" src="https://img.shields.io/badge/%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%D0%B5%D1%82-%D0%BE%D1%84%D0%BB%D0%B0%D0%B9%D0%BD-2e7d32">
   <img alt="сервер" src="https://img.shields.io/badge/%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D1%82%D0%BE%D0%BB%D1%8C%D0%BA%D0%BE%20127.0.0.1-455a64">
@@ -108,7 +108,7 @@ python server.py              # http://127.0.0.1:8765 opens in the browser
 2. архив распаковывается в `runtime/update/staging`, и каждый файл сверяется с подписанным списком; лишние файлы, пути `../` и папки `data/`, `runtime/`, `.venv/` отклоняются;
 3. **Перезапустить и установить**: запускатор копирует заменяемые и удаляемые файлы в `runtime/update/backup`, пишет журнал, устанавливает и снова проверяет каждый файл. При любой ошибке всё возвращается назад; установка, прерванная выключением питания, откатывается при следующем запуске. `python launcher.py --rollback` возвращает прошлую версию.
 
-Словари, проекты, `runtime/` и `.venv/` не трогаются. Удаляются только файлы из списка прошлой подписанной сборки. Клон Git архивом не обновляется: используйте `git pull`.
+Словари, проекты, `runtime/` и `.venv/` не трогаются. Удаляются только файлы из списка прошлой подписанной сборки. **Клон Git** получает ту же кнопку «Обновить», без архива: `git fetch` забирает тег релиза, его коммит должен совпасть с коммитом в подписанном `build.json`, и клон перематывается вперёд (`git merge --ff-only`). Незакоммиченные изменения или свои коммиты поверх релиза блокируют обновление (полоса объясняет почему); откат — `git reset --keep`.
 
 <details>
 <summary><b>Что лаунчер делает подробно</b></summary>
@@ -271,6 +271,7 @@ launcher.py                picks Python, installs dependencies, starts the serve
 setup_data.py              downloads and checks the dictionaries (SHA-256)
 server.py / backend.py     local server (127.0.0.1 only) and the Python Vigenère engine jobs
 updater.py / ed25519_ref.py   exact build, update check, signed install with rollback
+update_git.py              the same update for a Git clone (fetch the signed tag, fast-forward)
 tools/release.py           builds and signs a release (author only)
 vigenere/                  built-in Vigenère solver (MIT, by Dmytro)
 data/                      corpora, EN/RU/UK dictionaries, language-model cache (~300 MB, downloaded)

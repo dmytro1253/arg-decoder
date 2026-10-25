@@ -3,6 +3,7 @@ import hashlib
 import json
 import os
 import shutil
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -313,15 +314,84 @@ class InstallTest(UpdaterBase):
         (self.root / "build.json").write_bytes((self.root / "build.json").read_bytes().replace(b"1.3.0", b"1.3.1"))
         self.assertEqual(updater.build_info()["kind"], "unverified")
 
-    def test_git_checkout_is_not_updated_from_archive(self):
-        (self.root / ".git").mkdir()
-        (self.root / ".git" / "HEAD").write_text("ref: refs/heads/main\n")
-        (self.root / ".git" / "refs" / "heads").mkdir(parents=True)
-        (self.root / ".git" / "refs" / "heads" / "main").write_text("a" * 40 + "\n")
-        self.assertEqual(updater.build_info(), {"kind": "git", "version": "1.3.0", "commit": "a" * 40, "signed": False})
-        self.assertEqual(updater.install_mode()[0], "git")
-        with self.assertRaisesRegex(updater.UpdateError, "git pull"):
-            self.stage(NEW, "1.4.0")
+
+def git(cwd, *args):
+    return subprocess.run(["git", "-c", "user.name=t", "-c", "user.email=t@example.invalid", "-c", "init.defaultBranch=main",
+                           "-c", "core.autocrlf=false", *args], cwd=str(cwd), capture_output=True, text=True, check=True).stdout.strip()
+
+
+@unittest.skipUnless(shutil.which("git"), "нужна программа git")
+class GitCloneTest(UpdaterBase):
+    """Клон git: подписанный коммит приходит через git fetch тега и ставится перемоткой."""
+
+    def setUp(self):
+        super().setUp()
+        self.origin = self.tmp / "origin"
+        self.origin.mkdir()
+        git(self.origin, "init", "-q")
+        self.commit_files(OLD, "1.3.0")
+        shutil.rmtree(self.root)
+        git(self.tmp, "clone", "-q", str(self.origin), str(self.root))
+        self.old_commit = git(self.root, "rev-parse", "HEAD")
+        self.new_commit = self.commit_files(NEW, "1.4.0", tag="v1.4.0")
+
+    def commit_files(self, files, version, tag=None):
+        for p in list(git(self.origin, "ls-files").splitlines()):
+            if p not in files:
+                git(self.origin, "rm", "-q", p)
+        for p, b in files.items():
+            (self.origin / p).parent.mkdir(parents=True, exist_ok=True)
+            (self.origin / p).write_bytes(b)
+        git(self.origin, "add", "-A")
+        git(self.origin, "commit", "-q", "-m", version)
+        if tag:
+            git(self.origin, "tag", tag)
+        return git(self.origin, "rev-parse", "HEAD")
+
+    def stage_git(self, version="1.4.0", commit=None):
+        manifest, raw, sig = make_build(NEW, version)
+        manifest["commit"] = commit or self.new_commit
+        raw = (json.dumps(manifest, indent=1) + "\n").encode("utf-8")
+        sig = updater.sign_text(SECRET, KEY_ID, raw)
+        base = "https://github.com/%s/releases/download/v%s/" % (REPO, version)
+        blobs = {base + "m": raw, base + "s": sig.encode()}
+        info = {"latest": version, "urls": {"manifest": base + "m", "sig": base + "s", "zip": base + "z.zip"}}
+        return updater.stage(info, fetch_bytes=blobs.__getitem__, fetch_file=lambda u, t: self.fail("клону архив не нужен"))
+
+    def test_clone_updates_to_the_signed_commit_and_rolls_back(self):
+        self.assertEqual(updater.build_info()["kind"], "git")
+        self.assertEqual(updater.install_mode(), ("git", ""))
+        self.assertEqual(self.stage_git()["git_commit"], self.new_commit)
+        self.assertTrue(updater.apply_pending(log=lambda m: None))
+        self.assertEqual(git(self.root, "rev-parse", "HEAD"), self.new_commit)
+        for p, b in NEW.items():
+            self.assertEqual((self.root / p).read_bytes(), b, p)
+        self.assertFalse((self.root / "web" / "old.js").exists())
+        self.assertTrue(updater.verify_install()["ok"])
+        with mock.patch.object(updater, "APP_VERSION", "1.4.0"):
+            self.assertEqual(updater.rollback(log=lambda m: None), "1.3.0")
+        self.assertEqual(git(self.root, "rev-parse", "HEAD"), self.old_commit)
+        self.assertEqual((self.root / "launcher.py").read_bytes(), b"old launcher")
+
+    def test_tag_pointing_elsewhere_is_refused(self):
+        other = self.commit_files(dict(NEW, **{"evil.py": b"x"}), "1.4.0-evil")
+        with self.assertRaisesRegex(updater.UpdateError, "не на подписанный коммит"):
+            self.stage_git(commit=other)
+        self.assertEqual(git(self.root, "rev-parse", "HEAD"), self.old_commit)
+
+    def test_dirty_or_diverged_clone_is_not_touched(self):
+        (self.root / "launcher.py").write_bytes(b"my local edit")
+        mode, reason = updater.install_mode()
+        self.assertEqual(mode, "git-blocked")
+        self.assertIn("launcher.py", reason)
+        res = updater.verify_install()
+        self.assertEqual((res["ok"], res["modified"]), (False, ["launcher.py"]))
+        with self.assertRaisesRegex(updater.UpdateError, "незакоммиченные"):
+            self.stage_git()
+        git(self.root, "commit", "-qam", "my own commit")
+        with self.assertRaisesRegex(updater.UpdateError, "свои коммиты"):
+            self.stage_git()
+        self.assertEqual((self.root / "launcher.py").read_bytes(), b"my local edit")
 
 
 def release(tag, assets=True, **kw):

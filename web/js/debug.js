@@ -172,7 +172,7 @@
 
   function buildText(b) {
     if (b.kind === 'release') return T('релиз ', 'release ') + b.version + T(' · коммит ', ' · commit ') + short(b.commit) + T(' · сборка ', ' · build ') + b.id + T(' · файлов ', ' · files ') + b.files + T(' · подпись ', ' · signature ') + b.key + ' ✓';
-    if (b.kind === 'git') return T('клон git, версия ', 'git clone, version ') + b.version + T(' · коммит ', ' · commit ') + short(b.commit) + T(' — обновляется командой git pull', ' — updated with git pull');
+    if (b.kind === 'git') return T('клон git, версия ', 'git clone, version ') + b.version + T(' · коммит ', ' · commit ') + short(b.commit) + (b.tag ? ' · ' + b.tag : '') + T(' — обновляется до подписанных релизов через git', ' — updated to signed releases through git');
     if (b.kind === 'unverified') return T('build.json есть, но подпись не сошлась: ', 'build.json is present but its signature does not match: ') + srv(b.error || '');
     if (b.kind === 'source') return T('исходники без подписанного списка файлов, версия ', 'source files without a signed file list, version ') + b.version + T(' — точная сборка неизвестна', ' — the exact build is unknown');
     return srv(b.error || b.kind);
@@ -199,7 +199,8 @@
     if (integrity) {
       const bad = integrity.modified.concat(integrity.missing.map((p) => p + T(' (нет)', ' (missing)')));
       box.appendChild(row(integrity.ok ? true : integrity.checked ? false : null, T('Файлы программы', 'Program files'), integrity.ok
-        ? T('все ', 'all ') + integrity.checked + T(' совпадают с подписанной сборкой', ' match the signed build')
+        ? (integrity.git ? T('все ', 'all ') + integrity.checked + T(' файлов совпадают с коммитом (проверил git)', ' files match the commit (checked by git)')
+          : T('все ', 'all ') + integrity.checked + T(' совпадают с подписанной сборкой', ' match the signed build'))
         : integrity.checked ? T('изменены или пропали: ', 'changed or missing: ') + bad.slice(0, 12).join(', ') + (bad.length > 12 ? ' …+' + (bad.length - 12) : '') : srv(integrity.reason || '')));
     }
     const U = G.Updates;

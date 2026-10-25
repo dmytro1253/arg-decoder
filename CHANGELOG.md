@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.4 — Update button for Git clones
+
+- A Git clone gets the same **Update** button as a release copy, without an archive: the signed `build.json` of the release is checked as before, `git fetch` brings the release tag, its commit must equal the commit in the signed list, and the clone is fast-forwarded (`git merge --ff-only`) by the launcher on restart. Uncommitted changes, a detached HEAD or own commits on top of the release block the update with a clear reason; rollback is `git reset --keep` back to the previous commit, and only when nothing was committed on top.
+- Debug for a Git clone: the build line shows the release tag when HEAD is exactly on it, and **Check files** asks git which tracked files are changed or deleted instead of saying there is no signed list.
+- Clones on 1.3.3 or older need one manual `git pull` to get this; after that the button works.
+
 ## 1.3.3 — no stale bytecode after an update or rollback
 
 - Installing an update and rolling it back now delete the `__pycache__` entries of every Python file they write or remove. When the old and new file had the same size and were written within the same second, Python could keep loading the old bytecode (found by updating a real 1.3.1 install to 1.3.2 and rolling back at once: the files were 1.3.1, the code still reported 1.3.2).

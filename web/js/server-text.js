@@ -51,7 +51,14 @@
   EXACT['копия прошлой версии неполная или повреждена, файлы не тронуты'] = 'the backup of the previous version is incomplete or damaged; no files were changed'; // i18n-ok: ответ сервера
   EXACT['у копии прошлой версии нет записанных хешей, а подписанный список файлов отсутствует или повреждён — проверить её нельзя, файлы не тронуты'] = 'the backup of the previous version has no recorded hashes, and its signed file list is missing or damaged: it cannot be checked; no files were changed'; // i18n-ok: ответ сервера
   EXACT['после отката файлы не совпали с копией прошлой версии'] = 'after the rollback, files do not match the backup of the previous version'; // i18n-ok: ответ сервера
+  EXACT['клон git не на ветке (detached HEAD) — обнови вручную: git pull'] = 'the git clone is not on a branch (detached HEAD): update it by hand with git pull'; // i18n-ok: ответ сервера
+  EXACT['это клон git, но программа git не найдена — обнови вручную: git pull'] = 'this is a git clone, but the git program was not found: update it by hand with git pull'; // i18n-ok: ответ сервера
+  EXACT['в клоне есть свои коммиты, которых нет в релизе — обнови вручную: git pull'] = 'the clone has its own commits that are not in the release: update it by hand with git pull'; // i18n-ok: ответ сервера
+  EXACT['в подписанной сборке нет коммита — клон так не обновить'] = 'the signed build has no commit, so a clone cannot be updated to it'; // i18n-ok: ответ сервера
   const PATTERNS = [
+    [/^в клоне есть незакоммиченные изменения \((.*)\) — закоммить или убери их \(git stash\), потом обнови$/, 'the clone has uncommitted changes ($1): commit or stash them (git stash), then update'], // i18n-ok: ответ сервера
+    [/^тег (\S+) указывает не на подписанный коммит — обновление отклонено$/, 'tag $1 does not point to the signed commit: the update is refused'], // i18n-ok: ответ сервера
+    [/^git не смог забрать (\S+): (.*)$/, 'git could not fetch $1: $2'], // i18n-ok: ответ сервера
     [/^откат прерван ошибкой записи \((.*)\)$/, 'the rollback was interrupted by a write error ($1)'], // i18n-ok: ответ сервера
     [/^Нет моделей OCR: (.*) — запусти «python setup_ocr.py»$/, 'OCR models are missing: $1; run “python setup_ocr.py”'], // i18n-ok: ответ сервера
     [/^Неизвестный язык OCR: (.*)$/, 'Unknown OCR language: $1'], // i18n-ok: ответ сервера
