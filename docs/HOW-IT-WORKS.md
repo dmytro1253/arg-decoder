@@ -238,7 +238,11 @@ QR codes are read with **jsQR** (bundled); other barcodes with the browser's `Ba
 ## 13. Security and privacy
 
 * The server listens on **127.0.0.1 only**. API requests must come with a `Host` of `127.0.0.1` or `localhost` (protection from DNS rebinding), and `POST` requests must carry the header `X-ARG-Decoder: 1`, which a foreign web page cannot send to it without a CORS preflight.
-* **No telemetry, no accounts.** The program goes online only: on first setup (python.org for Python on Windows, PyPI for numpy/torch, the GitHub release for data), and when the user explicitly asks for a YouTube or link check. Link checks are limited to an allow-list of hosts and never follow redirects.
+* **No telemetry, no accounts.** The program goes online only:
+  * on first setup: python.org for Python on Windows, PyPI for numpy/torch and RapidOCR, modelscope.cn for the OCR models, the GitHub release for data;
+  * for the **update check**: at start, at most once per 6 hours, the local server reads the release list from `api.github.com` (no data about the user or the project is sent; the check can be turned off in Debug and `--offline` disables it), and downloads the release files from `github.com` only when the user presses Update;
+  * when the user explicitly asks for a YouTube or link check. Link checks are limited to an allow-list of hosts and never follow redirects.
+* **Updates are trusted only through the signature.** The release file list (`build.json`) is signed with Ed25519 by the author's key, whose public half is built into `updater.py`. Every file of the archive is compared with that list before installing. Replaced files are backed up with their hashes. A rollback checks the backup before touching anything and checks the result after; if either check fails, it reports `rollback-failed` with the files instead of success.
 * The downloaded data archive and every file in it are checked against SHA-256 hashes in `data.manifest.json`; extraction accepts only flat file names inside `data/`.
 * Projects and files stay in the browser storage of this computer or in the project file the user saves.
 

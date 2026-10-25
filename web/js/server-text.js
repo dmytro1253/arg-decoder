@@ -48,7 +48,10 @@
     'это не сборка ARG Decoder или формат новее, чем понимает эта версия': 'this is not an ARG Decoder build, or its format is newer than this version understands', // i18n-ok: ответ сервера
     'нет адресов файлов обновления': 'no addresses of the update files', // i18n-ok: ответ сервера
   };
+  EXACT['копия прошлой версии неполная или повреждена, файлы не тронуты'] = 'the backup of the previous version is incomplete or damaged; no files were changed'; // i18n-ok: ответ сервера
+  EXACT['после отката файлы не совпали с копией прошлой версии'] = 'after the rollback, files do not match the backup of the previous version'; // i18n-ok: ответ сервера
   const PATTERNS = [
+    [/^откат прерван ошибкой записи \((.*)\)$/, 'the rollback was interrupted by a write error ($1)'], // i18n-ok: ответ сервера
     [/^Нет моделей OCR: (.*) — запусти «python setup_ocr.py»$/, 'OCR models are missing: $1; run “python setup_ocr.py”'], // i18n-ok: ответ сервера
     [/^Неизвестный язык OCR: (.*)$/, 'Unknown OCR language: $1'], // i18n-ok: ответ сервера
     [/^Движок Виженера не загрузился: (.*)$/, 'The Vigenère engine failed to load: $1'], // i18n-ok: ответ сервера

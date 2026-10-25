@@ -261,17 +261,24 @@
 
     /**
      * Перед заменой проекта: спросить и сохранить резервную копию текущего. Возвращает true, если можно заменять.
-     * Пустой проект заменяется без вопросов; копия пишется отдельно от автосохранения и восстанавливается кнопкой «Прошлый проект».
+     * Пустой проект заменяется без вопросов. Снимок готовится в свободном слоте и становится копией для кнопки
+     * «Прошлый проект» только после согласия; при отмене прежняя копия остаётся как была.
      */
     async confirmReplace(question) {
       const snap = this.snapshot();
       if (!P.hasContent(snap)) return true;
-      const backup = this.store && this.store.saveBackup ? await this.store.saveBackup(snap, snap.artifacts) : { ok: false };
+      const store = this.store && this.store.prepareBackup ? this.store : null;
+      const backup = store ? await store.prepareBackup(snap, snap.artifacts) : { ok: false };
       const tail = backup.ok
         ? T('Копия текущего проекта сохранена в браузере: вернуть его можно кнопкой «Прошлый проект».', 'A copy of the current project is kept in the browser: the Previous project button brings it back.')
         : T('Резервную копию сохранить не удалось: текущий проект пропадёт, если не сохранить его в файл (Ctrl+S).', 'A backup copy could not be saved: the current project will be lost unless you save it to a file (Ctrl+S).');
-      if (!confirm(question + ' ' + tail)) return false;
-      this.updateRestoreButton(backup.ok);
+      if (!confirm(question + ' ' + tail)) {
+        if (store) await store.discardBackup(backup);
+        return false;
+      }
+      const kept = !!store && store.commitBackup(backup);
+      if (backup.ok && !kept) this.toast(T('Резервную копию сохранить не удалось: текущий проект пропадёт, если не сохранить его в файл (Ctrl+S).', 'A backup copy could not be saved: the current project will be lost unless you save it to a file (Ctrl+S).'));
+      this.updateRestoreButton(kept || !!(store && (await store.loadBackup())));
       return true;
     }
 

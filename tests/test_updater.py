@@ -163,6 +163,42 @@ class InstallTest(UpdaterBase):
         self.assertFalse((self.root / "web" / "new").exists())
         self.assertTrue(updater.verify_install()["ok"])
 
+    def test_rollback_with_missing_or_damaged_backup_fails_honestly(self):
+        backup_root = self.root / "runtime" / "update" / "backup"
+        for damage in ("delete", "corrupt"):
+            with self.subTest(damage=damage):
+                shutil.rmtree(self.root, ignore_errors=True)
+                self.root.mkdir()
+                self.install(OLD, "1.3.0")
+                self.stage(NEW, "1.4.0")
+                updater.apply_pending(log=lambda m: None)
+                saved = next(backup_root.iterdir()) / "launcher.py"
+                if damage == "delete":
+                    saved.unlink()
+                else:
+                    saved.write_bytes(b"old launcheX")   # тот же размер, другой хеш
+                with mock.patch.object(updater, "APP_VERSION", "1.4.0"):
+                    with self.assertRaisesRegex(updater.UpdateError, "неполная или повреждена.*launcher.py"):
+                        updater.rollback(log=lambda m: None)
+                    self.assertTrue(updater.verify_install()["ok"], "файлы не тронуты — осталась целая 1.4.0")
+                last = updater.status()["last"]
+                self.assertEqual((last["state"], last["bad_files"]), ("rollback-failed", ["launcher.py"]))
+
+    def test_rollback_reports_files_that_did_not_restore(self):
+        self.install(OLD, "1.3.0")
+        self.stage(NEW, "1.4.0")
+        updater.apply_pending(log=lambda m: None)
+        real = updater._copy_atomic
+
+        def silently_wrong(src, dst, executable=False):
+            real(src, dst, executable)
+            if dst.name == "launcher.py":
+                dst.write_bytes(b"something else")
+        with mock.patch.object(updater, "APP_VERSION", "1.4.0"), mock.patch.object(updater, "_copy_atomic", silently_wrong):
+            with self.assertRaisesRegex(updater.UpdateError, "после отката"):
+                updater.rollback(log=lambda m: None)
+        self.assertEqual(updater.status()["last"]["state"], "rollback-failed")
+
     def test_failure_midway_rolls_back_everything(self):
         self.install(OLD, "1.3.0")
         self.stage(NEW, "1.4.0")

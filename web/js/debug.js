@@ -207,7 +207,8 @@
     box.appendChild(row(c ? (c.status === 'error' ? false : c.status === 'update' ? null : true) : null, T('Новая версия', 'New version'), checkText(c)));
     const st = U && U.status;
     if (st && st.last) box.appendChild(row(st.last.state === 'done' ? true : st.last.state === 'rolled-back' ? null : false, T('Последнее обновление', 'Last update'),
-      st.last.from + ' → ' + st.last.to + ' · ' + (st.last.date || '') + ' · ' + ({ done: T('установлено (откат: launcher.py --rollback)', 'installed (undo: launcher.py --rollback)'), 'rolled-back': T('откачено', 'rolled back'), applying: T('прервано', 'interrupted') }[st.last.state] || st.last.state)));
+      st.last.from + ' → ' + st.last.to + ' · ' + (st.last.date || '') + ' · ' + ({ done: T('установлено (откат: launcher.py --rollback)', 'installed (undo: launcher.py --rollback)'), 'rolled-back': T('откачено', 'rolled back'), applying: T('прервано', 'interrupted'),
+        'rollback-failed': T('откат не удался: ', 'rollback failed: ') + srv(st.last.error || '') + ((st.last.bad_files || []).length ? ' (' + st.last.bad_files.slice(0, 5).join(', ') + ')' : '') }[st.last.state] || st.last.state)));
     const actions = h('div', 'dbg-actions');
     const verifyBtn = h('button', 'btn small', T('Проверить файлы', 'Check files'));
     verifyBtn.onclick = async () => {

@@ -7,10 +7,10 @@
 </p>
 
 <p align="center">
-  <img alt="version" src="https://img.shields.io/badge/version-1.3.0-1976d2">
+  <img alt="version" src="https://img.shields.io/badge/version-1.3.1-1976d2">
   <img alt="platforms" src="https://img.shields.io/badge/Windows%20%7C%20macOS%20%7C%20Linux-3b4252">
   <img alt="python" src="https://img.shields.io/badge/python-3.9%2B-3776ab">
-  <img alt="tests" src="https://img.shields.io/badge/tests-589%20passing-2e7d32">
+  <img alt="tests" src="https://img.shields.io/badge/tests-594%20passing-2e7d32">
   <img alt="languages" src="https://img.shields.io/badge/UI-EN%20%C2%B7%20RU%20%C2%B7%20UK-6a1b9a">
   <img alt="offline" src="https://img.shields.io/badge/works-offline-2e7d32">
   <img alt="server" src="https://img.shields.io/badge/server-127.0.0.1%20only-455a64">
@@ -252,7 +252,7 @@ Almost everything is local. The server listens on `127.0.0.1` only, checks the `
 ## ✅ Tests and development
 
 ```bash
-node --test                                              # 554 tests: engine, solver, examples, images, audio, files, OCR, archives, i18n
+node --test                                              # 557 tests: engine, solver, examples, images, audio, files, OCR, archives, i18n
 python -m unittest discover -s tests -p "test_*.py"      # server, data installer, Vigenère engine
 node tools/check_i18n.js                                 # interface strings outside T('ru', 'en')
 node tools/i18n_uk.js check                              # Ukrainian dictionary is complete

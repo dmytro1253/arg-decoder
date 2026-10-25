@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.3.1 — backup and rollback fixes
+
+- Previous project: cancelling New, Open or Previous project no longer overwrites the existing backup. The snapshot is prepared in a free slot and becomes the backup only after the replacement is confirmed; cancelling deletes it.
+- The backup pointer records the slot and the storage (IndexedDB or browser storage), so when IndexedDB refuses a write and the copy goes to browser storage, that copy is the one restored, also after a reload. Backups from 1.2.1–1.3.0 still open (the newer of the two storages is chosen).
+- Update rollback checks the backup before touching anything (every file present, SHA-256 as recorded at install) and checks the restored files afterwards. A missing or damaged backup, or a file that did not restore, is reported as `rollback-failed` with the files (in the launcher output and the Debug tab) instead of success.
+- HOW-IT-WORKS: the privacy section lists the automatic update check, the OCR model download and how updates are verified.
+
 ## 1.3.0 — signed updates
 
 - Exact build: a release carries `build.json` (version, commit, size and SHA-256 of every program file) and `build.sig`, an Ed25519 signature made with the author's key; the public key is built into `updater.py`. The Debug tab shows the version, the kind of copy (signed release, Git clone, plain sources), commit, build id and signature, and checks every program file on request.

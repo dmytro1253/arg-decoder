@@ -2150,6 +2150,14 @@
   ]
  },
  {
+  "key": "откат не удался: ",
+  "pattern": false,
+  "en": "rollback failed: ",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
   "key": "откачено",
   "pattern": false,
   "en": "rolled back",
@@ -28458,6 +28466,14 @@
   ]
  },
  {
+  "key": "копия прошлой версии неполная или повреждена, файлы не тронуты",
+  "pattern": false,
+  "en": "",
+  "files": [
+   "web/js/server-text.js"
+  ]
+ },
+ {
   "key": "кэш",
   "pattern": false,
   "en": "",
@@ -28603,6 +28619,14 @@
  },
  {
   "key": "подпись повреждена",
+  "pattern": false,
+  "en": "",
+  "files": [
+   "web/js/server-text.js"
+  ]
+ },
+ {
+  "key": "после отката файлы не совпали с копией прошлой версии",
   "pattern": false,
   "en": "",
   "files": [

@@ -2,6 +2,9 @@
 // честные статусы Python-движка (ARG-002/003), подготовка пробелов и мусорные «вероятно» (ARG-006/007).
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const vm = require('node:vm');
 const { loadFull } = require('./load');
 
 const G = loadFull('en');
@@ -67,6 +70,70 @@ test('резервная копия прошлого проекта: доски,
   assert.deepEqual(plain(back.project.keys), [{ value: 'k1', source: 'user', added: 5 }]);
   assert.equal(back.project.artifacts.length, 1);
   assert.equal((await store.load()).project.name, 'Новый', 'автосохранение не тронуто');
+});
+
+// IndexedDB в памяти; failSet — запись падает (квота, приватный режим).
+function memIdb() {
+  const map = new Map();
+  const db = {
+    map, failSet: false,
+    get: async (k) => (map.has(k) ? map.get(k) : undefined),
+    set: async (k, v) => { if (db.failSet) throw new Error('QuotaExceededError'); map.set(k, v); },
+    remove: async (k) => { map.delete(k); },
+  };
+  return db;
+}
+
+// Workspace.confirmReplace на подставном объекте: проект, хранилище и ответ на confirm().
+function fakeWorkspace(store, project, answer) {
+  G.confirm = () => answer;
+  return {
+    store, project, restore: null,
+    snapshot: () => ({ ...project, artifacts: [] }),
+    toast: () => {},
+    updateRestoreButton(on) { this.restore = on; },
+  };
+}
+
+test('«Новый» → «Отмена» сохраняет и текущий проект, и прежнюю резервную копию', async () => {
+  const store = P.createStore({ local: memStorage(), idb: memIdb() });
+  const A = P.create({ name: 'A', keys: ['ka'] });
+  const B = P.create({ name: 'B', keys: ['kb'] });
+  assert.equal((await store.saveBackup(A, [])).ok, true);
+  if (!G.Workspace) vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'web', 'js', 'workspace.js'), 'utf8'), G, { filename: 'workspace.js' });
+  const confirmReplace = G.Workspace.prototype.confirmReplace;
+  const cancelled = fakeWorkspace(store, B, false);
+  assert.equal(await confirmReplace.call(cancelled, 'Новый?'), false);
+  assert.equal((await store.loadBackup()).project.name, 'A', 'отмена не трогает копию A');
+  assert.equal(await confirmReplace.call(cancelled, 'Новый?'), false);
+  assert.equal((await store.loadBackup()).project.name, 'A', 'и повторная отмена тоже');
+  const agreed = fakeWorkspace(store, B, true);
+  assert.equal(await confirmReplace.call(agreed, 'Новый?'), true);
+  assert.equal((await store.loadBackup()).project.name, 'B', 'после согласия копия — B');
+  assert.equal(agreed.restore, true);
+});
+
+test('отказ записи в IndexedDB: копия уходит в память браузера, и восстанавливается именно она', async () => {
+  const idb = memIdb();
+  const local = memStorage();
+  const store = P.createStore({ local, idb });
+  await store.saveBackup(P.create({ name: 'A' }), []);
+  idb.failSet = true;
+  const res = await store.saveBackup(P.create({ name: 'B' }), []);
+  assert.deepEqual([res.ok, res.where], [true, 'local']);
+  assert.equal((await store.loadBackup()).project.name, 'B');
+  assert.equal((await P.createStore({ local, idb }).loadBackup()).project.name, 'B', 'и после перезагрузки страницы');
+  idb.failSet = false;
+  await store.saveBackup(P.create({ name: 'C' }), []);
+  assert.equal((await store.loadBackup()).project.name, 'C');
+});
+
+test('копия версий до 1.3.1 (без указателя) читается, из двух хранилищ — более новая', async () => {
+  const idb = memIdb();
+  const local = memStorage();
+  idb.map.set('previous-project', JSON.stringify({ ...P.create({ name: 'old-idb' }), savedAt: '2026-10-20T10:00:00.000Z' }));
+  local.setItem('argdec.project.previous', JSON.stringify({ ...P.create({ name: 'new-local' }), savedAt: '2026-10-24T10:00:00.000Z' }));
+  assert.equal((await P.createStore({ local, idb }).loadBackup()).project.name, 'new-local');
 });
 
 test('статусы движка: коды сервера, английские и неизвестный (не успех)', () => {

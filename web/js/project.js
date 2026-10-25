@@ -13,8 +13,12 @@
   const IDB_STORE = 'kv';
   const IDB_ARTIFACTS = 'artifacts';
   // Снимок проекта перед заменой (новый проект, открытие файла): отдельный ключ, не тот, что у автосохранения.
-  const BACKUP_KEY = 'argdec.project.previous';
-  const IDB_BACKUP = 'previous-project';
+  // Два слота (a, b) и указатель на действующий: новый снимок пишется в свободный слот и становится действующим
+  // только после согласия на замену, так что отмена не трогает прежнюю копию. Указатель хранит и хранилище слота.
+  const BACKUP_KEY = 'argdec.project.previous';          // слоты: BACKUP_KEY + '.a' / '.b'; без суффикса — версии до 1.3.1
+  const BACKUP_POINTER_KEY = 'argdec.project.previous.current';
+  const IDB_BACKUP = 'previous-project';                 // слоты: IDB_BACKUP + '-a' / '-b'
+  const BACKUP_SLOTS = ['a', 'b'];
   // Улики крупнее этого порога (в символах JSON) сразу уходят в IndexedDB: localStorage ограничен ~5 МБ.
   const LOCAL_ARTIFACTS_LIMIT = 1500000;
   const MAX_CLOSED = 20;
@@ -340,29 +344,79 @@
       return { ok: warnings.length === 0, mode, warnings };
     }
 
-    /**
-     * Резервный снимок проекта целиком (доски, рисунки, ключи, досье и вложения) перед заменой.
-     * Сначала IndexedDB (вмещает вложения), иначе память браузера. Возвращает { ok, where } — без исключений.
-     */
-    async function saveBackup(project, artifacts) {
-      const text = JSON.stringify({ ...project, artifacts: normalizeArtifacts(artifacts), keys: normalizeKeys(project.keys), savedAt: new Date().toISOString() });
-      if (idb) {
-        try { await idb.set(IDB_BACKUP, text); lsRemove(BACKUP_KEY); return { ok: true, where: 'idb' }; } catch (e) { /* пробуем память браузера */ }
-      }
-      try { local.setItem(BACKUP_KEY, text); return { ok: true, where: 'local' }; } catch (e) { return { ok: false, where: null }; }
+    const slotKey = (slot, where) => (where === 'idb' ? IDB_BACKUP + '-' + slot : BACKUP_KEY + '.' + slot);
+
+    function readPointer() {
+      try {
+        const p = JSON.parse(lsGet(BACKUP_POINTER_KEY) || 'null');
+        return p && BACKUP_SLOTS.includes(p.slot) && (p.where === 'idb' || p.where === 'local') && typeof p.id === 'string' ? p : null;
+      } catch (e) { return null; }
     }
 
-    /** Снимок, сохранённый saveBackup, или null. */
-    async function loadBackup() {
-      let text = null;
-      if (idb) { try { text = await idb.get(IDB_BACKUP); } catch (e) { text = null; } }
-      if (!text) text = lsGet(BACKUP_KEY);
+    async function readSlot(where, key) {
+      try { return where === 'idb' ? (idb ? await idb.get(key) : null) : lsGet(key); } catch (e) { return null; }
+    }
+
+    async function removeSlot(slot) {
+      lsRemove(slotKey(slot, 'local'));
+      if (idb) { try { await idb.remove(slotKey(slot, 'idb')); } catch (e) { /* устаревший слот без указателя не читается */ } }
+    }
+
+    function parseBackup(text, id) {
       if (!text) return null;
       try {
         const data = JSON.parse(text);
+        if (id && data.backupId !== id) return null;   // в слоте не тот снимок, на который указывает указатель
         const project = normalize(data);
-        return { project: { ...project, artifacts: normalizeArtifacts(data.artifacts) }, savedAt: data.savedAt || null };
+        return { project: { ...project, artifacts: normalizeArtifacts(data.artifacts) }, savedAt: data.savedAt || null, id: data.backupId || null };
       } catch (e) { return null; }
+    }
+
+    /**
+     * Готовит снимок проекта целиком (доски, рисунки, ключи, досье, вложения) в свободном слоте, не трогая действующую копию.
+     * Сначала IndexedDB (вмещает вложения), иначе память браузера. Возвращает { ok, slot, where, id } — без исключений.
+     */
+    async function prepareBackup(project, artifacts) {
+      const current = readPointer();
+      const slot = current && current.slot === 'a' ? 'b' : 'a';
+      const id = Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
+      const text = JSON.stringify({ ...project, artifacts: normalizeArtifacts(artifacts), keys: normalizeKeys(project.keys), savedAt: new Date().toISOString(), backupId: id });
+      await removeSlot(slot);
+      if (idb) {
+        try { await idb.set(slotKey(slot, 'idb'), text); return { ok: true, slot, where: 'idb', id }; } catch (e) { /* пробуем память браузера */ }
+      }
+      try { local.setItem(slotKey(slot, 'local'), text); return { ok: true, slot, where: 'local', id }; } catch (e) { return { ok: false, slot, where: null, id: null }; }
+    }
+
+    /** Делает подготовленный снимок действующей копией: указатель — на его слот и хранилище. */
+    function commitBackup(prepared) {
+      if (!prepared || !prepared.ok) return false;
+      try {
+        local.setItem(BACKUP_POINTER_KEY, JSON.stringify({ slot: prepared.slot, where: prepared.where, id: prepared.id }));
+      } catch (e) { return false; }
+      lsRemove(BACKUP_KEY);   // копия версий до 1.3.1 больше не нужна
+      if (idb) idb.remove(IDB_BACKUP).catch(() => {});
+      return true;
+    }
+
+    /** Отмена замены: подготовленный снимок стирается, действующая копия остаётся. */
+    async function discardBackup(prepared) {
+      if (prepared && prepared.slot && !(readPointer() && readPointer().slot === prepared.slot)) await removeSlot(prepared.slot);
+    }
+
+    /** Подготовить и сразу сделать действующей (когда спрашивать не о чем). */
+    async function saveBackup(project, artifacts) {
+      const prepared = await prepareBackup(project, artifacts);
+      return { ok: prepared.ok && commitBackup(prepared), where: prepared.where };
+    }
+
+    /** Действующая копия по указателю, или null. Без указателя — копия версий до 1.3.1 (новее из двух хранилищ). */
+    async function loadBackup() {
+      const pointer = readPointer();
+      if (pointer) return parseBackup(await readSlot(pointer.where, slotKey(pointer.slot, pointer.where)), pointer.id);
+      const legacy = [parseBackup(await readSlot('idb', IDB_BACKUP)), parseBackup(lsGet(BACKUP_KEY))].filter(Boolean);
+      legacy.sort((x, y) => String(y.savedAt || '').localeCompare(String(x.savedAt || '')));
+      return legacy[0] || null;
     }
 
     /** Читает проект и улики. Возвращает null, если ничего не сохранено. */
@@ -411,7 +465,7 @@
       return { project, artifacts: [], warnings, migrated: true };
     }
 
-    return { save, load, saveBackup, loadBackup };
+    return { save, load, saveBackup, loadBackup, prepareBackup, commitBackup, discardBackup };
   }
 
   G.Project = {

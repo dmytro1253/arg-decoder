@@ -521,11 +521,14 @@ def _apply(new, staging, log):
                "replaced": [], "created": [], "removed": removed, "date": time.strftime("%Y-%m-%d %H:%M")}
     for rel in changed + [BUILD_FILE, BUILD_SIG]:
         (journal["replaced"] if (ROOT / rel).is_file() else journal["created"]).append(rel)
+    # Хеши копий записываются в журнал: откат сверяет их до восстановления и результат после.
+    journal["backup_sha"] = {}
     for rel in journal["replaced"] + removed:
         dst = backup / rel
         dst.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(ROOT / rel, dst)
-    _write_journal(journal)   # план и копии готовы до первого изменения — откат возможен с любого места
+        journal["backup_sha"][rel] = sha256_file(dst)
+    _write_journal(journal)   # план и проверенные копии готовы до первого изменения — откат возможен с любого места
     try:
         for rel in changed:
             _copy_atomic(staging / rel, ROOT / rel, new_paths[rel].get("exec", False))
@@ -539,7 +542,10 @@ def _apply(new, staging, log):
             raise UpdateError("после установки не совпали файлы: %s" % ", ".join(bad[:5]))
     except (OSError, UpdateError) as exc:
         log("[!] Установка не удалась (%s) — возвращаю прошлую версию / rolling back" % exc)
-        _restore(journal)
+        try:
+            _restore(journal)
+        except UpdateError as failed:
+            raise UpdateError("установка не удалась (%s), и откат тоже: %s" % (exc, failed)) from None
         _prune_backups()
         raise UpdateError("установка не удалась и отменена: %s" % exc) from None
     journal["state"] = "done"
@@ -557,17 +563,40 @@ def _journal_ok(journal):
     return all(safe_path(p) or p in (BUILD_FILE, BUILD_SIG) for r in rels for p in r)
 
 
+def _restore_failed(journal, reason, files):
+    """Откат не удался: в журнале остаётся диагностируемое состояние, наружу — понятная ошибка."""
+    journal.update(state="rollback-failed", error=reason, bad_files=files[:50])
+    _write_journal(journal)
+    raise UpdateError("%s: %s — переустанови программу из архива релиза (данные и проекты не затронуты)"
+                      % (reason, ", ".join(files[:5]) + (" …+%d" % (len(files) - 5) if len(files) > 5 else "")))
+
+
 def _restore(journal):
+    """Возвращает файлы прошлой версии. Сначала копия проверяется целиком (есть ли каждый файл и совпадает ли хеш),
+    и только потом что-то меняется; после восстановления результат сверяется ещё раз."""
     if not _journal_ok(journal):
         raise UpdateError("журнал обновления повреждён — откат невозможен, переустанови программу из релиза")
     backup = ROOT / journal["backup"]
-    for rel in journal["replaced"] + journal["removed"]:
-        if (backup / rel).is_file():
+    hashes = journal.get("backup_sha") if isinstance(journal.get("backup_sha"), dict) else {}
+    to_restore = journal["replaced"] + journal["removed"]
+    damaged = [rel for rel in to_restore
+               if not (backup / rel).is_file() or (rel in hashes and sha256_file(backup / rel) != hashes[rel])]
+    if damaged:
+        _restore_failed(journal, "копия прошлой версии неполная или повреждена, файлы не тронуты", damaged)
+    try:
+        for rel in to_restore:
             _copy_atomic(backup / rel, ROOT / rel, os.access(backup / rel, os.X_OK))
-    for rel in journal["created"]:
-        (ROOT / rel).unlink(missing_ok=True)
-    _prune_empty_dirs(journal["created"])
-    journal["state"] = "rolled-back"
+        for rel in journal["created"]:
+            (ROOT / rel).unlink(missing_ok=True)
+        _prune_empty_dirs(journal["created"])
+    except OSError as exc:
+        _restore_failed(journal, "откат прерван ошибкой записи (%s)" % exc, to_restore)
+    wrong = [rel for rel in to_restore
+             if not (ROOT / rel).is_file() or sha256_file(ROOT / rel) != hashes.get(rel, sha256_file(backup / rel))]
+    wrong += [rel for rel in journal["created"] if (ROOT / rel).exists()]
+    if wrong:
+        _restore_failed(journal, "после отката файлы не совпали с копией прошлой версии", wrong)
+    journal.update(state="rolled-back", error=None, bad_files=[])
     _write_journal(journal)
 
 
@@ -611,4 +640,4 @@ def status():
     journal = _read_journal()
     return {"build": build_info(), "state": state(), "pending": pending(), "mode": mode, "mode_reason": reason,
             "launcher": os.environ.get("ARGDEC_LAUNCHER") == "1",
-            "last": {k: journal.get(k) for k in ("state", "from", "to", "date")} if journal else None}
+            "last": {k: journal.get(k) for k in ("state", "from", "to", "date", "error", "bad_files")} if journal else None}

@@ -7,10 +7,10 @@
 </p>
 
 <p align="center">
-  <img alt="версия" src="https://img.shields.io/badge/%D0%B2%D0%B5%D1%80%D1%81%D0%B8%D1%8F-1.3.0-1976d2">
+  <img alt="версия" src="https://img.shields.io/badge/%D0%B2%D0%B5%D1%80%D1%81%D0%B8%D1%8F-1.3.1-1976d2">
   <img alt="платформы" src="https://img.shields.io/badge/Windows%20%7C%20macOS%20%7C%20Linux-3b4252">
   <img alt="python" src="https://img.shields.io/badge/python-3.9%2B-3776ab">
-  <img alt="тесты" src="https://img.shields.io/badge/%D1%82%D0%B5%D1%81%D1%82%D1%8B-589%20%D0%BF%D1%80%D0%BE%D1%85%D0%BE%D0%B4%D1%8F%D1%82-2e7d32">
+  <img alt="тесты" src="https://img.shields.io/badge/%D1%82%D0%B5%D1%81%D1%82%D1%8B-594%20%D0%BF%D1%80%D0%BE%D1%85%D0%BE%D0%B4%D1%8F%D1%82-2e7d32">
   <img alt="языки" src="https://img.shields.io/badge/UI-EN%20%C2%B7%20RU%20%C2%B7%20UK-6a1b9a">
   <img alt="офлайн" src="https://img.shields.io/badge/%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%D0%B5%D1%82-%D0%BE%D1%84%D0%BB%D0%B0%D0%B9%D0%BD-2e7d32">
   <img alt="сервер" src="https://img.shields.io/badge/%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D1%82%D0%BE%D0%BB%D1%8C%D0%BA%D0%BE%20127.0.0.1-455a64">
@@ -252,7 +252,7 @@ python server.py              # http://127.0.0.1:8765 opens in the browser
 ## ✅ Тесты и разработка
 
 ```bash
-node --test                                              # 554 tests: engine, solver, examples, images, audio, files, OCR, archives, i18n
+node --test                                              # 557 tests: engine, solver, examples, images, audio, files, OCR, archives, i18n
 python -m unittest discover -s tests -p "test_*.py"      # server, data installer, Vigenère engine
 node tools/check_i18n.js                                 # interface strings outside T('ru', 'en')
 node tools/i18n_uk.js check                              # Ukrainian dictionary is complete
