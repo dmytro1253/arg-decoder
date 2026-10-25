@@ -10,7 +10,7 @@
 | jsQR | 1.4.0 | Apache-2.0 | `web/vendor/jsqr/` |
 | Built-in Vigenère solver (`vigenere/`) | 1.0 | MIT, © 2026 Dmytro | `vigenere/LICENSE` |
 | 7-Zip WebAssembly (7z-wasm, 7-Zip 24.09) | 1.2.0 | GNU LGPL 2.1+ with the unRAR restriction (the RAR decoder may not be used to recreate the RAR compression algorithm) | `web/vendor/7z-wasm/` (License.txt, unRarLicense.txt) |
-| RAR test samples | libarchive test suite | BSD-2-Clause | `tests/fixtures/archives/` (see SOURCE.md) |
+| RAR test samples | libarchive test suite | BSD-2-Clause | `tests/fixtures/archives/` (see SOURCE.md); one copy as the example sample `web/samples/rar5-locked.js` |
 
 The licence texts are next to each component.
 

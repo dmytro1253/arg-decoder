@@ -1,0 +1,747 @@
+[
+ {
+  "board": "squares",
+  "op": "bifid",
+  "params": {
+   "key": "LANTERN",
+   "dir": "dec"
+  },
+  "input": "NNEKORRGGTFUQUKVPZD",
+  "expect": "THEKEYISUNDERTHEMAT"
+ },
+ {
+  "board": "squares",
+  "op": "trifid",
+  "params": {
+   "key": "FELIX",
+   "dir": "dec"
+  },
+  "input": "GSFMQZIF+KEFVDJL",
+  "expect": "MEETATTHEOLDMILL"
+ },
+ {
+  "board": "squares",
+  "op": "adfgx",
+  "params": {
+   "square": "BTALPDHOZKQFVSNGICUXMREWY",
+   "key": "CARGO",
+   "dir": "dec"
+  },
+  "input": "FAXDGADDDXDGFAXAFAFAFAAF",
+  "expect": "ATTACKATDAWN"
+ },
+ {
+  "board": "squares",
+  "op": "adfgvx",
+  "params": {
+   "square": "PH0QG64MEA1YL2NOFDXKR3CVS5ZW7BJ9UTI8",
+   "key": "PRIVACY",
+   "dir": "dec"
+  },
+  "input": "XDFGDDXVDFDGXFGGGAGGVDGA",
+  "expect": "ATTACKAT1200"
+ },
+ {
+  "board": "squares",
+  "op": "four_square",
+  "params": {
+   "dir": "dec"
+  },
+  "input": "FYNFNEHWBXAFFOKHMD",
+  "expect": "HELPMEOBIWANKENOBI"
+ },
+ {
+  "board": "squares",
+  "op": "two_square",
+  "params": {
+   "dir": "dec"
+  },
+  "input": "LAGRZOKWPNEGKWWU",
+  "expect": "IOINUSATTHEGATEX"
+ },
+ {
+  "board": "squares",
+  "op": "nihilist",
+  "params": {
+   "dir": "dec"
+  },
+  "input": "37 106 62 36 67 47 86 26 104 53 62 77 27 55 57 66 55 36 54 27",
+  "expect": "DYNAMITEWINTERPALACE"
+ },
+ {
+  "board": "squares",
+  "op": "playfair",
+  "params": {
+   "key": "playfair example"
+  },
+  "input": "BMODZBXDNABEKUDMUIXMMOUVIF",
+  "expect": "hidethegoldinthetrexestump"
+ },
+ {
+  "board": "keyed",
+  "op": "vigenere_family",
+  "params": {
+   "key": "ORACLE",
+   "dir": "dec"
+  },
+  "input": "hye utkbrl tptsrtu lx azdptkvk",
+  "expect": "Vigenère (P = C − K): the signal repeats at midnight\nBeaufort (P = K − C): htw isunap jwlwahi ah osxnsuth\nVariant Beaufort (P = C + K): vpe weopil vaxgitw wb oqdreojb"
+ },
+ {
+  "board": "keyed",
+  "op": "running_key",
+  "params": {
+   "key": "itwasabrightcolddayinaprilandtheclockswerestrikingthirteen",
+   "dir": "dec"
+  },
+  "input": "baa vsumk wvlgu oe qlnc",
+  "expect": "the vault opens at nine"
+ },
+ {
+  "board": "keyed",
+  "op": "keyed_caesar",
+  "params": {
+   "key": "NIGHTJAR",
+   "n": 3,
+   "dir": "dec"
+  },
+  "input": "bpllpz wdr zdewr uhttew",
+  "expect": "follow the white rabbit"
+ },
+ {
+  "board": "keyed",
+  "op": "hill",
+  "params": {
+   "key": "GYBNQKURP",
+   "dir": "dec"
+  },
+  "input": "POHUPWLNA",
+  "expect": "ACTNOWXXX"
+ },
+ {
+  "board": "keyed",
+  "op": "chaocipher",
+  "params": {
+   "dir": "dec"
+  },
+  "input": "OAHQHCNYNXTSZJRRHJBYHQKSOUJY",
+  "expect": "WELLDONEISBETTERTHANWELLSAID"
+ },
+ {
+  "board": "keyed",
+  "op": "porta",
+  "params": {
+   "key": "FORTIFICATION"
+  },
+  "input": "oxxzep ktr wiigiowa",
+  "expect": "define the frontier"
+ },
+ {
+  "board": "keyed",
+  "op": "enigma",
+  "params": {
+   "model": "M3",
+   "rotors": "I II III",
+   "reflector": "B",
+   "rings": "AAA",
+   "positions": "ABC",
+   "plugboard": "AV BS CG"
+  },
+  "input": "SOJONXLIBADLRYGKES",
+  "expect": "WEATHERREPORTCLEAR"
+ },
+ {
+  "board": "keyed",
+  "op": "affine",
+  "params": {
+   "alpha": "en",
+   "a": 5,
+   "b": 8
+  },
+  "input": "ihhwvc swfrcp",
+  "expect": "affine cipher"
+ },
+ {
+  "board": "keyed",
+  "op": "autokey",
+  "params": {
+   "key": "queen",
+   "alpha": "en"
+  },
+  "input": "qnxepk tm dcgn",
+  "expect": "attack at dawn"
+ },
+ {
+  "board": "keyed",
+  "op": "rc4",
+  "params": {
+   "key": "Secret",
+   "fmt": "text"
+  },
+  "input": "E \u001fd_Ã[85RTKõ",
+  "expect": "Attack at dawn"
+ },
+ {
+  "board": "keyed",
+  "op": "xor_keep",
+  "params": {
+   "key": "7",
+   "fmt": "num",
+   "keep": "nonalnum"
+  },
+  "input": "Obkkh, Phukc!",
+  "expect": "Hello, World!"
+ },
+ {
+  "board": "keyed",
+  "op": "substitute",
+  "params": {
+   "from": "abcdefghijklmnopqrstuvwxyz",
+   "to": "qwertyuiopasdfghjklzxcvbnm"
+  },
+  "input": "epc vkrc hl k shc",
+  "expect": "the cake is a lie"
+ },
+ {
+  "board": "transpositions",
+  "op": "rail_fence",
+  "params": {
+   "rails": 3,
+   "dir": "dec"
+  },
+  "input": "WECRLTEERDSOEEFEAOCAIVDEN",
+  "expect": "WEAREDISCOVEREDFLEEATONCE"
+ },
+ {
+  "board": "transpositions",
+  "op": "scytale",
+  "params": {
+   "rows": 4,
+   "dir": "dec"
+  },
+  "input": "IRYYATBHMVAEHEDLURLP",
+  "expect": "IAMHURTVERYBADLYHELP"
+ },
+ {
+  "board": "transpositions",
+  "op": "route_cipher",
+  "params": {
+   "width": 4,
+   "route": "spiral_cw",
+   "dir": "dec"
+  },
+  "input": "WEARSEXDERCEDIVO",
+  "expect": "WEAREDISCOVEREDX"
+ },
+ {
+  "board": "transpositions",
+  "op": "myszkowski",
+  "params": {
+   "key": "TOMATO",
+   "dir": "dec"
+  },
+  "input": "ROFOACDTEDSEEEACWEIVRLENE",
+  "expect": "WEAREDISCOVEREDFLEEATONCE"
+ },
+ {
+  "board": "transpositions",
+  "op": "transpose",
+  "params": {
+   "w": 4,
+   "dir": "cols"
+  },
+  "input": "NTCIIJANGALGHRL!",
+  "expect": "NIGHTJARCALLING!"
+ },
+ {
+  "board": "transpositions",
+  "op": "swap_pairs",
+  "params": {},
+  "input": "EMTEEMTAONNO",
+  "expect": "MEETMEATNOON"
+ },
+ {
+  "board": "transpositions",
+  "op": "slice",
+  "params": {
+   "from": 1,
+   "to": 0,
+   "step": 3
+  },
+  "input": "TxxHxxExxKxxExxY",
+  "expect": "THEKEY"
+ },
+ {
+  "board": "transpositions",
+  "op": "chunk",
+  "params": {
+   "n": 5,
+   "sep": " "
+  },
+  "input": "ATTACKATDAWN",
+  "expect": "ATTAC KATDA WN"
+ },
+ {
+  "board": "transpositions",
+  "op": "interleave",
+  "params": {},
+  "input": "HLOOL",
+  "expect": "HELLOWORLD",
+  "second": "ELWRD"
+ },
+ {
+  "board": "symbols",
+  "op": "pigpen_decode",
+  "params": {},
+  "input": "<· ⊐· ┘ ┌· ⊔· ∨ < ⊓ □ ∨ ┐· ⊏· <",
+  "expect": "XMARKSTHESPOT"
+ },
+ {
+  "board": "symbols",
+  "op": "pigpen_encode",
+  "params": {},
+  "input": "enderman",
+  "expect": "□ □· ⊐ □ ┌· ⊐· ┘ □·"
+ },
+ {
+  "board": "symbols",
+  "op": "runes_decode",
+  "params": {},
+  "input": "ᛟᛞᛁᚾ ᛊᛖᛖᛊ ᚨᛚᛚ",
+  "expect": "odin sees all"
+ },
+ {
+  "board": "symbols",
+  "op": "runes_encode",
+  "params": {},
+  "input": "odin sees all",
+  "expect": "ᛟᛞᛁᚾ ᛊᛖᛖᛊ ᚨᛚᛚ"
+ },
+ {
+  "board": "symbols",
+  "op": "braille_decode",
+  "params": {},
+  "input": "⠞⠕⠥⠉⠓⠀⠞⠓⠑⠀⠺⠁⠇⠇",
+  "expect": "touch the wall"
+ },
+ {
+  "board": "symbols",
+  "op": "braille_encode",
+  "params": {},
+  "input": "touch the wall",
+  "expect": "⠞⠕⠥⠉⠓⠀⠞⠓⠑⠀⠺⠁⠇⠇"
+ },
+ {
+  "board": "symbols",
+  "op": "greek_translit",
+  "params": {
+   "dir": "gr2lat"
+  },
+  "input": "ΑΡΓΟΝΑΥΤΗΣ",
+  "expect": "argonaytes"
+ },
+ {
+  "board": "symbols",
+  "op": "phonetic_decode",
+  "params": {},
+  "input": "November Oscar Tango Charlie Hotel",
+  "expect": "NOTCH"
+ },
+ {
+  "board": "symbols",
+  "op": "phonetic_encode",
+  "params": {
+   "alphabet": "nato"
+  },
+  "input": "SOS",
+  "expect": "Sierra Oscar Sierra"
+ },
+ {
+  "board": "symbols",
+  "op": "sga_encode",
+  "params": {},
+  "input": "herobrine",
+  "expect": "⍑ᒷ∷𝙹ʖ∷╎リᒷ"
+ },
+ {
+  "board": "symbols",
+  "op": "morse_encode",
+  "params": {
+   "lang": "en"
+  },
+  "input": "OLD ROOT",
+  "expect": "--- .-.. -.. / .-. --- --- -"
+ },
+ {
+  "board": "symbols",
+  "op": "binary_pixels",
+  "params": {
+   "width": 5,
+   "scale": 1
+  },
+  "input": "01110100011000111111100011000110001",
+  "expect": " ███ \n█   █\n█   █\n█████\n█   █\n█   █\n█   █"
+ },
+ {
+  "board": "symbols",
+  "op": "callsign_order",
+  "params": {
+   "out": "digits"
+  },
+  "input": "Charlie 5\nAble 4\nEasy 2\nBaker 8\nDog 2",
+  "expect": "48522"
+ },
+ {
+  "board": "encodings",
+  "op": "base91_decode",
+  "params": {},
+  "input": ",X^Ic)jTh#w<pE}kYB+Jf,mC",
+  "expect": "the archive is open"
+ },
+ {
+  "board": "encodings",
+  "op": "base91_encode",
+  "params": {},
+  "input": "the archive is open",
+  "expect": ",X^Ic)jTh#w<pE}kYB+Jf,mC"
+ },
+ {
+  "board": "encodings",
+  "op": "octal_decode",
+  "params": {},
+  "input": "162 157 157 155 040 064 060 064",
+  "expect": "room 404"
+ },
+ {
+  "board": "encodings",
+  "op": "octal_encode",
+  "params": {},
+  "input": "room 404",
+  "expect": "162 157 157 155 040 064 060 064"
+ },
+ {
+  "board": "encodings",
+  "op": "ebcdic_decode",
+  "params": {},
+  "input": "ÔÁÉÕÆÙÁÔÅ",
+  "expect": "MAINFRAME"
+ },
+ {
+  "board": "encodings",
+  "op": "ebcdic_encode",
+  "params": {},
+  "input": "MAINFRAME",
+  "expect": "ÔÁÉÕÆÙÁÔÅ"
+ },
+ {
+  "board": "encodings",
+  "op": "uudecode",
+  "params": {},
+  "input": "begin 644 data.bin\n-8F5G:6X@=&AE(&5N9```\n`\nend",
+  "expect": "begin the end"
+ },
+ {
+  "board": "encodings",
+  "op": "uuencode",
+  "params": {},
+  "input": "begin the end",
+  "expect": "begin 644 data.bin\n-8F5G:6X@=&AE(&5N9```\n`\nend"
+ },
+ {
+  "board": "encodings",
+  "op": "qp_decode",
+  "params": {},
+  "input": "=D0=9A=D0=BB=D1=8E=D1=87: =D0=BD=D0=BE=D1=87=D1=8C",
+  "expect": "Ключ: ночь"
+ },
+ {
+  "board": "encodings",
+  "op": "qp_encode",
+  "params": {},
+  "input": "Ключ: ночь",
+  "expect": "=D0=9A=D0=BB=D1=8E=D1=87: =D0=BD=D0=BE=D1=87=D1=8C"
+ },
+ {
+  "board": "encodings",
+  "op": "punycode_decode",
+  "params": {},
+  "input": "xn--80aa0aqw.xn--p1ai",
+  "expect": "тайна.рф"
+ },
+ {
+  "board": "encodings",
+  "op": "punycode_encode",
+  "params": {},
+  "input": "тайна.рф",
+  "expect": "xn--80aa0aqw.xn--p1ai"
+ },
+ {
+  "board": "encodings",
+  "op": "base58_decode",
+  "params": {},
+  "input": "StV1DL6CwTryKyV",
+  "expect": "hello world"
+ },
+ {
+  "board": "encodings",
+  "op": "rot47",
+  "params": {},
+  "input": "|66E o hib_P",
+  "expect": "Meet @ 9:30!"
+ },
+ {
+  "board": "encodings",
+  "op": "rot5",
+  "params": {},
+  "input": "9703770706",
+  "expect": "4258225251"
+ },
+ {
+  "board": "encodings",
+  "op": "rot18",
+  "params": {},
+  "input": "Ebbz 656",
+  "expect": "Room 101"
+ },
+ {
+  "board": "encodings",
+  "op": "rot8000",
+  "params": {},
+  "input": "籱籲籭籭籮籷 籲籷 籹籵籪籲籷 籼籲籰籱籽",
+  "expect": "hidden in plain sight"
+ },
+ {
+  "board": "encodings",
+  "op": "base_convert",
+  "params": {
+   "from": 16,
+   "to": 10
+  },
+  "input": "DEADBEEF",
+  "expect": "3735928559"
+ },
+ {
+  "board": "encodings",
+  "op": "a1z26",
+  "params": {
+   "alpha": "en"
+  },
+  "input": "14 9 7 8 20",
+  "expect": "night"
+ },
+ {
+  "board": "encodings",
+  "op": "letters_to_numbers",
+  "params": {
+   "alpha": "en"
+  },
+  "input": "NIGHT",
+  "expect": "14 9 7 8 20"
+ },
+ {
+  "board": "encodings",
+  "op": "text_to_codes",
+  "params": {},
+  "input": "ARG",
+  "expect": "65 82 71"
+ },
+ {
+  "board": "encodings",
+  "op": "url_encode",
+  "params": {},
+  "input": "ключ = 42",
+  "expect": "%D0%BA%D0%BB%D1%8E%D1%87%20%3D%2042"
+ },
+ {
+  "board": "encodings",
+  "op": "hex_encode",
+  "params": {},
+  "input": "stop",
+  "expect": "73 74 6F 70"
+ },
+ {
+  "board": "encodings",
+  "op": "base64_encode",
+  "params": {},
+  "input": "stop",
+  "expect": "c3RvcA=="
+ },
+ {
+  "board": "encodings",
+  "op": "base32_encode",
+  "params": {},
+  "input": "stop",
+  "expect": "ON2G64A"
+ },
+ {
+  "board": "encodings",
+  "op": "binary_encode",
+  "params": {},
+  "input": "Hi",
+  "expect": "01001000 01101001"
+ },
+ {
+  "board": "encodings",
+  "op": "text_encode",
+  "params": {
+   "enc": "cp1251"
+  },
+  "input": "Привет",
+  "expect": "Ïðèâåò"
+ },
+ {
+  "board": "encodings",
+  "op": "hex_encode",
+  "params": {
+   "enc": "latin1"
+  },
+  "chainFrom": "text_encode",
+  "expect": "CF F0 E8 E2 E5 F2"
+ },
+ {
+  "board": "encodings",
+  "op": "unescape",
+  "params": {},
+  "input": "\\u0048\\x65llo &#x2764; U+0021",
+  "expect": "Hello ❤ !"
+ },
+ {
+  "board": "encodings",
+  "op": "translit",
+  "params": {
+   "dir": "ru2lat"
+  },
+  "input": "Шифр Цезаря",
+  "expect": "Shifr Tsezarya"
+ },
+ {
+  "board": "encodings",
+  "op": "keyboard_shift",
+  "params": {
+   "n": -1
+  },
+  "input": "jrtpntomr",
+  "expect": "herobrine"
+ },
+ {
+  "board": "encodings",
+  "op": "filter",
+  "params": {
+   "mode": "letters"
+  },
+  "input": "T-H-E 1 K.E.Y 2",
+  "expect": "THEKEY"
+ },
+ {
+  "board": "hidden",
+  "op": "zero_width",
+  "params": {
+   "mode": "bits"
+  },
+  "input": "Nothing to see​‌‌​‌​​​‍​‌‌​‌​​‌‍​‌‌​​‌​​‍​‌‌​​‌​‌ here.",
+  "expect": "01101000 01101001 01100100 01100101"
+ },
+ {
+  "board": "hidden",
+  "op": "binary_decode",
+  "params": {},
+  "chainFrom": "zero_width",
+  "expect": "hide"
+ },
+ {
+  "board": "hidden",
+  "op": "acrostic",
+  "params": {
+   "n": 1,
+   "by": "words"
+  },
+  "input": "Every New Day Every Room Matters And Nothing",
+  "expect": "ENDERMAN"
+ },
+ {
+  "board": "hidden",
+  "op": "book_cipher",
+  "params": {
+   "unit": "words",
+   "book": "In the beginning the forest was silent and the old mill stood alone by the river"
+  },
+  "input": "7 10 11",
+  "expect": "silent old mill"
+ },
+ {
+  "board": "hidden",
+  "op": "pick_letters",
+  "params": {
+   "mode": "upper"
+  },
+  "input": "the Key is hidden in thE capitals, You see",
+  "expect": "KEY"
+ },
+ {
+  "board": "hidden",
+  "op": "overlay_fill",
+  "params": {
+   "mark": "#",
+   "mode": "seq"
+  },
+  "input": "N#GHT#AR",
+  "expect": "NIGHTJAR",
+  "second": "IJ"
+ },
+ {
+  "board": "hashes",
+  "op": "hash_sha1",
+  "params": {},
+  "input": "nightjar",
+  "expect": "3ff80a7b0a680e446fe334c4640f81313e716e32"
+ },
+ {
+  "board": "hashes",
+  "op": "hash_sha256",
+  "params": {},
+  "input": "nightjar",
+  "expect": "43775932ce106a474e91158de24cfbba11d6f58e1d4e344ff7297ad1288dd084"
+ },
+ {
+  "board": "hashes",
+  "op": "hash_sha512",
+  "params": {},
+  "input": "nightjar",
+  "expect": "94a0e90cc710a2d0de3537a024da78dbfe3185e7cc490888e1841ea7fb4d83027271fc57aa451486d3dbd1f2a20883d6c2a861101e33c64297dad40128181d58"
+ },
+ {
+  "board": "hashes",
+  "op": "hash_crc32",
+  "params": {},
+  "input": "nightjar",
+  "expect": "612e5473"
+ },
+ {
+  "board": "hashes",
+  "op": "hash_all",
+  "params": {},
+  "input": "nightjar",
+  "expect": "MD5     43a1ea6d499f04c780219c8b0bd9126b\nSHA-1   3ff80a7b0a680e446fe334c4640f81313e716e32\nSHA-256 43775932ce106a474e91158de24cfbba11d6f58e1d4e344ff7297ad1288dd084\nSHA-512 94a0e90cc710a2d0de3537a024da78dbfe3185e7cc490888e1841ea7fb4d83027271fc57aa451486d3dbd1f2a20883d6c2a861101e33c64297dad40128181d58\nCRC32   612e5473"
+ },
+ {
+  "board": "hashes",
+  "op": "openssl_decrypt",
+  "params": {
+   "key": "secret"
+  },
+  "input": "U2FsdGVkX1/Zu4Xl5dNXFoMWT3JaQDGpr22Xz/By6B0bkzDmDnqPyW0bIbCY+Iuw",
+  "expect": "Meet at dawn, Ёлка!"
+ },
+ {
+  "board": "hashes",
+  "op": "permute_fragments",
+  "params": {
+   "sep": " ",
+   "join": "",
+   "contains": "CAB",
+   "limit": 20
+  },
+  "input": "IN CAB OUT",
+  "expect": "INCABOUT\nCABINOUT\nOUTINCAB\nINOUTCAB\nCABOUTIN\nOUTCABIN"
+ }
+]

@@ -281,7 +281,7 @@
         copy.title = T('Копировать значение', 'Copy the value');
         copy.onclick = () => this.copy(this.graph.results.get(node.id));
         bar.append(meta, hexBtn, copy);
-        out.append(bar, h('pre', 'out-text'), h('div', 'out-warn hidden'), h('div', 'out-links'));
+        out.append(bar, h('div', 'out-media hidden'), h('pre', 'out-text'), h('div', 'out-warn hidden'), h('div', 'out-links'));
         body.appendChild(out);
       }
       el.appendChild(body);
@@ -412,12 +412,49 @@
       links.innerHTML = '';
       this.showWarnings(warn, res.warnings);
       if (res.error) { pre.textContent = '⚠ ' + res.error; meta.textContent = T('ошибка', 'error'); return; }
+      const media = el.querySelector('.out-media');
+      // Картинку и звук показывает нода «Результат»: у нод обработки своё превью, дублировать его не нужно.
+      const isFile = node.type === 'view' && res.value !== undefined && !res.error && G.Artifacts && G.Artifacts.isHandle(res.value);
+      if (media) { media.classList.toggle('hidden', !isFile); if (!isFile) { media.innerHTML = ''; media.dataset.key = ''; } }
       if (res.value === undefined) { pre.textContent = res.empty ? T('— подключи вход —', '— connect an input —') : '—'; meta.textContent = ''; return; }
+      if (isFile && media) { this.showArtifact(media, pre, meta, res.value); return; }
       const v = String(res.value);
       const shown = node.state.hex ? C.toHexView(v) : C.visible(v);
       pre.textContent = shown.length > MAX_PREVIEW ? shown.slice(0, MAX_PREVIEW) + ' …' : shown;
       meta.textContent = Array.from(v).length + T(' симв.', ' chars');
       this.renderLinks(links, v);
+    }
+
+    // Выход — файл (картинка, звук, архив…): картинка рисуется, звук играет, для прочего — имя, тип и размер.
+    showArtifact(media, pre, meta, handle) {
+      const A = G.Artifacts;
+      const a = A.get(A.idOf(handle));
+      if (!a) { pre.textContent = handle; meta.textContent = ''; return; }
+      const size = a.size ? ' · ' + (a.size > 1048576 ? (a.size / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(a.size / 1024)) + ' KB') : '';
+      pre.textContent = a.name || '';
+      meta.textContent = (a.width && a.height ? a.width + '×' + a.height : a.kind) + size;
+      if (media.dataset.key === handle) return;
+      media.dataset.key = handle;
+      media.innerHTML = '';
+      if (a.kind === 'image') {
+        let px = null;
+        try { px = G.ImgStore && G.ImgStore.get(handle); } catch (e) { px = null; }
+        if (px) {
+          const c = h('canvas', 'out-image');
+          c.width = px.width; c.height = px.height;
+          c.getContext('2d').putImageData(new ImageData(px.data, px.width, px.height), 0, 0);
+          media.appendChild(c);
+          meta.textContent = px.width + '×' + px.height + size;
+        } else if (a.dataUrl) {
+          const img = h('img', 'out-image');
+          img.src = a.dataUrl; img.alt = a.name || '';
+          media.appendChild(img);
+        } else media.dataset.key = '';   // пиксели ещё декодируются — нарисуем при следующем пересчёте
+      } else if ((a.kind === 'audio' || a.kind === 'video') && a.dataUrl) {
+        const el = h(a.kind, 'out-image');
+        el.controls = true; el.src = a.dataUrl;
+        media.appendChild(el);
+      }
     }
 
     // Предупреждения операции (потеря данных при разборе): значок ⚠ и текст под выводом.

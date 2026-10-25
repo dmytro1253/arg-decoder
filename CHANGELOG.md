@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.3.5 — one example for every node, pictures in the Result node
+
+- 98 new examples, **one technique per example** (input → node → Result, with the node's own description and parameters in a note), grouped in the Examples menu: square ciphers, keyed ciphers, transpositions, symbols and alphabets, encodings, numbers and bytes, hidden text, hashes and OpenSSL, audio, images, files. Every operation and every special node now has an example (except the video frame viewer, which needs a real video); `tests/tour.test.js` fails if one is left without.
+- Real data, made and checked by the program itself: the ciphertexts come from the nodes in "encrypt" mode or the inverse operation and are decrypted back (`tools/make_tour_data.js`).
+- Audio: **SSTV Robot 36** with a QR code (picture → crop → QR: PASSWORD: NIGHTJAR), Morse and DTMF from audio, bare PCM bytes → DTMF. Images: a message in pixel LSBs, a bit plane, a number that appears after XOR of two noise frames. Files: PNG metadata, a ZIP inside a PNG, strings from a file, a password-protected RAR5 (libarchive sample), an archive joined from two Base64 parts. Samples in `web/samples`, made by `tools/make_tour_samples.js` and `tools/make_tour_images.py`.
+- The **Result** node shows a picture when its input is an image and plays audio, instead of printing the internal file handle.
+
 ## 1.3.4 — Update button for Git clones
 
 - A Git clone gets the same **Update** button as a release copy, without an archive: the signed `build.json` of the release is checked as before, `git fetch` brings the release tag, its commit must equal the commit in the signed list, and the clone is fast-forwarded (`git merge --ff-only`) by the launcher on restart. Uncommitted changes, a detached HEAD or own commits on top of the release block the update with a clear reason; rollback is `git reset --keep` back to the previous commit, and only when nothing was committed on top.

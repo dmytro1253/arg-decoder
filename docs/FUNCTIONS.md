@@ -4,7 +4,7 @@
 
 Every node, example, dossier and keyboard in the app, generated from the live registries by `tools/gen_functions_doc.js` (do not edit by hand). How the pieces work inside is described in [HOW-IT-WORKS.md](HOW-IT-WORKS.md).
 
-**133** operations (function nodes), **34** special nodes, **75** examples, **17** built-in dossiers.
+**133** operations (function nodes), **34** special nodes, **173** examples, **17** built-in dossiers.
 
 ## Contents
 
@@ -1731,6 +1731,134 @@ Open any example from the **Examples** menu or with a link such as `http://127.0
 
 - **Base64 → XOR → zlib → text** · `xor-zlib` — The XOR key comes from the zlib header, Adler-32 confirms it<br>answer: `The second fragment is hidden behind the clock tower; bring the brass key at dawn.`
 - **Text in an audio spectrogram** · `audio-spectrogram` — WAV → spectrogram → the text PG56<br>manual: A person or OCR on the saved picture reads the text
+- **SSTV: a picture from audio → QR** · `tour-sstv` — Robot 36 → picture → crop → QR: PASSWORD: NIGHTJAR<br>answer: `PASSWORD: NIGHTJAR` · manual: Nodes take the file apart; Auto works with text
+- **Morse from audio** · `tour-morse-audio` — A 700 Hz tone → OLDROOT<br>answer: `OLDROOT` · manual: Nodes take the file apart; Auto works with text
+- **DTMF: phone key tones** · `tour-dtmf` — A dialling sound → 425822<br>answer: `425822` · manual: Nodes take the file apart; Auto works with text
+- **Bytes → audio (no WAV header)** · `tour-raw-pcm` — Base64 → bytes → 8-bit 8 kHz audio → DTMF 42<br>answer: `42` · manual: Nodes take the file apart; Auto works with text
+
+### Square ciphers
+
+- **Bifid** · `tour-bifid` — NNEKORRGGTFUQUKVPZD → THEKEYISUNDERTHEMAT<br>answer: `THEKEYISUNDERTHEMAT` · manual: An example of one operation: the key and parameters are already set in the node
+- **Trifid** · `tour-trifid` — GSFMQZIF+KEFVDJL → MEETATTHEOLDMILL<br>answer: `MEETATTHEOLDMILL` · manual: An example of one operation: the key and parameters are already set in the node
+- **ADFGX** · `tour-adfgx` — FAXDGADDDXDGFAXAFAFAFAAF → ATTACKATDAWN<br>answer: `ATTACKATDAWN` · manual: An example of one operation: the key and parameters are already set in the node
+- **ADFGVX** · `tour-adfgvx` — XDFGDDXVDFDGXFGGGAGGVDGA → ATTACKAT1200<br>answer: `ATTACKAT1200` · manual: An example of one operation: the key and parameters are already set in the node
+- **Four-square** · `tour-four_square` — FYNFNEHWBXAFFOKHMD → HELPMEOBIWANKENOBI<br>answer: `HELPMEOBIWANKENOBI` · manual: An example of one operation: the key and parameters are already set in the node
+- **Two-square** · `tour-two_square` — LAGRZOKWPNEGKWWU → IOINUSATTHEGATEX<br>answer: `IOINUSATTHEGATEX` · manual: An example of one operation: the key and parameters are already set in the node
+- **Nihilist** · `tour-nihilist` — 37 106 62 36 67 47 86 26 104 53 62 … → DYNAMITEWINTERPALACE<br>answer: `DYNAMITEWINTERPALACE` · manual: An example of one operation: the key and parameters are already set in the node
+- **Playfair (decryption)** · `tour-playfair` — BMODZBXDNABEKUDMUIXMMOUVIF → hidethegoldinthetrexestump<br>answer: `hidethegoldinthetrexestump` · manual: An example of one operation: the key and parameters are already set in the node
+
+### Keyed ciphers
+
+- **Vigenère / Beaufort / Variant** · `tour-vigenere_family` — hye utkbrl tptsrtu lx azdptkvk → the signal repeats at midnight<br>manual: An example of one operation: the key and parameters are already set in the node
+- **Running-key Vigenère** · `tour-running_key` — baa vsumk wvlgu oe qlnc → the vault opens at nine<br>answer: `the vault opens at nine` · manual: An example of one operation: the key and parameters are already set in the node
+- **Keyed Caesar** · `tour-keyed_caesar` — bpllpz wdr zdewr uhttew → follow the white rabbit<br>answer: `follow the white rabbit` · manual: An example of one operation: the key and parameters are already set in the node
+- **Hill 2×2 / 3×3** · `tour-hill` — POHUPWLNA → ACTNOWXXX<br>answer: `ACTNOWXXX` · manual: An example of one operation: the key and parameters are already set in the node
+- **Chaocipher** · `tour-chaocipher` — OAHQHCNYNXTSZJRRHJBYHQKSOUJY → WELLDONEISBETTERTHANWELLSAID<br>answer: `WELLDONEISBETTERTHANWELLSAID` · manual: An example of one operation: the key and parameters are already set in the node
+- **Porta** · `tour-porta` — oxxzep ktr wiigiowa → define the frontier<br>answer: `define the frontier` · manual: An example of one operation: the key and parameters are already set in the node
+- **Enigma** · `tour-enigma` — SOJONXLIBADLRYGKES → WEATHERREPORTCLEAR<br>answer: `WEATHERREPORTCLEAR` · manual: An example of one operation: the key and parameters are already set in the node
+- **Affine (decryption)** · `tour-affine` — ihhwvc swfrcp → affine cipher<br>answer: `affine cipher` · manual: An example of one operation: the key and parameters are already set in the node
+- **Autokey (Vigenère)** · `tour-autokey` — qnxepk tm dcgn → attack at dawn<br>answer: `attack at dawn` · manual: An example of one operation: the key and parameters are already set in the node
+- **RC4 (raw stream)** · `tour-rc4` — E d_Ã[85RTKõ → Attack at dawn<br>answer: `Attack at dawn` · manual: An example of one operation: the key and parameters are already set in the node
+- **XOR keeping spaces/punctuation** · `tour-xor_keep` — Obkkh, Phukc! → Hello, World!<br>answer: `Hello, World!` · manual: An example of one operation: the key and parameters are already set in the node
+- **Simple substitution** · `tour-substitute` — epc vkrc hl k shc → the cake is a lie<br>answer: `the cake is a lie` · manual: An example of one operation: the key and parameters are already set in the node
+
+### Transpositions
+
+- **Rail fence** · `tour-rail_fence` — WECRLTEERDSOEEFEAOCAIVDEN → WEAREDISCOVEREDFLEEATONCE<br>answer: `WEAREDISCOVEREDFLEEATONCE` · manual: An example of one operation: the key and parameters are already set in the node
+- **Scytale** · `tour-scytale` — IRYYATBHMVAEHEDLURLP → IAMHURTVERYBADLYHELP<br>answer: `IAMHURTVERYBADLYHELP` · manual: An example of one operation: the key and parameters are already set in the node
+- **Route cipher** · `tour-route_cipher` — WEARSEXDERCEDIVO → WEAREDISCOVEREDX<br>answer: `WEAREDISCOVEREDX` · manual: An example of one operation: the key and parameters are already set in the node
+- **Myszkowski transposition** · `tour-myszkowski` — ROFOACDTEDSEEEACWEIVRLENE → WEAREDISCOVEREDFLEEATONCE<br>answer: `WEAREDISCOVEREDFLEEATONCE` · manual: An example of one operation: the key and parameters are already set in the node
+- **Grid: rows ↔ columns** · `tour-transpose` — NTCIIJANGALGHRL! → NIGHTJARCALLING!<br>answer: `NIGHTJARCALLING!` · manual: An example of one operation: the key and parameters are already set in the node
+- **Swap adjacent characters** · `tour-swap_pairs` — EMTEEMTAONNO → MEETMEATNOON<br>answer: `MEETMEATNOON` · manual: An example of one operation: the key and parameters are already set in the node
+- **Part of the string** · `tour-slice` — TxxHxxExxKxxExxY → THEKEY<br>answer: `THEKEY` · manual: An example of one operation: the key and parameters are already set in the node
+- **Split into groups** · `tour-chunk` — ATTACKATDAWN → ATTAC KATDA WN<br>answer: `ATTAC KATDA WN` · manual: An example of one operation: the key and parameters are already set in the node
+- **Interleave** · `tour-interleave` — HLOOL + ELWRD → HELLOWORLD<br>answer: `HELLOWORLD` · manual: An example of one operation: the key and parameters are already set in the node
+- **Fragment permutations** · `tour-permute_fragments` — IN CAB OUT → INCABOUT CABINOUT OUTINCAB INOUTCAB…<br>answer: `INCABOUT CABINOUT OUTINCAB INOUTCAB CABOUTIN OUTCABIN` · manual: An example of one operation: the key and parameters are already set in the node
+
+### Symbols and alphabets
+
+- **Pigpen → letters** · `tour-pigpen_decode` — <· ⊐· ┘ ┌· ⊔· ∨ < ⊓ □ ∨ ┐· ⊏· < → XMARKSTHESPOT<br>answer: `XMARKSTHESPOT` · manual: An example of one operation: the key and parameters are already set in the node
+- **Letters → pigpen** · `tour-pigpen_encode` — enderman → □ □· ⊐ □ ┌· ⊐· ┘ □·<br>answer: `□ □· ⊐ □ ┌· ⊐· ┘ □·` · manual: An example of one operation: the key and parameters are already set in the node
+- **Runes (Elder Futhark) → Latin** · `tour-runes_decode` — ᛟᛞᛁᚾ ᛊᛖᛖᛊ ᚨᛚᛚ → odin sees all<br>answer: `odin sees all` · manual: An example of one operation: the key and parameters are already set in the node
+- **Latin → runes (Elder Futhark)** · `tour-runes_encode` — odin sees all → ᛟᛞᛁᚾ ᛊᛖᛖᛊ ᚨᛚᛚ<br>answer: `ᛟᛞᛁᚾ ᛊᛖᛖᛊ ᚨᛚᛚ` · manual: An example of one operation: the key and parameters are already set in the node
+- **Braille (⠁⠃⠉) → Latin** · `tour-braille_decode` — ⠞⠕⠥⠉⠓⠀⠞⠓⠑⠀⠺⠁⠇⠇ → touch the wall<br>answer: `touch the wall` · manual: An example of one operation: the key and parameters are already set in the node
+- **Latin → Braille** · `tour-braille_encode` — touch the wall → ⠞⠕⠥⠉⠓⠀⠞⠓⠑⠀⠺⠁⠇⠇<br>answer: `⠞⠕⠥⠉⠓⠀⠞⠓⠑⠀⠺⠁⠇⠇` · manual: An example of one operation: the key and parameters are already set in the node
+- **Greek letters ↔ Latin** · `tour-greek_translit` — ΑΡΓΟΝΑΥΤΗΣ → argonaytes<br>answer: `argonaytes` · manual: An example of one operation: the key and parameters are already set in the node
+- **Phonetic alphabet → letters** · `tour-phonetic_decode` — November Oscar Tango Charlie Hotel → NOTCH<br>answer: `NOTCH` · manual: An example of one operation: the key and parameters are already set in the node
+- **Letters → phonetic alphabet** · `tour-phonetic_encode` — SOS → Sierra Oscar Sierra<br>answer: `Sierra Oscar Sierra` · manual: An example of one operation: the key and parameters are already set in the node
+- **Text → enchanting table** · `tour-sga_encode` — herobrine → ⍑ᒷ∷𝙹ʖ∷╎リᒷ<br>answer: `⍑ᒷ∷𝙹ʖ∷╎リᒷ` · manual: An example of one operation: the key and parameters are already set in the node
+- **Text → Morse** · `tour-morse_encode` — OLD ROOT → --- .-.. -.. / .-. --- --- -<br>answer: `--- .-.. -.. / .-. --- --- -` · manual: An example of one operation: the key and parameters are already set in the node
+- **Binary → pixel grid** · `tour-binary_pixels` — 01110100011000111111100011000110001 →  ███ █ █ █ █ █████ █ █ █ █ █ █<br>answer: `███  █   █ █   █ █████ █   █ █   █ █   █` · manual: An example of one operation: the key and parameters are already set in the node
+- **Callsigns by alphabet (Able…Jig / NATO)** · `tour-callsign_order` — Charlie 5 Able 4 Easy 2 Baker 8 Dog… → 48522<br>answer: `48522` · manual: An example of one operation: the key and parameters are already set in the node
+
+### Encodings
+
+- **Base91 → bytes** · `tour-base91_decode` — ,X^Ic)jTh#w<pE}kYB+Jf,mC → the archive is open<br>answer: `the archive is open` · manual: An example of one operation: the key and parameters are already set in the node
+- **Text → Base91** · `tour-base91_encode` — the archive is open → ,X^Ic)jTh#w<pE}kYB+Jf,mC<br>answer: `,X^Ic)jTh#w<pE}kYB+Jf,mC` · manual: An example of one operation: the key and parameters are already set in the node
+- **Octal codes → bytes** · `tour-octal_decode` — 162 157 157 155 040 064 060 064 → room 404<br>answer: `room 404` · manual: An example of one operation: the key and parameters are already set in the node
+- **Text → octal codes** · `tour-octal_encode` — room 404 → 162 157 157 155 040 064 060 064<br>answer: `162 157 157 155 040 064 060 064` · manual: An example of one operation: the key and parameters are already set in the node
+- **EBCDIC (cp037) → text** · `tour-ebcdic_decode` — ÔÁÉÕÆÙÁÔÅ → MAINFRAME<br>answer: `MAINFRAME` · manual: An example of one operation: the key and parameters are already set in the node
+- **Text → EBCDIC (cp037)** · `tour-ebcdic_encode` — MAINFRAME → ÔÁÉÕÆÙÁÔÅ<br>answer: `ÔÁÉÕÆÙÁÔÅ` · manual: An example of one operation: the key and parameters are already set in the node
+- **uudecode → bytes** · `tour-uudecode` — begin 644 data.bin -8F5G:6X@=&AE(&5… → begin the end<br>answer: `begin the end` · manual: An example of one operation: the key and parameters are already set in the node
+- **Text → uuencode** · `tour-uuencode` — begin the end → begin 644 data.bin -8F5G:6X@=&AE(&5…<br>answer: `begin 644 data.bin -8F5G:6X@=&AE(&5N9``` ` end` · manual: An example of one operation: the key and parameters are already set in the node
+- **Quoted-printable → text** · `tour-qp_decode` — =D0=9A=D0=BB=D1=8E=D1=87: =D0=BD=D0… → Ключ: ночь<br>answer: `Ключ: ночь` · manual: An example of one operation: the key and parameters are already set in the node
+- **Text → quoted-printable** · `tour-qp_encode` — Ключ: ночь → =D0=9A=D0=BB=D1=8E=D1=87: =D0=BD=D0…<br>answer: `=D0=9A=D0=BB=D1=8E=D1=87: =D0=BD=D0=BE=D1=87=D1=8C` · manual: An example of one operation: the key and parameters are already set in the node
+- **Punycode → Unicode** · `tour-punycode_decode` — xn--80aa0aqw.xn--p1ai → тайна.рф<br>answer: `тайна.рф` · manual: An example of one operation: the key and parameters are already set in the node
+- **Unicode → Punycode** · `tour-punycode_encode` — тайна.рф → xn--80aa0aqw.xn--p1ai<br>answer: `xn--80aa0aqw.xn--p1ai` · manual: An example of one operation: the key and parameters are already set in the node
+- **Base58 → bytes** · `tour-base58_decode` — StV1DL6CwTryKyV → hello world<br>answer: `hello world` · manual: An example of one operation: the key and parameters are already set in the node
+- **ROT47** · `tour-rot47` — \|66E o hib_P → Meet @ 9:30!<br>answer: `Meet @ 9:30!` · manual: An example of one operation: the key and parameters are already set in the node
+- **ROT5** · `tour-rot5` — 9703770706 → 4258225251<br>answer: `4258225251` · manual: An example of one operation: the key and parameters are already set in the node
+- **ROT18** · `tour-rot18` — Ebbz 656 → Room 101<br>answer: `Room 101` · manual: An example of one operation: the key and parameters are already set in the node
+- **ROT8000** · `tour-rot8000` — 籱籲籭籭籮籷 籲籷 籹籵籪籲籷 籼籲籰籱籽 → hidden in plain sight<br>answer: `hidden in plain sight` · manual: An example of one operation: the key and parameters are already set in the node
+
+### Numbers and bytes
+
+- **Number: base → base** · `tour-base_convert` — DEADBEEF → 3735928559<br>answer: `3735928559` · manual: An example of one operation: the key and parameters are already set in the node
+- **Numbers → letters (A1Z26)** · `tour-a1z26` — 14 9 7 8 20 → night<br>answer: `night` · manual: An example of one operation: the key and parameters are already set in the node
+- **Letters → numbers** · `tour-letters_to_numbers` — NIGHT → 14 9 7 8 20<br>answer: `14 9 7 8 20` · manual: An example of one operation: the key and parameters are already set in the node
+- **Characters → numbers** · `tour-text_to_codes` — ARG → 65 82 71<br>answer: `65 82 71` · manual: An example of one operation: the key and parameters are already set in the node
+- **URL encoding** · `tour-url_encode` — ключ = 42 → %D0%BA%D0%BB%D1%8E%D1%87%20%3D%2042<br>answer: `%D0%BA%D0%BB%D1%8E%D1%87%20%3D%2042` · manual: An example of one operation: the key and parameters are already set in the node
+- **Text → HEX** · `tour-hex_encode` — stop → 73 74 6F 70<br>answer: `73 74 6F 70` · manual: An example of one operation: the key and parameters are already set in the node
+- **Text → Base64** · `tour-base64_encode` — stop → c3RvcA==<br>answer: `c3RvcA==` · manual: An example of one operation: the key and parameters are already set in the node
+- **Text → Base32** · `tour-base32_encode` — stop → ON2G64A<br>answer: `ON2G64A` · manual: An example of one operation: the key and parameters are already set in the node
+- **Text → binary** · `tour-binary_encode` — Hi → 01001000 01101001<br>answer: `01001000 01101001` · manual: An example of one operation: the key and parameters are already set in the node
+- **Text → bytes → Text → HEX** · `tour-text_encode` — Привет → CF F0 E8 E2 E5 F2<br>answer: `CF F0 E8 E2 E5 F2` · manual: An example of one operation: the key and parameters are already set in the node
+- **Escapes → characters** · `tour-unescape` — \u0048\x65llo &#x2764; U+0021 → Hello ❤ !<br>answer: `Hello ❤ !` · manual: An example of one operation: the key and parameters are already set in the node
+- **Transliteration** · `tour-translit` — Шифр Цезаря → Shifr Tsezarya<br>answer: `Shifr Tsezarya` · manual: An example of one operation: the key and parameters are already set in the node
+- **Keyboard shift** · `tour-keyboard_shift` — jrtpntomr → herobrine<br>answer: `herobrine` · manual: An example of one operation: the key and parameters are already set in the node
+- **Keep / remove characters** · `tour-filter` — T-H-E 1 K.E.Y 2 → THEKEY<br>answer: `THEKEY` · manual: An example of one operation: the key and parameters are already set in the node
+
+### Hidden text
+
+- **Zero-width characters → Binary → bytes** · `tour-zero_width` — Nothing to see​‌‌​‌​​​‍​‌‌​‌​​‌‍​‌‌… → hide<br>answer: `hide` · manual: An example of one operation: the key and parameters are already set in the node
+- **Letters from words (acrostic)** · `tour-acrostic` — Every New Day Every Room Matters An… → ENDERMAN<br>answer: `ENDERMAN` · manual: An example of one operation: the key and parameters are already set in the node
+- **Book cipher (numbers → words)** · `tour-book_cipher` — 7 10 11 → silent old mill<br>answer: `silent old mill` · manual: An example of one operation: the key and parameters are already set in the node
+- **Pick letters (positions, UPPERCASE, mark)** · `tour-pick_letters` — the Key is hidden in thE capitals, … → KEY<br>answer: `KEY` · manual: An example of one operation: the key and parameters are already set in the node
+- **Overlay: fill # from the second text** · `tour-overlay_fill` — N#GHT#AR + IJ → NIGHTJAR<br>answer: `NIGHTJAR` · manual: An example of one operation: the key and parameters are already set in the node
+- **Link finder** · `tour-links` — hxxps://pastebin[.]com/raw/… → https://pastebin.com/raw/…<br>answer: `https://pastebin.com/raw/aB3dE7fG` · manual: An example of one operation: the key and parameters are already set in the node
+
+### Hashes and OpenSSL
+
+- **Hash SHA-1** · `tour-hash_sha1` — nightjar → 3ff80a7b0a680e446fe334c4640f81313e7…<br>answer: `3ff80a7b0a680e446fe334c4640f81313e716e32` · manual: An example of one operation: the key and parameters are already set in the node
+- **Hash SHA-256** · `tour-hash_sha256` — nightjar → 43775932ce106a474e91158de24cfbba11d…<br>answer: `43775932ce106a474e91158de24cfbba11d6f58e1d4e344ff7297ad1288dd084` · manual: An example of one operation: the key and parameters are already set in the node
+- **Hash SHA-512** · `tour-hash_sha512` — nightjar → 94a0e90cc710a2d0de3537a024da78dbfe3…<br>answer: `94a0e90cc710a2d0de3537a024da78dbfe3185e7cc490888e1841ea7fb4d83027271fc57aa451486d3dbd1f2a2` · manual: An example of one operation: the key and parameters are already set in the node
+- **Hash CRC32** · `tour-hash_crc32` — nightjar → 612e5473<br>answer: `612e5473` · manual: An example of one operation: the key and parameters are already set in the node
+- **All hashes** · `tour-hash_all` — nightjar → 43a1ea6d499f04c780219c8b0bd9126b<br>manual: An example of one operation: the key and parameters are already set in the node
+- **OpenSSL enc: decrypt with password** · `tour-openssl_decrypt` — U2FsdGVkX1/Zu4Xl5dNXFoMWT3JaQDGpr22… → Meet at dawn, Ёлка!<br>answer: `Meet at dawn, Ёлка!` · manual: An example of one operation: the key and parameters are already set in the node
+
+### Images: steganography
+
+- **LSB: text in the low bits of pixels** · `tour-lsb` — A lighthouse picture → The password is NIGHTJAR…<br>manual: The browser decodes the picture; Auto works with text
+- **Bit plane: where the data hides** · `tour-bit-plane` — An ordinary picture → the low bit of red → LOOK UP<br>manual: The answer is a picture: see it in the Result node
+- **XOR of two pictures** · `tour-xor-images` — Two noise frames → 7319<br>manual: The answer is a picture: see it in the Result node
+
+### Files and archives
+
+- **Picture metadata and data after the end** · `tour-png-meta` — logbook.png → a comment and 246 bytes after IEND<br>manual: The browser parses the picture; Auto works with text
+- **A ZIP inside a picture** · `tour-zip-in-png` — logbook.png → archive → logbook.txt → the line with key<br>manual: Nodes take the file apart; Auto works with text
+- **Strings from a file** · `tour-strings` — Readable phrases right in the file bytes<br>manual: Nodes take the file apart; Auto works with text
+- **A password-protected RAR (7-Zip)** · `tour-rar-password` — RAR5 with encrypted names, password password → 4 files<br>manual: 7-Zip runs in the browser (WebAssembly)
+- **An archive in two parts** · `tour-join-parts` — Two Base64 halves → ZIP → note.txt: the code 0451<br>answer: `Both halves were needed: the code is 0451.` · manual: Nodes take the file apart; Auto works with text
 
 ## Built-in dossiers
 

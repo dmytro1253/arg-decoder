@@ -28,7 +28,7 @@ The six items Dmytro asked for on 2026-10-19 (order is not priority), then what 
 - Files: inspector with hex, strings, ZIP/JAR with ZipCrypto and `.class` constants, log viewer; hashes with hash check.
 - Project file (`.argproj.json`) with attachments, RU/EN interface switch, Debug tab.
 - One-click setup: Windows works without an installed Python; dictionaries download once from the release and are checked by SHA-256; later starts take about 3 s.
-- 75 examples (17 ARGs, the mslan case, teaching sets, audio and compressed data) and 17 ARG dossiers, custom dossiers; every example opens with a step-by-step guide card.
+- 173 examples (17 ARGs, the mslan case, teaching sets, one example per node: every operation, SSTV, Morse, DTMF, steganography, files) and 17 ARG dossiers, custom dossiers; every example opens with a step-by-step guide card.
 - Examples with pictures (`img-sga-poem`, `img-sga-key`, `img-vrfneo`): SGA photos and a dark frame read by OCR, loaded on demand from `web/samples/`.
 - Documentation: [How it works](docs/HOW-IT-WORKS.md) and a generated [function reference](docs/FUNCTIONS.md), both in English and Russian.
 - English text for the server's messages in the Debug tab and API errors.
@@ -66,7 +66,7 @@ The six items Dmytro asked for on 2026-10-19 (order is not priority), then what 
 - Файлы: инспектор с hex, строки, ZIP/JAR с ZipCrypto и константами `.class`, просмотр лога; хеши и проверка хеша.
 - Файл проекта (`.argproj.json`) с вложениями, переключатель RU/EN, вкладка «Отладка».
 - Установка в один клик: на Windows не нужен установленный Python; словари скачиваются один раз из релиза и проверяются по SHA-256; следующие запуски — около 3 с.
-- 75 примеров (17 ARG, кейс mslan, учебные наборы, звук и сжатые данные) и 17 досье по ARG, свои досье; каждый пример открывается с карточкой-гидом по шагам.
+- 173 примера (17 ARG, кейс mslan, учебные наборы, по примеру на каждую ноду: все операции, SSTV, Морзе, DTMF, стеганография, файлы) и 17 досье по ARG, свои досье; каждый пример открывается с карточкой-гидом по шагам.
 - Примеры с картинками (`img-sga-poem`, `img-sga-key`, `img-vrfneo`): SGA-фото и тёмный кадр с OCR, подгружаются по требованию из `web/samples/`.
 - Документация: [как устроена программа](docs/HOW-IT-WORKS.ru.md) и генерируемый [справочник функций](docs/FUNCTIONS.ru.md), на английском и русском.
 - Английский текст для сообщений сервера во вкладке «Отладка» и ошибках API.

@@ -857,7 +857,8 @@
   "files": [
    "web/js/app.js",
    "web/js/dossiers-data-c.js",
-   "web/js/files/node-strings.js"
+   "web/js/files/node-strings.js",
+   "web/js/presets-tour.js"
   ]
  },
  {
@@ -932,7 +933,8 @@
   "pattern": false,
   "en": "Permutations",
   "files": [
-   "web/js/app.js"
+   "web/js/app.js",
+   "web/js/presets-tour.js"
   ]
  },
  {
@@ -1065,7 +1067,8 @@
   "pattern": false,
   "en": "Keyed ciphers",
   "files": [
-   "web/js/app.js"
+   "web/js/app.js",
+   "web/js/presets-tour.js"
   ]
  },
  {
@@ -8189,7 +8192,8 @@
   "pattern": false,
   "en": "Strings from file",
   "files": [
-   "web/js/files/node-strings.js"
+   "web/js/files/node-strings.js",
+   "web/js/presets-tour.js"
   ]
  },
  {
@@ -18660,7 +18664,8 @@
   "pattern": false,
   "en": "Morse from audio",
   "files": [
-   "web/js/media/signal-nodes.js"
+   "web/js/media/signal-nodes.js",
+   "web/js/presets-tour.js"
   ]
  },
  {
@@ -20303,7 +20308,8 @@
   "pattern": false,
   "en": "Link finder",
   "files": [
-   "web/js/node-types.js"
+   "web/js/node-types.js",
+   "web/js/presets-tour.js"
   ]
  },
  {
@@ -26940,7 +26946,8 @@
   "pattern": false,
   "en": "Audio and compressed data",
   "files": [
-   "web/js/presets-extra.js"
+   "web/js/presets-extra.js",
+   "web/js/presets-tour.js"
   ]
  },
  {
@@ -27157,6 +27164,431 @@
   "en": "Reliability: ",
   "files": [
    "web/js/presets-kit.js"
+  ]
+ },
+ {
+  "key": "«Инспектор файла» показывает, что после PNG лежит ZIP. Нода «Архив» открывает его прямо из картинки и достаёт logbook.txt, «Файл → байты» делает из него текст, а «Просмотр лога» оставляет только строки со словом key.",
+  "pattern": false,
+  "en": "\"File inspector\" shows that a ZIP follows the PNG. The \"Archive\" node opens it straight from the picture and extracts logbook.txt, \"File → bytes\" turns it into text, and \"Log viewer\" keeps only the lines with the word key.",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "7-Zip работает в браузере (WebAssembly)",
+  "pattern": false,
+  "en": "7-Zip runs in the browser (WebAssembly)",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "Архив из двух частей",
+  "pattern": false,
+  "en": "An archive in two parts",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "Архив разрезан на две части, и по отдельности ни одна не открывается. Каждая часть: Base64 → байты → «Байты → файл»; «Склейка файлов» соединяет их по порядку входов, и получается целый ZIP.",
+  "pattern": false,
+  "en": "The archive is cut into two parts, and neither opens alone. Each part: Base64 → bytes → \"Bytes → file\"; \"Join files\" puts them together in input order, and a whole ZIP comes out.",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "Байты → звук (без заголовка WAV)",
+  "pattern": false,
+  "en": "Bytes → audio (no WAV header)",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "Битовая плоскость: где спрятаны данные",
+  "pattern": false,
+  "en": "Bit plane: where the data hides",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "В RAR5 с зашифрованными заголовками без пароля не видно даже имён файлов. Нода 7-Zip с паролем открывает список; «Запись (артефакт)» достаёт нужный файл.",
+  "pattern": false,
+  "en": "In a RAR5 with encrypted headers even the file names are hidden without the password. The 7-Zip node with the password opens the list; \"Entry (artifact)\" extracts a file.",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "высокая: ответ задан при синтезе и проверяется тестами",
+  "pattern": false,
+  "en": "high: the answer was set at synthesis and is checked by tests",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "Два кадра шума → 7319",
+  "pattern": false,
+  "en": "Two noise frames → 7319",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "Две половины Base64 → ZIP → note.txt: код 0451",
+  "pattern": false,
+  "en": "Two Base64 halves → ZIP → note.txt: the code 0451",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "Звук набора номера → 425822",
+  "pattern": false,
+  "en": "A dialling sound → 425822",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "Иногда звук дают голыми байтами, без заголовка WAV. «Байты → звук» читает их как отсчёты (здесь 8 бит без знака, 8000 Гц, моно), и дальше работает любая звуковая нода: DTMF слышит 42.",
+  "pattern": false,
+  "en": "Sometimes audio is given as bare bytes without a WAV header. \"Bytes → audio\" reads them as samples (8-bit unsigned, 8000 Hz, mono here), and any audio node works after it: DTMF hears 42.",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "Каждая кнопка телефона звучит двумя частотами сразу. Нода слушает их и выписывает цифры; длинная пауза между группами становится пробелом. В Petscop так спрятан номер BBS.",
+  "pattern": false,
+  "en": "Each phone key sounds as two frequencies at once. The node listens to them and writes the digits; a long pause between groups becomes a space. Petscop hides a BBS number like this.",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "Каждый бит каждого канала можно показать отдельной чёрно-белой картинкой. Изменение младшего бита глазом не видно, поэтому в нём удобно прятать рисунок: здесь в младшем бите красного канала нарисована надпись LOOK UP. В самой картинке её нет, а «Битовая плоскость» (канал R, бит 0) показывает её в «Результате». Если не знаешь, где искать, перебери каналы и биты 0–2.",
+  "pattern": false,
+  "en": "Each bit of each channel can be shown as a separate black-and-white picture. A change in the low bit is invisible to the eye, so it is a handy place to hide a drawing: here the text LOOK UP is drawn in the low bit of the red channel. The picture itself does not show it, and \"Bit plane\" (channel R, bit 0) shows it in the Result node. If you do not know where to look, go through the channels and bits 0–2.",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "Каждый кадр по отдельности — белый шум. Если наложить их режимом XOR (нода «Две картинки → одна»), одинаковый шум исчезает и остаётся то, чем кадры отличались: число 7319.",
+  "pattern": false,
+  "en": "Each frame alone is white noise. Combining them in XOR mode (\"Two images → one\") cancels the shared noise and leaves only the difference: the number 7319.",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "Картинка выглядит обычной, но в PNG есть текстовый комментарий «Not everything ends at IEND», а после конца картинки (чанк IEND) дописаны ещё байты, начинающиеся с PK — это ZIP. Следующий пример его достаёт.",
+  "pattern": false,
+  "en": "The picture looks ordinary, but the PNG has a text comment \"Not everything ends at IEND\", and more bytes starting with PK are appended after the end of the image (the IEND chunk): a ZIP. The next example extracts it.",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "Картинка маяка → The password is NIGHTJAR…",
+  "pattern": false,
+  "en": "A lighthouse picture → The password is NIGHTJAR…",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "Картинки: стеганография",
+  "pattern": false,
+  "en": "Images: steganography",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "Картинку декодирует браузер; авто-поиск работает с текстом",
+  "pattern": false,
+  "en": "The browser decodes the picture; Auto works with text",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "Картинку разбирает браузер; авто-поиск работает с текстом",
+  "pattern": false,
+  "en": "The browser parses the picture; Auto works with text",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "Метаданные картинки и данные после конца",
+  "pattern": false,
+  "en": "Picture metadata and data after the end",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "Нода находит частоту тона, порог и длину точки, затем собирает точки и тире в текст. Переключатель «Выход» показывает либо точки и тире, либо сразу текст.",
+  "pattern": false,
+  "en": "The node finds the tone frequency, threshold and dot length, then turns dots and dashes into text. The Output switch shows either dots and dashes or the text right away.",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "Обычная картинка → младший бит красного → LOOK UP",
+  "pattern": false,
+  "en": "An ordinary picture → the low bit of red → LOOK UP",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "Ответ — картинка: его видно в «Результате»",
+  "pattern": false,
+  "en": "The answer is a picture: see it in the Result node",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "Ответ этого примера проверяется тестами программы.",
+  "pattern": false,
+  "en": "The answer of this example is checked by the program tests.",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "Параметры примера: ",
+  "pattern": false,
+  "en": "Parameters in this example: ",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "Пример одной операции: ключ и параметры уже стоят в ноде",
+  "pattern": false,
+  "en": "An example of one operation: the key and parameters are already set in the node",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "Самый быстрый первый шаг с незнакомым файлом: вытащить из байтов всё, что похоже на текст. Фильтр key|step оставляет нужные строки — они видны даже без распаковки архива.",
+  "pattern": false,
+  "en": "The fastest first step with an unknown file: pull everything that looks like text out of the bytes. The key|step filter keeps the useful lines; they show even without unpacking the archive.",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "Символы и алфавиты",
+  "pattern": false,
+  "en": "Symbols and alphabets",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "синтезировано для программы (tools/make_tour_samples.js, tools/make_tour_images.py)",
+  "pattern": false,
+  "en": "synthesised for the program (tools/make_tour_samples.js, tools/make_tour_images.py)",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "Скрытый текст",
+  "pattern": false,
+  "en": "Hidden text",
+  "files": [
+   "web/js/presets-tour.js",
+   "web/js/profile.js"
+  ]
+ },
+ {
+  "key": "Сообщение записано в самый младший бит красного, зелёного и синего канала первых пикселей. Глазом картинка не меняется. «LSB-извлечение» собирает эти биты в байты (старший бит первым, по строкам), «Макс. байт» обрезает шум после сообщения.",
+  "pattern": false,
+  "en": "The message is written into the lowest bit of the red, green and blue channels of the first pixels. The picture looks the same. \"LSB extraction\" collects these bits into bytes (most significant bit first, by rows); \"Max output bytes\" cuts the noise after the message.",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "Ссылки в ARG часто «обезврежены» (hxxp, [.], пробелы) или перевёрнуты. «Поиск ссылок» находит их и ID, похожие на YouTube, Drive, Catbox, Pastebin, и восстанавливает адрес; кнопка «проверить» узнаёт через локальный сервер, существует ли страница.",
+  "pattern": false,
+  "en": "ARG links are often defanged (hxxp, [.], spaces) or reversed. \"Link finder\" finds them and IDs that look like YouTube, Drive, Catbox, Pastebin, and restores the address; the check button asks the local server whether the page exists.",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "тесты libarchive (BSD-2-Clause), test_read_format_rar5_encrypted_filenames",
+  "pattern": false,
+  "en": "the libarchive tests (BSD-2-Clause), test_read_format_rar5_encrypted_filenames",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "Тон 700 Гц → OLDROOT",
+  "pattern": false,
+  "en": "A 700 Hz tone → OLDROOT",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "Файл разбирают ноды; авто-поиск работает с текстом",
+  "pattern": false,
+  "en": "Nodes take the file apart; Auto works with text",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "Файлы и архивы",
+  "pattern": false,
+  "en": "Files and archives",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "Хеши и OpenSSL",
+  "pattern": false,
+  "en": "Hashes and OpenSSL",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "Числа и байты",
+  "pattern": false,
+  "en": "Numbers and bytes",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "Читаемые фразы прямо в байтах файла",
+  "pattern": false,
+  "en": "Readable phrases right in the file bytes",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "Шифры с квадратом",
+  "pattern": false,
+  "en": "Square ciphers",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "Base64 → байты → звук 8 бит, 8 кГц → DTMF 42",
+  "pattern": false,
+  "en": "Base64 → bytes → 8-bit 8 kHz audio → DTMF 42",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "DTMF: тоны кнопок телефона",
+  "pattern": false,
+  "en": "DTMF: phone key tones",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "logbook.png → архив → logbook.txt → строка с key",
+  "pattern": false,
+  "en": "logbook.png → archive → logbook.txt → the line with key",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "logbook.png → комментарий и 246 байт после IEND",
+  "pattern": false,
+  "en": "logbook.png → a comment and 246 bytes after IEND",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "LSB: текст в младших битах пикселей",
+  "pattern": false,
+  "en": "LSB: text in the low bits of pixels",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "RAR с паролем (7-Zip)",
+  "pattern": false,
+  "en": "A password-protected RAR (7-Zip)",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "RAR5 с зашифрованными именами, пароль password → 4 файла",
+  "pattern": false,
+  "en": "RAR5 with encrypted names, password password → 4 files",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "Robot 36 → картинка → обрезка → QR: PASSWORD: NIGHTJAR",
+  "pattern": false,
+  "en": "Robot 36 → picture → crop → QR: PASSWORD: NIGHTJAR",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "SSTV — способ передавать картинки звуком по радио; в ARG такие записи прячут в видео и аудиофайлах. Нода «SSTV из звука» сама узнаёт режим по коду VIS в начале записи (здесь Robot 36, 37 секунд) и рисует картинку. На ней QR-код: «Обрезка» вырезает и увеличивает его, нода QR читает текст.",
+  "pattern": false,
+  "en": "SSTV sends pictures as sound over radio; ARGs hide such recordings in videos and audio files. The \"SSTV from audio\" node detects the mode from the VIS code at the start (Robot 36 here, 37 seconds) and draws the picture. It holds a QR code: \"Crop\" cuts it out and enlarges it, and the QR node reads the text.",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "SSTV: картинка из звука → QR",
+  "pattern": false,
+  "en": "SSTV: a picture from audio → QR",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "XOR двух картинок",
+  "pattern": false,
+  "en": "XOR of two pictures",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "ZIP внутри картинки",
+  "pattern": false,
+  "en": "A ZIP inside a picture",
+  "files": [
+   "web/js/presets-tour.js"
   ]
  },
  {
@@ -28013,14 +28445,6 @@
   "key": "Склейка фрагментов",
   "pattern": false,
   "en": "Joining fragments",
-  "files": [
-   "web/js/profile.js"
-  ]
- },
- {
-  "key": "Скрытый текст",
-  "pattern": false,
-  "en": "Hidden text",
   "files": [
    "web/js/profile.js"
   ]

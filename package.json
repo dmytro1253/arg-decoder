@@ -1,6 +1,6 @@
 {
   "name": "arg-decoder",
-  "version": "1.3.4",
+  "version": "1.3.5",
   "private": true,
   "description": "Local node-graph workbench for cracking ARG puzzles (ciphers, images, audio, files, hashes) — by Dmytro",
   "author": "Dmytro",

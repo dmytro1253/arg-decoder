@@ -19,7 +19,7 @@ function sampleData(id) {
 }
 
 test('примеры с картинками есть, у каждого причина manual и заметка об источнике', () => {
-  assert.deepEqual([...images.map((p) => p.id)].sort(), ['audio-spectrogram', 'img-sga-key', 'img-sga-poem', 'img-vrfneo']);
+  assert.deepEqual([...images.map((p) => p.id)].sort(), ['audio-spectrogram', 'img-sga-key', 'img-sga-poem', 'img-vrfneo', 'tour-bit-plane', 'tour-dtmf', 'tour-lsb', 'tour-morse-audio', 'tour-png-meta', 'tour-rar-password', 'tour-sstv', 'tour-strings', 'tour-xor-images', 'tour-zip-in-png']);
   for (const p of images) {
     assert.ok(typeof p.manual === 'string' && p.manual.length > 15, p.id);
     assert.ok(p.nodes.some((n) => n.type === 'note' && /Source:/.test(n.params.text)), p.id);
