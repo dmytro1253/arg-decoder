@@ -26,8 +26,8 @@ IS_WIN = os.name == "nt"
 RUNTIME = ROOT / "runtime"
 EMBED_PY = RUNTIME / "python" / "python.exe"
 SETUP_DONE = RUNTIME / "setup-done.json"
-SETUP_VERSION = 1
-OWN_ARGS = ("--gpu", "--ocr", "--check", "--repair", "--offline")
+SETUP_VERSION = 2   # 2: локальный OCR (RapidOCR) ставится вместе с программой
+OWN_ARGS = ("--gpu", "--ocr", "--no-ocr", "--check", "--repair", "--offline")
 # Короткая проверка движка: модель загружается и Виженер расшифровывает известный пример.
 SELFTEST = (
     "import os,sys,json;sys.path.insert(0,os.getcwd())\n"
@@ -181,16 +181,31 @@ def setup(args):
     test = self_test(py) if info.get("numpy") else {"vigenere": False, "skipped": "no numpy"}
     say("[%s] %s" % ("✓" if test.get("vigenere") else "!", "Самопроверка движка / engine self-test: " + ("OK" if test.get("vigenere") else "не прошла / failed")))
     RUNTIME.mkdir(exist_ok=True)
+    ocr_ok = install_ocr(py, args)
     if data_ok and info.get("numpy") and test.get("vigenere"):
         SETUP_DONE.write_text(json.dumps({
             "version": SETUP_VERSION, "python": py, "python_version": info.get("version"), "numpy": True,
-            "cuda": info.get("cuda", False), "data": data_ok, "selftest": test, "date": time.strftime("%Y-%m-%d %H:%M"),
+            "cuda": info.get("cuda", False), "data": data_ok, "selftest": test, "ocr": ocr_ok, "date": time.strftime("%Y-%m-%d %H:%M"),
         }, indent=2), encoding="utf-8")
         say("[✓] Готово! Дальше программа будет запускаться сразу / Done! Next launches start immediately.")
     else:
         say("[!] Установка не полная — программа всё равно откроется, недостающее докачается в следующий раз.")
         say("    Setup is incomplete — the app still opens; missing parts are retried next time.")
     return py
+
+
+def install_ocr(py, args):
+    """Локальный OCR (RapidOCR + модели) ставится вместе с программой. Неудача не мешает запуску:
+    распознавание тогда идёт через tesseract.js, а повторить установку можно ключом --ocr."""
+    if "--no-ocr" in args:
+        say("[-] OCR RapidOCR пропущен (--no-ocr) / RapidOCR skipped (--no-ocr)")
+        return None
+    say("[*] Ставлю локальный OCR RapidOCR (~120 МБ, один раз) / Installing local OCR RapidOCR (~120 MB, once)…")
+    code = subprocess.call([py, str(ROOT / "setup_ocr.py")] + (["--offline"] if "--offline" in args else []), cwd=str(ROOT))
+    if code != 0:
+        say("[!] RapidOCR не установился — OCR будет работать через tesseract.js. Повторить: python launcher.py --ocr")
+        say("    RapidOCR was not installed — OCR falls back to tesseract.js. Retry with: python launcher.py --ocr")
+    return code == 0
 
 
 def choose_python(args):
@@ -227,9 +242,9 @@ def main():
     py = done["python"] if done else setup(args)
     if "--gpu" in args:
         install_gpu(py)
-    if "--ocr" in args:
-        # Экспериментальный RapidOCR: пакеты в runtime/ocr-python, модели в data/ocr (с проверкой SHA-256).
-        subprocess.call([py, str(ROOT / "setup_ocr.py")] + (["--offline"] if "--offline" in args else []), cwd=str(ROOT))
+    if "--ocr" in args and done:
+        # Повторная установка RapidOCR (при первой настройке он уже ставится): пакеты в runtime/ocr-python, модели в data/ocr.
+        install_ocr(py, args)
     env = dict(os.environ, PYTHONIOENCODING="utf-8", VIGENERE_DATA=str(ROOT / "data"))
     extra = [a for a in sys.argv[1:] if a not in OWN_ARGS]
     try:

@@ -202,11 +202,11 @@ Size, format, PNG text chunks (tEXt/zTXt/iTXt), JPEG/GIF comments, EXIF text and
 
 #### Image: OCR (text) `img_ocr`
 
-Recognises text locally, with no internet, when running through the local server. The auto order: Minecraft font (digits from the pixel grid) → RapidOCR (ONNX, experimental; install with python setup_ocr.py) as is, then with auto contrast → tesseract.js trying several preprocessing variants. Raw answers of every branch, line boxes and removed fragments are kept; characters are not corrected (O does not become 0, Ґ does not become Г). For large screenshots select a region with the Region button.
+Recognises text locally, with no internet, when running through the local server. The auto order: Minecraft font (digits from the pixel grid) → RapidOCR (ONNX; installed with the program) as is, then with auto contrast → tesseract.js trying several preprocessing variants. Raw answers of every branch, line boxes and removed fragments are kept; characters are not corrected (O does not become 0, Ґ does not become Г). For large screenshots select a region with the Region button.
 
 - Inputs: image
 - Parameters:
-  - Engine — options: **auto (Minecraft → RapidOCR → tesseract)**, RapidOCR (experimental), tesseract.js, Minecraft font (digits)
+  - Engine — options: **auto (Minecraft → RapidOCR → tesseract)**, RapidOCR, tesseract.js, Minecraft font (digits)
   - Language — options: **English**, Русский, Українська, English + Русский, Русский + English, Українська + English, EN + RU + UK
   - Digits only — default: off
   - Preprocessing — options: **auto (try several)**, as is + upscale, auto contrast, auto contrast + denoise, lift shadows (dark frames), black & white, invert

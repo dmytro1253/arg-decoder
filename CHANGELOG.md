@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.2.1 — fixes from the 2026-10-25 audit
+
+- Key bank: keys are saved in the project file and in autosave with their source and time, and come back after a reload (they used to be dropped); old projects with plain string keys open. Keys are shown as chips with × to delete; Enter adds a key. Fixed a CSS class clash with the on-screen keyboards.
+- New project and Open: the confirmation says what really happens, a backup of the current project (boards, drawings, keys, dossiers, attachments) is kept separately from autosave, and the new "Previous project" button restores it. A project with only keys or own dossiers is no longer treated as empty.
+- Engine statuses: server codes are mapped to running / done / error / cancelled in one place; an engine error (also with partial candidates) or an unknown status is never reported as done, and the reason is shown, in Auto and in the Vigenère panel.
+- Auto: whitespace preparation alone cannot produce a confident answer; "likely" needs word coverage of the whole output; letters with diacritics foreign to Spanish count against the Spanish model; texts in decomposed Unicode (NFD) are scored as NFC.
+- RapidOCR is installed by the first start together with the program (`--no-ocr` skips it, `--ocr` retries).
+- Debug tab rebuilt: summary cards, all current modules and self-tests (Enigma, RC4, zlib), RapidOCR, tesseract.js and 7-Zip status, data source (release or original sources), first-setup marker, project and browser storage.
+- CI: a separate job installs the data-v1 dictionaries and runs the full Python engine tests with skips treated as failures. Docs synced with the registries (75 examples, 17 dossiers, 133 operations of which 58 have Auto probes); the Dossier tab is no longer labelled "Profile" in English.
+
 ## 1.2.0 — after the 2026-10-24 review
 
 - Packaging: `.gitignore` excluded `web/data/` by accident (a clean checkout lost two OCR data files); now only the root `data/`, `dist/` and `runtime/` are ignored. The release URL points to `dmytro1253/arg-decoder` (the `data-v1` asset still has to be uploaded; until then setup falls back to the original sources and stops retrying on HTTP 404). Third-party notices record the licences of every dictionary source.

@@ -12,6 +12,9 @@
   const IDB_NAME = 'argdec';
   const IDB_STORE = 'kv';
   const IDB_ARTIFACTS = 'artifacts';
+  // Снимок проекта перед заменой (новый проект, открытие файла): отдельный ключ, не тот, что у автосохранения.
+  const BACKUP_KEY = 'argdec.project.previous';
+  const IDB_BACKUP = 'previous-project';
   // Улики крупнее этого порога (в символах JSON) сразу уходят в IndexedDB: localStorage ограничен ~5 МБ.
   const LOCAL_ARTIFACTS_LIMIT = 1500000;
   const MAX_CLOSED = 20;
@@ -80,8 +83,20 @@
     return (Array.isArray(list) ? list : []).filter((a) => isObj(a) && typeof a.id === 'string' && typeof a.dataUrl === 'string' && a.dataUrl.startsWith('data:'));
   }
 
+  // Ключ проекта — запись банка { value, source, added }. Старые проекты хранили массив строк: такие ключи
+  // переносятся с источником «user» (как и в самом банке). Дубликаты (без учёта регистра) и пустые отбрасываются.
+  const MAX_KEY = 200;
+  const MAX_KEYS = 2000;
   function normalizeKeys(list) {
-    return (Array.isArray(list) ? list : []).filter((k) => typeof k === 'string' && k.trim()).map((k) => k.trim());
+    const out = [];
+    for (const raw of Array.isArray(list) ? list : []) {
+      const obj = isObj(raw);
+      const value = String(obj ? raw.value === undefined || raw.value === null ? '' : raw.value : typeof raw === 'string' ? raw : '').trim().slice(0, MAX_KEY);
+      if (!value || out.length >= MAX_KEYS || out.some((k) => k.value.toLowerCase() === value.toLowerCase())) continue;
+      const added = obj && Number.isFinite(raw.added) ? raw.added : null;
+      out.push({ value, source: String((obj && raw.source) || 'user').slice(0, 200), added });
+    }
+    return out;
   }
 
   // Свои досье проекта: нормализует модель досье (dossiers.js), а если она не загружена — отбрасывает всё, кроме объектов с названием.
@@ -212,7 +227,8 @@
   const isPristineBoard = (b) => !b.graph.nodes.length && !b.annotations.length;
   /** Есть ли в проекте что терять: ноды, рисунки, улики. */
   function hasContent(p) {
-    return p.boards.length > 1 || p.boards.some((b) => !isPristineBoard(b)) || p.artifacts.length > 0;
+    return p.boards.length > 1 || p.boards.some((b) => !isPristineBoard(b)) || p.artifacts.length > 0
+      || (p.keys || []).length > 0 || (p.dossiers || []).length > 0;
   }
 
   // ---------- файл проекта ----------
@@ -324,6 +340,31 @@
       return { ok: warnings.length === 0, mode, warnings };
     }
 
+    /**
+     * Резервный снимок проекта целиком (доски, рисунки, ключи, досье и вложения) перед заменой.
+     * Сначала IndexedDB (вмещает вложения), иначе память браузера. Возвращает { ok, where } — без исключений.
+     */
+    async function saveBackup(project, artifacts) {
+      const text = JSON.stringify({ ...project, artifacts: normalizeArtifacts(artifacts), keys: normalizeKeys(project.keys), savedAt: new Date().toISOString() });
+      if (idb) {
+        try { await idb.set(IDB_BACKUP, text); lsRemove(BACKUP_KEY); return { ok: true, where: 'idb' }; } catch (e) { /* пробуем память браузера */ }
+      }
+      try { local.setItem(BACKUP_KEY, text); return { ok: true, where: 'local' }; } catch (e) { return { ok: false, where: null }; }
+    }
+
+    /** Снимок, сохранённый saveBackup, или null. */
+    async function loadBackup() {
+      let text = null;
+      if (idb) { try { text = await idb.get(IDB_BACKUP); } catch (e) { text = null; } }
+      if (!text) text = lsGet(BACKUP_KEY);
+      if (!text) return null;
+      try {
+        const data = JSON.parse(text);
+        const project = normalize(data);
+        return { project: { ...project, artifacts: normalizeArtifacts(data.artifacts) }, savedAt: data.savedAt || null };
+      } catch (e) { return null; }
+    }
+
     /** Читает проект и улики. Возвращает null, если ничего не сохранено. */
     async function load() {
       const warnings = [];
@@ -370,7 +411,7 @@
       return { project, artifacts: [], warnings, migrated: true };
     }
 
-    return { save, load };
+    return { save, load, saveBackup, loadBackup };
   }
 
   G.Project = {

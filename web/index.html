@@ -24,6 +24,7 @@
         <div class="menu hidden" id="preset-menu"></div>
       </div>
       <button class="btn" id="btn-new" data-t="New" data-t-title="New project (the current one is replaced after confirmation)" title="Новый проект (текущий заменяется после подтверждения)">Новый</button>
+      <button class="btn hidden" id="btn-restore" data-t="Previous project" data-t-title="Bring back the project that was replaced by New or Open" title="Вернуть проект, заменённый кнопками «Новый» или «Открыть»">Прошлый проект</button>
       <button class="btn" id="btn-open" data-t="Open" data-t-title="Open a project (.argproj.json) or an old graph (.json)" title="Открыть проект (.argproj.json) или старый граф (.json)">Открыть</button>
       <button class="btn" id="btn-save" data-t="Save" data-t-title="Save the whole project with attachments to one file (Ctrl+S)" title="Сохранить весь проект с вложениями в один файл (Ctrl+S)">Сохранить</button>
       <button class="btn" id="btn-undo" data-t-title="Undo (Ctrl+Z)" title="Отменить (Ctrl+Z)">↶</button>
@@ -59,7 +60,7 @@
     <aside class="side" id="side">
       <nav class="tabs">
         <button class="tab active" data-tab="tab-auto" data-t="⚡ Auto">⚡ Авто</button>
-        <button class="tab" data-tab="tab-dossier" data-t="Profile">Досье</button>
+        <button class="tab" data-tab="tab-dossier" data-t="Dossier">Досье</button>
         <button class="tab" data-tab="tab-keys" data-t="Keys">Ключи</button>
         <button class="tab" data-tab="tab-debug" data-t="Debug" data-t-title="What is connected and what errors occurred" title="Что подключено и какие были ошибки">Отладка</button>
       </nav>

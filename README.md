@@ -7,10 +7,10 @@
 </p>
 
 <p align="center">
-  <img alt="version" src="https://img.shields.io/badge/version-1.2.0-1976d2">
+  <img alt="version" src="https://img.shields.io/badge/version-1.2.1-1976d2">
   <img alt="platforms" src="https://img.shields.io/badge/Windows%20%7C%20macOS%20%7C%20Linux-3b4252">
   <img alt="python" src="https://img.shields.io/badge/python-3.9%2B-3776ab">
-  <img alt="tests" src="https://img.shields.io/badge/tests-561%20passing-2e7d32">
+  <img alt="tests" src="https://img.shields.io/badge/tests-574%20passing-2e7d32">
   <img alt="languages" src="https://img.shields.io/badge/UI-EN%20%C2%B7%20RU%20%C2%B7%20UK-6a1b9a">
   <img alt="offline" src="https://img.shields.io/badge/works-offline-2e7d32">
   <img alt="server" src="https://img.shields.io/badge/server-127.0.0.1%20only-455a64">
@@ -70,7 +70,7 @@ ARG Decoder is a universal tool for alternate reality games. You paste a string 
 
 > **Optional GPU.** The full Vigenère key search runs on an NVIDIA card about 10× faster: double-click **`Enable-GPU-Windows.bat`** (installs PyTorch with CUDA, ~2.5 GB) or run `python launcher.py --gpu`.
 
-> **Optional local OCR (experimental).** `python setup_ocr.py` (or `python launcher.py --ocr`) installs RapidOCR 3.10.0 with ONNX Runtime into `runtime/ocr-python` (your Python stays untouched) and three models (~26 MB) into `data/ocr`, each checked by SHA-256. Without it OCR uses tesseract.js as before.
+> **Local OCR comes with the program.** The first start also installs RapidOCR 3.10.0 with ONNX Runtime into `runtime/ocr-python` (your Python stays untouched) and three models (~26 MB) into `data/ocr`, each checked by SHA-256. If that fails, OCR falls back to tesseract.js and `python launcher.py --ocr` retries; `--no-ocr` skips it.
 
 ### 3. Or install by hand from the console
 
@@ -161,7 +161,7 @@ All screenshots are captures of the running program. Any example opens straight 
 
 ## 🤖 Auto search
 
-The **⚡ Auto** panel and the *Auto-decrypt* node run a beam search over chains of up to four steps, scored by English, Russian and Ukrainian language models (quadgrams + dictionaries) and by structure (links, IDs, coordinates, file paths, numbers).
+The **⚡ Auto** panel and the *Auto-decrypt* node run a beam search over chains of up to four steps (58 of the 133 operations have their own probes; the rest are manual nodes or need a key), scored by English, Russian and Ukrainian language models (quadgrams + dictionaries) and by structure (links, IDs, coordinates, file paths, numbers).
 
 - **Honest statuses.** Each result is *confident*, *likely*, *format recognised*, *part of the input* or *hypothesis*, and the search ends with a verdict, including **"answer not determined"**. Format checks are strict, and the penalty for trying many variants fades only when the text really reads.
 - **Before searching** it evaluates arithmetic exactly, reports hash digests and opaque tokens as such, and recognises coordinates and file paths.
@@ -182,7 +182,7 @@ Measured blind (neutral profile, empty key bank, no answer or key passed) on the
 
 ## 🧩 Examples and dossiers
 
-The **Examples** menu holds **72 ready boards** from documented solutions of real ARGs (OldRoot, HERMatrix, Endermite, Cicada 3301, Portal, Sombra, Killing Floor 2, Dr. Langeskov, 76543, Steam Winter 2015 and more), plus teaching sets. Each example says how it is solved:
+The **Examples** menu holds **75 ready boards** from documented solutions of real ARGs (OldRoot, HERMatrix, Endermite, Cicada 3301, Portal, Sombra, Killing Floor 2, Dr. Langeskov, 76543, Steam Winter 2015 and more), plus teaching sets. Each example says how it is solved:
 
 | Mark | Meaning |
 |---|---|
@@ -191,7 +191,7 @@ The **Examples** menu holds **72 ready boards** from documented solutions of rea
 | 🟡 **key** | a manual solution with a key obtained at an earlier stage |
 | 🟡 **context** | the program does the computing part; a human step is needed |
 
-The **Profile** tab shows **17 built-in dossiers** (one per ARG: period, platform, stages, techniques, sources, open questions). You can write your own dossiers; they are stored in the project file.
+The **Dossier** tab shows **17 built-in dossiers** (one per ARG: period, platform, stages, techniques, sources, open questions). You can write your own dossiers; they are stored in the project file.
 
 ## 🌐 Languages
 
@@ -219,7 +219,7 @@ Almost everything is local. The server listens on `127.0.0.1` only, checks the `
 | What | When | Where to |
 |---|---|---|
 | First setup | first launch only | python.org (Python on Windows), PyPI (numpy, optional PyTorch), the GitHub release (dictionaries) |
-| Optional OCR setup | only `setup_ocr.py` | PyPI (RapidOCR, ONNX Runtime), modelscope.cn (three ONNX models, SHA-256 checked) |
+| OCR setup | first launch (or `launcher.py --ocr`) | PyPI (RapidOCR, ONNX Runtime), modelscope.cn (three ONNX models, SHA-256 checked) |
 | YouTube check | only when you press it | `youtube.com/oembed` |
 | Link check | only when you press it | a fixed list of known file and paste hosts; redirects are never followed |
 | Wikipedia in help cards | only when you click | your browser |
@@ -235,7 +235,7 @@ Almost everything is local. The server listens on `127.0.0.1` only, checks the `
 ## ✅ Tests and development
 
 ```bash
-node --test                                              # 541 tests: engine, solver, examples, images, audio, files, OCR, archives, i18n
+node --test                                              # 554 tests: engine, solver, examples, images, audio, files, OCR, archives, i18n
 python -m unittest discover -s tests -p "test_*.py"      # server, data installer, Vigenère engine
 node tools/check_i18n.js                                 # interface strings outside T('ru', 'en')
 node tools/i18n_uk.js check                              # Ukrainian dictionary is complete
@@ -252,7 +252,7 @@ Start-Windows.bat / Start-Mac.command / start.sh   one-click start (first run se
 Enable-GPU-Windows.bat     PyTorch with CUDA (optional)
 launcher.py                picks Python, installs dependencies, starts the server
 setup_data.py              downloads and checks the dictionaries (SHA-256)
-setup_ocr.py / ocr_backend.py   optional local RapidOCR (packages in runtime/ocr-python, models in data/ocr)
+setup_ocr.py / ocr_backend.py   local RapidOCR, installed by the first start (packages in runtime/ocr-python, models in data/ocr)
 server.py / backend.py     local server (127.0.0.1 only) and the Python Vigenère engine jobs
 vigenere/                  built-in Vigenère solver (MIT, by Dmytro)
 data/                      corpora, EN/RU/UK dictionaries, language-model cache (~300 MB, downloaded)

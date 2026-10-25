@@ -30,14 +30,18 @@
     });
     let status = job;
     let stopSent = false;
-    while (status.status === 'идёт') { // i18n-ok: данные
+    while (G.API.engineStatus(status.status) === 'running') {
       if (o.cancel && o.cancel.stop && !stopSent) { stopSent = true; await G.API.vigStop(job.id).catch(() => null); }
       await sleep(POLL_MS);
       status = await G.API.vigStatus(job.id);
       if (onProgress) onProgress({ stage: progressText(status), rows: status.rows.map((r) => toRow(r, variant)), progress: status.progress, log: status.log, gpu: status.gpu });
     }
-    if (status.status === 'ошибка' && !status.rows.length) throw new Error(status.log.slice(-1)[0] || T('движок завершился с ошибкой', 'the engine finished with an error')); // i18n-ok: данные
-    return { rows: status.rows.map((r) => toRow(r, variant)), log: status.log, gpu: status.gpu, status: status.status, seconds: status.seconds, truncated: status.truncated || null };
+    // state: 'done' | 'cancelled' | 'error'. Ошибка без кандидатов — исключение; с кандидатами — результат с error.
+    const raw = G.API.engineStatus(status.status);
+    const state = raw === 'unknown' ? 'error' : raw;
+    const error = state === 'error' ? G.API.engineFailure(status) || T('движок завершился с ошибкой', 'the engine finished with an error') : null;
+    if (state === 'error' && !(status.rows || []).length) throw new Error(error);
+    return { rows: (status.rows || []).map((r) => toRow(r, variant)), log: status.log, gpu: status.gpu, status: status.status, state, error, seconds: status.seconds, truncated: status.truncated || null };
   }
 
   function progressText(s) {
@@ -49,5 +53,12 @@
     return T(`Python-движок, ${where} · ${pct}% · ${rate} ключей/с · осталось ~${Math.round(p.eta || 0)} с`, `Python engine, ${where} · ${pct}% · ${rate} keys/s · ~${Math.round(p.eta || 0)} s left`);
   }
 
-  G.VigPython = { run };
+  /** Итог задания словами: сбой с частичными результатами не выдаётся за «готово». */
+  function outcome(out) {
+    if (out.state === 'cancelled') return T('остановлено', 'stopped');
+    if (out.state === 'error') return T('ошибка, показаны частичные результаты: ', 'error, partial results shown: ') + out.error;
+    return T('готово', 'done');
+  }
+
+  G.VigPython = { run, outcome };
 })(typeof self !== 'undefined' ? self : this);

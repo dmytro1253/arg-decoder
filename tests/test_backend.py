@@ -1,4 +1,5 @@
 """Тесты серверной части: python -m unittest discover -s tests -p "test_*.py" """
+import os
 import sys
 import time
 import unittest
@@ -15,6 +16,9 @@ except ImportError:
 
 # Словари не хранятся в репозитории (скачиваются при первом запуске) — без них часть тестов пропускается.
 HAS_DATA = (Path(__file__).resolve().parent.parent / "data" / "words_en.txt").exists()
+# В CI-задании с данными (ARGDEC_REQUIRE_DATA=1) отсутствие словарей или numpy — ошибка, а не пропуск полного подбора.
+if os.environ.get("ARGDEC_REQUIRE_DATA") == "1" and not (HAS_DATA and HAS_NUMPY):
+    raise RuntimeError("ARGDEC_REQUIRE_DATA=1, но словарей или numpy нет: полный движок не проверен")
 
 
 class DiagnosticsTest(unittest.TestCase):

@@ -7,6 +7,7 @@
 import collections
 import hashlib
 import importlib
+import json
 import math
 import os
 import platform
@@ -22,7 +23,7 @@ ROOT = Path(__file__).resolve().parent
 DATA_DIR = ROOT / "data"
 os.environ.setdefault("VIGENERE_DATA", str(DATA_DIR))
 
-APP_VERSION = "1.2.0"
+APP_VERSION = "1.2.1"
 STARTED = time.time()
 WARM_ALPHABETS = ["en-26", "ru-33", "ru-32"]
 HASH_CHUNK = 4 * 1024 * 1024
@@ -201,6 +202,39 @@ def start_background():
     threading.Thread(target=warm_models, name="models", daemon=True).start()
 
 
+def _setup_info():
+    """Отметка первой установки (runtime/setup-done.json): версия установки, OCR, CUDA, дата."""
+    try:
+        done = json.loads((ROOT / "runtime" / "setup-done.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {"done": False}
+    return {"done": True, "version": done.get("version"), "ocr": done.get("ocr"), "cuda": done.get("cuda"),
+            "python_version": done.get("python_version"), "date": done.get("date")}
+
+
+def _data_source():
+    """Откуда данные: архив релиза (совпадает с манифестом), первоисточники (отметка) или неполная установка."""
+    try:
+        import setup_data
+        manifest = setup_data.load_manifest()
+        bad = setup_data.check_data(manifest, full=False) if manifest else []
+        if manifest and not bad:
+            return {"source": "release", "version": manifest.get("version"), "missing": []}
+        if setup_data.sources_ready():
+            return {"source": "sources", "version": None, "missing": []}
+        return {"source": "incomplete", "version": manifest.get("version") if manifest else None, "missing": bad[:20]}
+    except Exception as exc:  # noqa: BLE001 — диагностика не должна падать
+        return {"source": "unknown", "error": str(exc), "missing": []}
+
+
+def _ocr_status():
+    try:
+        import ocr_backend
+        return ocr_backend.status()
+    except Exception as exc:  # noqa: BLE001
+        return {"ready": False, "note": "%s: %s" % (type(exc).__name__, exc), "models": [], "packages": {"ok": False}}
+
+
 def diagnostics():
     return {
         "app": {"version": APP_VERSION, "uptime": round(time.time() - STARTED), "root": str(ROOT)},
@@ -212,6 +246,9 @@ def diagnostics():
         "data": {"dir": str(DATA_DIR), "exists": DATA_DIR.is_dir(), "files": data_files()},
         "hashing": STATE["hashing"],
         "models": STATE["models"],
+        "setup": _setup_info(),
+        "datasource": _data_source(),
+        "ocr": _ocr_status(),
         "jobs": [{"id": j["id"], "status": j["status"]} for j in _jobs_snapshot()],
         "errors": list(ERRORS),
     }

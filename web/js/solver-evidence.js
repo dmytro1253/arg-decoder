@@ -66,7 +66,14 @@
   const COVER_MIN = 0.6;
   const STEP_BITS = 3;
   const SHORT_GUESS = 6;
-  const CONFIRM_LETTERS = 6;       // букв, начиная с которых читаемый вывод декодера подтверждает себя сам
+  const CONFIRM_LETTERS = 6;
+  // «Вероятно» для подобранного результата: слова должны покрывать весь вывод, а не удачный кусок
+  // («sjlbrown» — это не «brown»). Короткому выводу — строже.
+  const LIKELY_COVER = 0.6;
+  const LIKELY_COVER_SHORT = 0.75;
+  const SHORT_TEXT = 12;
+  // Подготовка пробелов (ws_prep) ничего не расшифровывает: такая цепочка не поднимается выше «как есть».
+  const PREP_ONLY = new Set(['ws_prep']);       // букв, начиная с которых читаемый вывод декодера подтверждает себя сам
   // Шаг по своему типу снимает формат (без угадываемых параметров), независимо от входа.
   const formatKind = (c) => NEUTRAL.has(c.op) || (c.op === 'ws_prep' && c.params && c.params.mode !== 'nospace') || (!!FORMAT[c.op] && !(c.op === 'dec_codes' && Number(c.params && c.params.shift)));
   const bitsOf = (item, weight) => (item.freedom || 0) / weight;
@@ -121,9 +128,10 @@
       else if (a.readable && !item.unjustified && (a.letters >= 8 || item.userKey) && (a.cover || 0) >= COVER_MIN && evidence >= EVIDENCE_MIN) { status = 'confident'; reason = 'readable'; }
       else if (a.hasLink && a.badRatio === 0) { status = a.linkConfirmed ? 'likely' : 'fragment'; reason = 'link'; }
       // Короткое «слово» из угаданной цепочки (3–5 букв) — почти всегда совпадение.
-      else if ((a.readable && a.letters >= SHORT_GUESS) || kind === 'coordinates' || kind === 'path') status = 'likely';
+      else if ((a.readable && a.letters >= SHORT_GUESS && (a.cover || 0) >= (a.letters < SHORT_TEXT ? LIKELY_COVER_SHORT : LIKELY_COVER)) || kind === 'coordinates' || kind === 'path') status = 'likely';
       else status = 'weak';
     }
+    if (item.chain.length && item.chain.every((c) => PREP_ONLY.has(c.op)) && status === 'confident') { status = 'likely'; reason = 'prep-only'; }
     // Расшифрован кусок длинного входа — это не ответ на весь вход. base — статус самого куска.
     const base = status;
     if (item.coverage !== undefined && item.coverage < 0.8 && (status === 'confident' || status === 'likely' || status === 'decoded')) status = 'fragment';

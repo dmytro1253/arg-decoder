@@ -46,6 +46,7 @@
   const LATIN_LANGS = ['en', 'es'];
   const ES_COVER_MIN = 0.6;
   const ES_WEAK = 0.6;
+  const ES_FOREIGN = 0.4;
 
   function lettersOf(text, lang) {
     const m = MODELS[lang];
@@ -145,8 +146,10 @@
   const topLetterLimit = (n) => Math.max(0.22, 0.15 + 2.5 * Math.sqrt(0.1275 / Math.max(1, n)));
 
   // nested: разбор текста вокруг ссылки — без повторного поиска ссылок (иначе голый домен даёт бесконечную рекурсию).
-  function analyze(text, extraKeywords, nested) {
+  function analyze(raw, extraKeywords, nested) {
     init();
+    // Оценка — по нормальной форме NFC: «ї» из «і» + комбинируемой точки — та же буква. Сам текст кандидата не меняется.
+    const text = typeof raw === 'string' && raw.normalize ? raw.normalize('NFC') : String(raw);
     const st = charStats(text);
     const tags = [];
     const n = Math.max(1, st.total);
@@ -169,7 +172,9 @@
         let natural = qWeight * Math.max(0, q.norm) + (1 - qWeight) * w.coverage;
         // Испанский — дополнительная модель для латиницы: без сильного свидетельства (покрытие словами и два слова
         // или буквы ñ/á/¿) случайная строка с «peina» внутри не должна становиться читаемой.
-        if (lang === 'es' && !(w.coverage >= ES_COVER_MIN && (w.words.length >= 2 || /[ñáéíóú¿¡]/i.test(text)))) natural *= ES_WEAK;
+        // Буквы с чужими для испанского диакритиками (ã, ë, ø…) модель не видит — это свидетельство против испанского.
+        if (lang === 'es' && /[àâãäåæçèêëìîïòôõöøùûýÿœ]/i.test(text)) natural *= ES_FOREIGN;
+        else if (lang === 'es' && !(w.coverage >= ES_COVER_MIN && (w.words.length >= 2 || /[ñáéíóú¿¡]/i.test(text)))) natural *= ES_WEAK;
         if (natural > best.natural) best = { lang, natural, quad: q.norm, cover: w.coverage, words: w.words };
       }
     }

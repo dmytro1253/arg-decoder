@@ -143,12 +143,12 @@ test('уникальное имя доски', () => {
 test('файл проекта: круг сохранения с вложениями, ключами и аннотациями', () => {
   const shape = M.make('rect', { x: 1, y: 2, w: 30, h: 20, color: '#ff0000' });
   let p = P.create({ name: 'Дело/1', boards: [{ name: 'Лог', graph: graphOf(2), annotations: [shape], view: { pan: { x: 5, y: 6 }, zoom: 0.8 } }] });
-  const text = P.serialize(p, [art('a1', 'привет')], ['KEY']);
+  const text = P.serialize(p, [art('a1', 'привет')], [{ value: 'KEY', source: 'video title', added: 1700000000000 }]);
   const back = P.parse(text);
   assert.equal(back.name, 'Дело/1');
   assert.equal(back.artifacts.length, 1);
   assert.equal(Buffer.from(back.artifacts[0].dataUrl.split(',')[1], 'base64').toString(), 'привет');
-  eq(back.keys, ['KEY']);
+  eq(back.keys, [{ value: 'KEY', source: 'video title', added: 1700000000000 }], 'ключ сохраняется с источником и временем');
   assert.equal(back.boards[0].annotations[0].type, 'rect');
   assert.equal(back.boards[0].view.zoom, 0.8);
   eq(back.boards[0].view.pan, { x: 5, y: 6 });
@@ -157,10 +157,11 @@ test('файл проекта: круг сохранения с вложения
   assert.throws(() => P.parse('не json'), /JSON/);
 });
 
-test('вложения без dataURL отбрасываются, ключи очищаются', () => {
-  const p = P.create({ artifacts: [{ id: 'x', dataUrl: 'http://evil' }, art('ok', 'z'), null], keys: [' a ', '', 5, 'b'] });
+test('вложения без dataURL отбрасываются, ключи очищаются (старый формат строк переносится)', () => {
+  const p = P.create({ artifacts: [{ id: 'x', dataUrl: 'http://evil' }, art('ok', 'z'), null], keys: [' a ', '', 5, 'b', 'B', { value: 'c', source: 'лог' }, { source: 'x' }] });
   eq(p.artifacts.map((a) => a.id), ['ok']);
-  eq(p.keys, ['a', 'b']);
+  eq(p.keys.map((k) => k.value), ['a', 'b', 'c'], 'пустые, нестроки и дубликаты без учёта регистра отброшены');
+  eq(p.keys.map((k) => k.source), ['user', 'user', 'лог']);
 });
 
 test('автосохранение: проект и улики возвращаются после перезагрузки', async () => {

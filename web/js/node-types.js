@@ -369,7 +369,7 @@
         out = await G.VigPython.run(input, { mode: p.mode, variant: p.variant, lang: p.lang, gpu: p.gpu, maxLen: Number(p.maxLen) || 20, keys, cancel: node.state.cancel },
           (info) => { show(info.rows, info.stage); u.hints.textContent = info.log.slice(-2).join(' · '); });
         u.hints.textContent = out.log.filter((l) => /индекс|Касиски|IC|Kasiski|длин|length/i.test(l)).slice(0, 2).join(' · ') + (out.truncated ? ' · ' + T('Ввод обрезан до ' + out.truncated.to + ' символов (было ' + out.truncated.from + ')', 'Input truncated to ' + out.truncated.to + ' characters (was ' + out.truncated.from + ')') : '');
-        show(out.rows, (out.status === 'остановлено' ? T('Остановлено', 'Stopped') : T('Готово', 'Done')) + ' · Python, ' + (out.gpu ? 'GPU' : 'CPU')); // i18n-ok: данные
+        show(out.rows, G.VigPython.outcome(out) + ' · Python, ' + (out.gpu ? 'GPU' : 'CPU'));
       } else {
         out = await G.VigenereAuto.run(input, {
           variants: p.variant === 'all' ? ['vigenere', 'beaufort', 'variant'] : [p.variant],

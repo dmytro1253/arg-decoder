@@ -87,6 +87,26 @@
     vigStart(params) { return API.post('/api/vigenere', params); },
     vigStatus(id) { return API.get('/api/vigenere/status?id=' + encodeURIComponent(id)); },
     vigStop(id) { return API.post('/api/vigenere/stop?id=' + encodeURIComponent(id), {}); },
+
+    /**
+     * Единый машинный статус задания Python-движка: 'running' | 'done' | 'error' | 'cancelled' | 'unknown'.
+     * Сервер отвечает кодами «идёт / готово / ошибка / остановлено»; неизвестное значение — не успех, а ошибка протокола.
+     */
+    engineStatus(raw) {
+      const s = String(raw === undefined || raw === null ? '' : raw).toLowerCase();
+      if (s === 'идёт' || s === 'ожидает' || s === 'running' || s === 'waiting') return 'running'; // i18n-ok: коды сервера
+      if (s === 'готово' || s === 'done') return 'done'; // i18n-ok: коды сервера
+      if (s === 'ошибка' || s === 'error') return 'error'; // i18n-ok: коды сервера
+      if (s === 'остановлено' || s === 'stopped' || s === 'cancelled') return 'cancelled'; // i18n-ok: коды сервера
+      return 'unknown';
+    },
+    /** Причина сбоя из ответа движка: последняя строка журнала или неизвестный статус. */
+    engineFailure(status) {
+      const log = (status && status.log) || [];
+      const last = log.length ? String(log[log.length - 1]) : '';
+      if (API.engineStatus(status && status.status) === 'unknown') return T('неизвестный статус движка: ', 'unknown engine status: ') + (status && status.status);
+      return G.I18n && G.I18n.server ? G.I18n.server(last) : last;
+    },
     ocrStatus() { return API.get('/api/ocr/status'); },
 
     /** Есть ли на сервере рабочий движок Виженера (numpy + модели). */

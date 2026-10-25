@@ -216,7 +216,7 @@
     try {
       if (await G.API.pythonEngine()) {
         const out = await G.VigPython.run(text, { cancel: vigCancel }, (info) => show(info.rows, info.stage));
-        show(out.rows, (out.status === 'остановлено' ? T('остановлено', 'stopped') : T('готово', 'done')) + ' (Python, ' + (out.gpu ? 'GPU' : 'CPU') + ', ' + out.seconds + T(' с)', ' s)')); // i18n-ok: данные
+        show(out.rows, G.VigPython.outcome(out) + ' (Python, ' + (out.gpu ? 'GPU' : 'CPU') + ', ' + out.seconds + T(' с)', ' s)'));
       } else {
         const out = await G.VigenereAuto.run(text, { variants: ['vigenere', 'beaufort'], cancel: vigCancel }, (info) => show(info.rows, T('браузер · ', 'browser · ') + info.stage));
         show(out.rows, (vigCancel.stop ? T('остановлено', 'stopped') : T('готово', 'done')) + T(' (браузер)', ' (browser)'));
@@ -272,14 +272,17 @@
     const entries = bank.list();
     if (!entries.length) list.appendChild(h('div', 'muted small', T('В банке пока нет ключей.', 'The bank has no keys yet.')));
     for (const e of entries) {
-      const row = h('div', 'kb-row');
-      const del = h('button', 'icon', '×');
-      del.title = T('Убрать ключ', 'Remove the key');
+      // «Островок» с крестиком; найденные программой ключи (не введённые вручную) — с пунктирной рамкой.
+      const chip = h('span', 'kbank-chip' + (e.source === 'user' ? '' : ' auto'));
+      const when = e.added ? new Date(e.added).toLocaleString(G.I18n && G.I18n.locale ? G.I18n.locale() : undefined) : '';
+      chip.title = (e.source === 'user' ? T('введён вручную', 'typed by hand') : e.source) + (when ? ' · ' + when : '');
+      const del = h('button', 'kbank-x', '×');
+      del.type = 'button';
+      del.title = T('Убрать ключ «', 'Remove the key “') + e.value + T('»', '”');
+      del.setAttribute('aria-label', del.title);
       del.onclick = () => bank.remove(e.value);
-      const source = h('span', 'kb-source', e.source === 'user' ? T('введён вручную', 'typed by hand') : e.source);
-      source.title = e.source;
-      row.append(h('span', 'mono', e.value), source, del);
-      list.appendChild(row);
+      chip.append(h('span', 'kbank-value', e.value), del);
+      list.appendChild(chip);
     }
     const p = G.AuthorProfile;
     const own = bank.values();
@@ -293,6 +296,8 @@
       $('#keys-input').value = '';
       if (words.length) toast(T('Ключи добавлены — авто-расшифровка будет их пробовать', 'Keys added — auto-decryption will try them'));
     };
+    // Enter добавляет, Shift+Enter — новая строка (несколько ключей сразу).
+    $('#keys-input').addEventListener('keydown', (ev) => { if (ev.key === 'Enter' && !ev.shiftKey) { ev.preventDefault(); $('#keys-save').click(); } });
     $('#keys-clear').onclick = () => { if (G.KeyBank.list().length && confirm(T('Убрать все ключи проекта?', 'Remove all project keys?'))) G.KeyBank.clear(); };
     if (G.KeyBank.onChange) G.KeyBank.onChange(buildKeys);
   }
@@ -313,6 +318,7 @@
 
   function bindToolbar() {
     $('#btn-new').onclick = () => ws.newProject();
+    $('#btn-restore').onclick = () => ws.restorePrevious();
     $('#btn-save').onclick = () => ws.saveFile();
     $('#btn-open').onclick = () => $('#file-open').click();
     $('#file-open').onchange = (e) => { if (e.target.files[0]) ws.openFile(e.target.files[0]); e.target.value = ''; };

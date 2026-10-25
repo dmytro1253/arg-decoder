@@ -10,7 +10,6 @@
   const MAX_ROWS = 8;
   const MAX_JOBS = 3;               // вход и до двух промежуточных состояний на один поиск
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-  const RUNNING = 'идёт'; // i18n-ok: код статуса сервера
   let ready = { at: 0, ok: false };
 
   async function engineReady() {
@@ -66,7 +65,13 @@
         for (;;) {
           const status = await G.API.vigStatus(id).catch((e) => ({ status: 'error', rows: job.rows, log: [e.message] }));
           job.rows = status.rows || job.rows;
-          if (status.status !== RUNNING) { if (!stopSent) job.report.status = status.status === 'error' ? 'error' : 'done'; break; }
+          const state = G.API.engineStatus(status.status);
+          if (state !== 'running') {
+            // Отмена/бюджет уже записаны при остановке; иначе — честный итог движка (неизвестный статус = ошибка).
+            if (!stopSent) job.report.status = state === 'done' ? 'done' : state === 'cancelled' ? 'cancelled' : 'error';
+            if (state === 'error' || state === 'unknown') job.report.note = G.API.engineFailure(status) || job.report.note;
+            break;
+          }
           const cancelled = o.cancel && o.cancel.stop;
           if ((cancelled || Date.now() > deadline) && !stopSent) {
             stopSent = true;

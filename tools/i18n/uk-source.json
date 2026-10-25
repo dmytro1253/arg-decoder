@@ -40,6 +40,14 @@
   ]
  },
  {
+  "key": "Вернуть проект, заменённый кнопками «Новый» или «Открыть»",
+  "pattern": false,
+  "en": "",
+  "files": [
+   "web/index.html"
+  ]
+ },
+ {
   "key": "Вставь сюда строку из описания, субтитров, книги…",
   "pattern": false,
   "en": "",
@@ -235,6 +243,14 @@
   "key": "Проверить найденные YouTube ID",
   "pattern": false,
   "en": "Check the found YouTube IDs",
+  "files": [
+   "web/index.html"
+  ]
+ },
+ {
+  "key": "Прошлый проект",
+  "pattern": false,
+  "en": "Previous project",
   "files": [
    "web/index.html"
   ]
@@ -594,6 +610,14 @@
   ]
  },
  {
+  "key": "неизвестный статус движка: ",
+  "pattern": false,
+  "en": "unknown engine status: ",
+  "files": [
+   "web/js/api.js"
+  ]
+ },
+ {
   "key": "Сервер вернул не JSON (HTTP {0})",
   "pattern": true,
   "en": "The server returned non-JSON (HTTP ",
@@ -765,7 +789,8 @@
   "files": [
    "web/js/app.js",
    "web/js/server-text.js",
-   "web/js/solver-engines.js"
+   "web/js/solver-engines.js",
+   "web/js/vigenere-python.js"
   ]
  },
  {
@@ -833,7 +858,8 @@
   "en": "stopped",
   "files": [
    "web/js/app.js",
-   "web/js/server-text.js"
+   "web/js/server-text.js",
+   "web/js/vigenere-python.js"
   ]
  },
  {
@@ -979,9 +1005,9 @@
   ]
  },
  {
-  "key": "Убрать ключ",
+  "key": "Убрать ключ «",
   "pattern": false,
-  "en": "Remove the key",
+  "en": "Remove the key “",
   "files": [
    "web/js/app.js"
   ]
@@ -1495,6 +1521,30 @@
   ]
  },
  {
+  "key": " · версия установки ",
+  "pattern": false,
+  "en": " · setup version ",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": " досье",
+  "pattern": false,
+  "en": " dossiers",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": " из ",
+  "pattern": false,
+  "en": " of ",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
   "key": " МБ",
   "pattern": false,
   "en": " MB",
@@ -1503,33 +1553,33 @@
   ]
  },
  {
-  "key": " операций, ",
+  "key": " на месте",
   "pattern": false,
-  "en": " operations, ",
+  "en": " present",
   "files": [
    "web/js/debug.js"
   ]
  },
  {
-  "key": " примеров",
+  "key": " операций (в авто-поиске ",
   "pattern": false,
-  "en": " examples",
+  "en": " operations (",
   "files": [
    "web/js/debug.js"
   ]
  },
  {
-  "key": " слов",
+  "key": " повреждена",
   "pattern": false,
-  "en": " words",
+  "en": " is corrupted",
   "files": [
    "web/js/debug.js"
   ]
  },
  {
-  "key": " слов, ru ",
+  "key": " примеров, ",
   "pattern": false,
-  "en": " words, ru ",
+  "en": " examples, ",
   "files": [
    "web/js/debug.js"
   ]
@@ -1543,9 +1593,49 @@
   ]
  },
  {
+  "key": ", вложений ",
+  "pattern": false,
+  "en": ", attachments ",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": ", ключей ",
+  "pattern": false,
+  "en": ", keys ",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": ", нод ",
+  "pattern": false,
+  "en": ", nodes ",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
   "key": ", работает ",
   "pattern": false,
   "en": ", up for ",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": ", своих досье ",
+  "pattern": false,
+  "en": ", own dossiers ",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": ", совпадает с манифестом",
+  "pattern": false,
+  "en": ", matches the manifest",
   "files": [
    "web/js/debug.js"
   ]
@@ -1567,9 +1657,9 @@
   ]
  },
  {
-  "key": "английская таблица повреждена",
+  "key": "архив релиза ",
   "pattern": false,
-  "en": "the English table is corrupted",
+  "en": "release archive ",
   "files": [
    "web/js/debug.js"
   ]
@@ -1591,9 +1681,9 @@
   ]
  },
  {
-  "key": "все 14 на месте",
+  "key": "все ",
   "pattern": false,
-  "en": "all 14 present",
+  "en": "all ",
   "files": [
    "web/js/debug.js"
   ]
@@ -1607,9 +1697,33 @@
   ]
  },
  {
+  "key": "все проверки прошли",
+  "pattern": false,
+  "en": "all checks passed",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
   "key": "Встроенный подбор Виженера",
   "pattern": false,
   "en": "Built-in Vigenère solver",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "выполнена ",
+  "pattern": false,
+  "en": "done ",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "готов (eng, rus, ukr)",
+  "pattern": false,
+  "en": "ready (eng, rus, ukr)",
   "files": [
    "web/js/debug.js"
   ]
@@ -1626,6 +1740,38 @@
   "key": "Диагностика сервера",
   "pattern": false,
   "en": "Server diagnostics",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "досок ",
+  "pattern": false,
+  "en": "boards ",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "ещё не выполнялась (запуск не через Start)",
+  "pattern": false,
+  "en": "not done yet (not started with Start)",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "Задания подбора",
+  "pattern": false,
+  "en": "Solver jobs",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "из первоисточников",
+  "pattern": false,
+  "en": "from the original sources",
   "files": [
    "web/js/debug.js"
   ]
@@ -1663,6 +1809,22 @@
   ]
  },
  {
+  "key": "Источник данных",
+  "pattern": false,
+  "en": "Data source",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "модель ",
+  "pattern": false,
+  "en": "model ",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
   "key": "Модули интерфейса",
   "pattern": false,
   "en": "Interface modules",
@@ -1679,9 +1841,25 @@
   ]
  },
  {
+  "key": "не отвечает",
+  "pattern": false,
+  "en": "not responding",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
   "key": "не отвечает — окно консоли закрыто или сервер упал",
   "pattern": false,
   "en": "not responding: the console window was closed or the server crashed",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "не прошло проверок: ",
+  "pattern": false,
+  "en": "checks failed: ",
   "files": [
    "web/js/debug.js"
   ]
@@ -1721,9 +1899,33 @@
   ]
  },
  {
-  "key": "недоступно — граф не будет сохраняться между запусками",
+  "key": "недоступен",
   "pattern": false,
-  "en": "unavailable: the graph will not be kept between sessions",
+  "en": "unavailable",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "недоступно — проект не будет сохраняться между запусками",
+  "pattern": false,
+  "en": "unavailable: the project will not be kept between sessions",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "неполные",
+  "pattern": false,
+  "en": "incomplete",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "неполные, нет: ",
+  "pattern": false,
+  "en": "incomplete, missing: ",
   "files": [
    "web/js/debug.js"
   ]
@@ -1739,6 +1941,22 @@
   ]
  },
  {
+  "key": "нет — python setup_ocr.py",
+  "pattern": false,
+  "en": "missing: python setup_ocr.py",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "нет части языков",
+  "pattern": false,
+  "en": "some languages are missing",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
   "key": "нет: ",
   "pattern": false,
   "en": "missing: ",
@@ -1747,17 +1965,17 @@
   ]
  },
  {
-  "key": "Обязательные файлы",
+  "key": "нужен локальный сервер",
   "pattern": false,
-  "en": "Required files",
+  "en": "needs the local server",
   "files": [
    "web/js/debug.js"
   ]
  },
  {
-  "key": "Операции (ноды-функции)",
+  "key": "Обязательные файлы",
   "pattern": false,
-  "en": "Operations (function nodes)",
+  "en": "Required files",
   "files": [
    "web/js/debug.js"
   ]
@@ -1795,6 +2013,14 @@
   ]
  },
  {
+  "key": "Память браузера",
+  "pattern": false,
+  "en": "Browser storage",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
   "key": "Папка данных",
   "pattern": false,
   "en": "Data folder",
@@ -1811,9 +2037,49 @@
   ]
  },
  {
-  "key": "русская таблица повреждена",
+  "key": "Первая установка",
   "pattern": false,
-  "en": "the Russian table is corrupted",
+  "en": "First setup",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "Проверки интерфейса",
+  "pattern": false,
+  "en": "Interface checks",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "Проект и хранилище",
+  "pattern": false,
+  "en": "Project and storage",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "Распознавание и архивы",
+  "pattern": false,
+  "en": "Recognition and archives",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "Реестры",
+  "pattern": false,
+  "en": "Registries",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "Резервная копия прошлого проекта",
+  "pattern": false,
+  "en": "Backup of the previous project",
   "files": [
    "web/js/debug.js"
   ]
@@ -1843,9 +2109,25 @@
   ]
  },
  {
+  "key": "скачаны из первоисточников (модели строятся на месте)",
+  "pattern": false,
+  "en": "downloaded from the original sources (models are built locally)",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
   "key": "слов",
   "pattern": false,
   "en": "words",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "Словари",
+  "pattern": false,
+  "en": "Dictionaries",
   "files": [
    "web/js/debug.js"
   ]
@@ -1859,22 +2141,6 @@
   ]
  },
  {
-  "key": "Словари интерфейса",
-  "pattern": false,
-  "en": "Interface dictionaries",
-  "files": [
-   "web/js/debug.js"
-  ]
- },
- {
-  "key": "словари пустые",
-  "pattern": false,
-  "en": "the dictionaries are empty",
-  "files": [
-   "web/js/debug.js"
-  ]
- },
- {
   "key": "Стол зачарований туда-обратно",
   "pattern": false,
   "en": "Enchanting table round trip",
@@ -1883,9 +2149,41 @@
   ]
  },
  {
-  "key": "страница открыта как файл — запусти программу через «Запуск», чтобы работали проверка ссылок и полный движок",
+  "key": "страница открыта как файл",
   "pattern": false,
-  "en": "the page is opened as a file: start the program through the launcher so link checks and the full engine work",
+  "en": "opened as a file",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "страница открыта как файл — запусти программу через Start, чтобы работали проверка ссылок, полный движок и RapidOCR",
+  "pattern": false,
+  "en": "the page is opened as a file: start the program with Start so link checks, the full engine and RapidOCR work",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "таблица ",
+  "pattern": false,
+  "en": "table ",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "только tesseract.js",
+  "pattern": false,
+  "en": "tesseract.js only",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "Файлы и хеши",
+  "pattern": false,
+  "en": "Files and hashes",
   "files": [
    "web/js/debug.js"
   ]
@@ -1907,17 +2205,25 @@
   ]
  },
  {
-  "key": "Языковые данные (квадграммы)",
+  "key": "Энигма I: AAAAA → BDZGO",
   "pattern": false,
-  "en": "Language data (quadgrams)",
+  "en": "Enigma I: AAAAA → BDZGO",
   "files": [
    "web/js/debug.js"
   ]
  },
  {
-  "key": "Языковые модели",
+  "key": "Языковые модели браузера",
   "pattern": false,
-  "en": "Language models",
+  "en": "Browser language models",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "Языковые модели Python",
+  "pattern": false,
+  "en": "Python language models",
   "files": [
    "web/js/debug.js"
   ]
@@ -1926,6 +2232,30 @@
   "key": "lang-data.js не загружен",
   "pattern": false,
   "en": "lang-data.js is not loaded",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "Python-подбор",
+  "pattern": false,
+  "en": "Python solver",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "WebAssembly, грузится по требованию",
+  "pattern": false,
+  "en": "WebAssembly, loaded on demand",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "zlib: распаковка с Adler-32",
+  "pattern": false,
+  "en": "zlib: decompression with Adler-32",
   "files": [
    "web/js/debug.js"
   ]
@@ -16270,9 +16600,9 @@
   ]
  },
  {
-  "key": "Распознаёт текст на картинке локально, без интернета, при запуске через локальный сервер. Порядок «авто»: шрифт Minecraft (цифры по сетке пикселей) → RapidOCR (ONNX, экспериментально; ставится командой python setup_ocr.py) как есть, затем с автоконтрастом → tesseract.js с перебором предобработок. Сырые ответы всех веток, рамки строк и убранные обрывки сохраняются; символы не исправляются (O не становится 0, Ґ не становится Г). Для больших скриншотов выдели область кнопкой «Область».",
+  "key": "Распознаёт текст на картинке локально, без интернета, при запуске через локальный сервер. Порядок «авто»: шрифт Minecraft (цифры по сетке пикселей) → RapidOCR (ONNX; ставится вместе с программой) как есть, затем с автоконтрастом → tesseract.js с перебором предобработок. Сырые ответы всех веток, рамки строк и убранные обрывки сохраняются; символы не исправляются (O не становится 0, Ґ не становится Г). Для больших скриншотов выдели область кнопкой «Область».",
   "pattern": false,
-  "en": "Recognises text locally, with no internet, when running through the local server. The auto order: Minecraft font (digits from the pixel grid) → RapidOCR (ONNX, experimental; install with python setup_ocr.py) as is, then with auto contrast → tesseract.js trying several preprocessing variants. Raw answers of every branch, line boxes and removed fragments are kept; characters are not corrected (O does not become 0, Ґ does not become Г). For large screenshots select a region with the Region button.",
+  "en": "Recognises text locally, with no internet, when running through the local server. The auto order: Minecraft font (digits from the pixel grid) → RapidOCR (ONNX; installed with the program) as is, then with auto contrast → tesseract.js trying several preprocessing variants. Raw answers of every branch, line boxes and removed fragments are kept; characters are not corrected (O does not become 0, Ґ does not become Г). For large screenshots select a region with the Region button.",
   "files": [
    "web/js/image/nodes-recog.js"
   ]
@@ -16397,14 +16727,6 @@
   "key": "QR-код не найден (попробуй выделить область или обработать изображение выше по графу)",
   "pattern": false,
   "en": "No QR code found (try selecting a region or preprocessing the image upstream)",
-  "files": [
-   "web/js/image/nodes-recog.js"
-  ]
- },
- {
-  "key": "RapidOCR (экспериментально)",
-  "pattern": false,
-  "en": "RapidOCR (experimental)",
   "files": [
    "web/js/image/nodes-recog.js"
   ]
@@ -28343,6 +28665,14 @@
   ]
  },
  {
+  "key": "ошибка, показаны частичные результаты: ",
+  "pattern": false,
+  "en": "error, partial results shown: ",
+  "files": [
+   "web/js/vigenere-python.js"
+  ]
+ },
+ {
   "key": "подготовка",
   "pattern": false,
   "en": "preparing",
@@ -28386,6 +28716,14 @@
   "key": "⚠ Проект изменён в другом окне — перезагрузи страницу, иначе правки перезапишут друг друга",
   "pattern": false,
   "en": "⚠ The project was changed in another window — reload, or edits will overwrite each other",
+  "files": [
+   "web/js/workspace.js"
+  ]
+ },
+ {
+  "key": "Вернуть прошлый проект «{0}»? Текущий будет заменён.",
+  "pattern": true,
+  "en": "Bring back the previous project \"",
   "files": [
    "web/js/workspace.js"
   ]
@@ -28447,9 +28785,17 @@
   ]
  },
  {
-  "key": "Начать новый проект? Текущий будет заменён. Он остаётся в памяти браузера, но лучше сохрани его в файл (Ctrl+S).",
+  "key": "Копия текущего проекта сохранена в браузере: вернуть его можно кнопкой «Прошлый проект».",
   "pattern": false,
-  "en": "Start a new project? The current one will be replaced. It stays in browser storage, but save it to a file first (Ctrl+S).",
+  "en": "A copy of the current project is kept in the browser: the Previous project button brings it back.",
+  "files": [
+   "web/js/workspace.js"
+  ]
+ },
+ {
+  "key": "Начать новый проект? Текущий будет заменён.",
+  "pattern": false,
+  "en": "Start a new project? The current one will be replaced.",
   "files": [
    "web/js/workspace.js"
   ]
@@ -28479,7 +28825,7 @@
   ]
  },
  {
-  "key": "Проект открыт: досок {0}, вложений {1}",
+  "key": "Проект открыт: досок {0}, ключей {1}, вложений {2}",
   "pattern": true,
   "en": "Project opened: ",
   "files": [
@@ -28490,6 +28836,30 @@
   "key": "Проект сохранён в файл вместе с вложениями",
   "pattern": false,
   "en": "Project saved to a file together with its attachments",
+  "files": [
+   "web/js/workspace.js"
+  ]
+ },
+ {
+  "key": "Прошлый проект возвращён: досок {0}, ключей {1}, вложений {2}",
+  "pattern": true,
+  "en": "Previous project restored: ",
+  "files": [
+   "web/js/workspace.js"
+  ]
+ },
+ {
+  "key": "Резервной копии прошлого проекта нет",
+  "pattern": false,
+  "en": "There is no backup of a previous project",
+  "files": [
+   "web/js/workspace.js"
+  ]
+ },
+ {
+  "key": "Резервную копию сохранить не удалось: текущий проект пропадёт, если не сохранить его в файл (Ctrl+S).",
+  "pattern": false,
+  "en": "A backup copy could not be saved: the current project will be lost unless you save it to a file (Ctrl+S).",
   "files": [
    "web/js/workspace.js"
   ]

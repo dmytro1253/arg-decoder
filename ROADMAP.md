@@ -19,23 +19,24 @@ The six items Dmytro asked for on 2026-10-19 (order is not priority), then what 
 
 ### Also shipped since the original list
 
+- Licence: MIT (`LICENSE`). RAR 4/5 and 7z extraction through 7-Zip WebAssembly; zlib/gzip/deflate; Enigma; raw RC4; local RapidOCR installed with the program.
+
 - Universal tool: the author profile is optional (`neutral` by default, `mslan` on demand), the key bank is part of the project.
 - Auto search reports "no convincing result" instead of guessing, tags results ("as is", "from text", "project key") and extracts candidates from long logs.
 - Images: OCR with bundled tesseract.js (eng/rus/ukr), Minecraft-font digit reader, QR, SGA reader, bit planes, LSB.
-- Audio and video: spectrogram, Morse, DTMF, SSTV (synthetic-verified), video frame stepper.
+- Audio and video: spectrogram, Morse, DTMF, SSTV (synthetic tests in the repository; three original recordings checked with the external `ARGDEC_ORIGINALS` set), video frame stepper.
 - Files: inspector with hex, strings, ZIP/JAR with ZipCrypto and `.class` constants, log viewer; hashes with hash check.
 - Project file (`.argproj.json`) with attachments, RU/EN interface switch, Debug tab.
 - One-click setup: Windows works without an installed Python; dictionaries download once from the release and are checked by SHA-256; later starts take about 3 s.
-- 60 examples (11 public ARGs, the mslan case, teaching sets) and 14 dossiers (13 ARG dossiers plus the standard profile one), custom dossiers; every example opens with a step-by-step guide card.
+- 75 examples (17 ARGs, the mslan case, teaching sets, audio and compressed data) and 17 ARG dossiers, custom dossiers; every example opens with a step-by-step guide card.
 - Examples with pictures (`img-sga-poem`, `img-sga-key`, `img-vrfneo`): SGA photos and a dark frame read by OCR, loaded on demand from `web/samples/`.
 - Documentation: [How it works](docs/HOW-IT-WORKS.md) and a generated [function reference](docs/FUNCTIONS.md), both in English and Russian.
 - English text for the server's messages in the Debug tab and API errors.
 
 ### Still open
 
-- A licence for the repository (the author has not chosen one; the README says "TBD").
-- Check SSTV on real recordings; add Robot 72, PD and Scottie DX.
-- Extraction of RAR, 7z, tar, xz and zstd; WinZip-AES; bzip2 and LZMA inside ZIP.
+- Add SSTV Robot 72, PD and Scottie DX.
+- zstd; bzip2 and LZMA inside the ZIP node (RAR, 7z, tar, xz and WinZip-AES already work through the 7-Zip node).
 - Automatic finding of the text region for OCR on full screenshots.
 - English versions of the Python solver's job log (server statuses and errors are already translated in the interface).
 - Keep node runtime state (search progress, results) when switching boards.
@@ -61,20 +62,19 @@ The six items Dmytro asked for on 2026-10-19 (order is not priority), then what 
 - Универсальность: профиль автора необязателен (по умолчанию `neutral`, `mslan` по желанию), банк ключей входит в проект.
 - Авто-поиск говорит «убедительного результата нет» вместо догадок, помечает результаты («как есть», «из текста», «ключ проекта») и достаёт кандидатов из длинных логов.
 - Картинки: OCR со встроенным tesseract.js (eng/rus/ukr), читатель цифр «шрифт Minecraft», QR, читатель SGA, битовые плоскости, LSB.
-- Звук и видео: спектрограмма, Морзе, DTMF, SSTV (проверен на синтетике), покадровый просмотр видео.
+- Звук и видео: спектрограмма, Морзе, DTMF, SSTV (синтетические тесты в репозитории; три оригинальные записи проверены внешним набором `ARGDEC_ORIGINALS`), покадровый просмотр видео.
 - Файлы: инспектор с hex, строки, ZIP/JAR с ZipCrypto и константами `.class`, просмотр лога; хеши и проверка хеша.
 - Файл проекта (`.argproj.json`) с вложениями, переключатель RU/EN, вкладка «Отладка».
 - Установка в один клик: на Windows не нужен установленный Python; словари скачиваются один раз из релиза и проверяются по SHA-256; следующие запуски — около 3 с.
-- 60 примеров (11 публичных ARG, кейс mslan, учебные наборы) и 14 досье (13 по ARG и стандартное досье профиля), свои досье; каждый пример открывается с карточкой-гидом по шагам.
+- 75 примеров (17 ARG, кейс mslan, учебные наборы, звук и сжатые данные) и 17 досье по ARG, свои досье; каждый пример открывается с карточкой-гидом по шагам.
 - Примеры с картинками (`img-sga-poem`, `img-sga-key`, `img-vrfneo`): SGA-фото и тёмный кадр с OCR, подгружаются по требованию из `web/samples/`.
 - Документация: [как устроена программа](docs/HOW-IT-WORKS.ru.md) и генерируемый [справочник функций](docs/FUNCTIONS.ru.md), на английском и русском.
 - Английский текст для сообщений сервера во вкладке «Отладка» и ошибках API.
 
 ### Ещё открыто
 
-- Лицензия репозитория (автор её не выбрал; в README написано «решит автор»).
-- Проверить SSTV на настоящих записях; добавить Robot 72, PD и Scottie DX.
-- Распаковка RAR, 7z, tar, xz и zstd; WinZip-AES; bzip2 и LZMA внутри ZIP.
+- Добавить SSTV Robot 72, PD и Scottie DX.
+- zstd; bzip2 и LZMA внутри ноды ZIP (RAR, 7z, tar, xz и WinZip-AES уже работают через ноду 7-Zip).
 - Автоматический поиск области с текстом для OCR на полных скриншотах.
 - Английская версия журнала задач Python-подбора (статусы и ошибки сервера интерфейс уже переводит).
 - Сохранять состояние нод в памяти (ход перебора, результаты) при смене доски.

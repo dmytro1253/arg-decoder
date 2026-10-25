@@ -57,6 +57,8 @@
       this.enterBoard(this.project.activeBoardId, { fit });
       this.watchOtherWindows();
       this.saveNow();
+      // Кнопка «Прошлый проект» видна, только если есть резервная копия.
+      if (this.store && this.store.loadBackup) this.store.loadBackup().then((b) => this.updateRestoreButton(!!b)).catch(() => {});
     }
 
     watchOtherWindows() {
@@ -251,10 +253,45 @@
       this.saveNow();
     }
 
-    newProject() {
+    /** Текущее состояние целиком (с банком ключей и вложениями) — для проверки «есть что терять» и резервной копии. */
+    snapshot() {
       this.captureBoard();
-      if (P.hasContent(this.project) && !confirm(T('Начать новый проект? Текущий будет заменён. Он остаётся в памяти браузера, но лучше сохрани его в файл (Ctrl+S).', 'Start a new project? The current one will be replaced. It stays in browser storage, but save it to a file first (Ctrl+S).'))) return;
+      return { ...this.project, keys: this.currentKeys(), artifacts: G.Artifacts.toJSON() };
+    }
+
+    /**
+     * Перед заменой проекта: спросить и сохранить резервную копию текущего. Возвращает true, если можно заменять.
+     * Пустой проект заменяется без вопросов; копия пишется отдельно от автосохранения и восстанавливается кнопкой «Прошлый проект».
+     */
+    async confirmReplace(question) {
+      const snap = this.snapshot();
+      if (!P.hasContent(snap)) return true;
+      const backup = this.store && this.store.saveBackup ? await this.store.saveBackup(snap, snap.artifacts) : { ok: false };
+      const tail = backup.ok
+        ? T('Копия текущего проекта сохранена в браузере: вернуть его можно кнопкой «Прошлый проект».', 'A copy of the current project is kept in the browser: the Previous project button brings it back.')
+        : T('Резервную копию сохранить не удалось: текущий проект пропадёт, если не сохранить его в файл (Ctrl+S).', 'A backup copy could not be saved: the current project will be lost unless you save it to a file (Ctrl+S).');
+      if (!confirm(question + ' ' + tail)) return false;
+      this.updateRestoreButton(backup.ok);
+      return true;
+    }
+
+    async newProject() {
+      if (!(await this.confirmReplace(T('Начать новый проект? Текущий будет заменён.', 'Start a new project? The current one will be replaced.')))) return;
       this.loadProject(P.create({}));
+    }
+
+    /** Возвращает проект из резервной копии; текущий при этом сам уходит в копию (обмен). */
+    async restorePrevious() {
+      const prev = this.store && this.store.loadBackup ? await this.store.loadBackup() : null;
+      if (!prev) { this.toast(T('Резервной копии прошлого проекта нет', 'There is no backup of a previous project')); this.updateRestoreButton(false); return; }
+      if (!(await this.confirmReplace(T('Вернуть прошлый проект «' + prev.project.name + '»? Текущий будет заменён.', 'Bring back the previous project "' + prev.project.name + '"? The current one will be replaced.')))) return;
+      this.loadProject(prev.project, { fit: false });
+      this.toast(T('Прошлый проект возвращён: досок ' + prev.project.boards.length + ', ключей ' + prev.project.keys.length + ', вложений ' + prev.project.artifacts.length, 'Previous project restored: ' + prev.project.boards.length + ' boards, ' + prev.project.keys.length + ' keys, ' + prev.project.artifacts.length + ' attachments'));
+    }
+
+    updateRestoreButton(on) {
+      const b = typeof document !== 'undefined' && document.getElementById('btn-restore');
+      if (b) b.classList.toggle('hidden', !on);
     }
 
     download(text, name) {
@@ -287,10 +324,11 @@
       try { data = JSON.parse(text); } catch (e) { throw new Error(T('файл не читается как JSON', 'the file is not valid JSON')); }
       if (P.isProjectData(data)) {
         const project = P.normalize(data);
-        this.captureBoard();
-        if (P.hasContent(this.project) && !confirm(T('Открыть проект «' + project.name + '»? Текущий проект будет заменён.', 'Open the project "' + project.name + '"? The current project will be replaced.'))) return;
-        this.loadProject(project, { fit: false });
-        this.toast(T('Проект открыт: досок ' + project.boards.length + ', вложений ' + project.artifacts.length, 'Project opened: ' + project.boards.length + ' boards, ' + project.artifacts.length + ' attachments'));
+        this.confirmReplace(T('Открыть проект «' + project.name + '»? Текущий проект будет заменён.', 'Open the project "' + project.name + '"? The current project will be replaced.')).then((ok) => {
+          if (!ok) return;
+          this.loadProject(project, { fit: false });
+          this.toast(T('Проект открыт: досок ' + project.boards.length + ', ключей ' + project.keys.length + ', вложений ' + project.artifacts.length, 'Project opened: ' + project.boards.length + ' boards, ' + project.keys.length + ' keys, ' + project.artifacts.length + ' attachments'));
+        });
         return;
       }
       const converted = P.fromLegacyGraph(data);
