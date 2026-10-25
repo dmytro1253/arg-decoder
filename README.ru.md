@@ -14,7 +14,7 @@
   <img alt="языки" src="https://img.shields.io/badge/UI-EN%20%C2%B7%20RU%20%C2%B7%20UK-6a1b9a">
   <img alt="офлайн" src="https://img.shields.io/badge/%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%D0%B5%D1%82-%D0%BE%D1%84%D0%BB%D0%B0%D0%B9%D0%BD-2e7d32">
   <img alt="сервер" src="https://img.shields.io/badge/%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D1%82%D0%BE%D0%BB%D1%8C%D0%BA%D0%BE%20127.0.0.1-455a64">
-  <img alt="лицензия" src="https://img.shields.io/badge/%D0%BB%D0%B8%D1%86%D0%B5%D0%BD%D0%B7%D0%B8%D1%8F-%D1%80%D0%B5%D1%88%D0%B8%D1%82%20%D0%B0%D0%B2%D1%82%D0%BE%D1%80-lightgrey">
+  <img alt="лицензия" src="https://img.shields.io/badge/%D0%BB%D0%B8%D1%86%D0%B5%D0%BD%D0%B7%D0%B8%D1%8F-MIT-2e7d32">
 </p>
 
 <p align="center">
@@ -269,7 +269,7 @@ web/vendor/                tesseract.js 5.1.1 (eng/rus/ukr), jsQR 1.4.0
 
 ## ⚖ Лицензия и благодарности
 
-**Лицензия: решит автор.** Пока файл лицензии не добавлен, все права остаются за автором. Встроенный решатель Виженера распространяется по лицензии MIT ([`vigenere/LICENSE`](vigenere/LICENSE)).
+**Лицензия: [MIT](LICENSE)**, © 2026 Dmytro. Встроенные сторонние компоненты и скачиваемые данные сохраняют свои лицензии (ниже и в [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)).
 
 **Автор:** Dmytro.
 
@@ -278,6 +278,7 @@ web/vendor/                tesseract.js 5.1.1 (eng/rus/ukr), jsQR 1.4.0
 | [tesseract.js](https://github.com/naptha/tesseract.js) + core | 5.1.1 | Apache-2.0 | локальный OCR |
 | [tessdata_fast](https://github.com/tesseract-ocr/tessdata_fast) (eng, rus, ukr) | 4.1.0 | Apache-2.0 | языковые данные OCR |
 | [jsQR](https://github.com/cozmo/jsQR) | 1.4.0 | Apache-2.0 | QR-коды |
+| [7-Zip WebAssembly](https://github.com/use-strict/7z-wasm) (7-Zip 24.09) | 1.2.0 | LGPL-2.1+ с ограничением unRAR | распаковка RAR/7z |
 
 Источники данных и их лицензии перечислены в [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 

@@ -16,7 +16,7 @@ The licence texts are next to each component.
 
 ## Project licence / Лицензия проекта
 
-The author has not chosen a licence for the application as a whole yet; there is no top-level LICENSE file. Only `vigenere/` carries its own MIT licence. The components below keep their own licences.
+The application is released under the MIT licence (`LICENSE`, © 2026 Dmytro); `vigenere/` carries the same MIT licence. The components and data below keep their own licences.
 
 ## Installed only on request (`python setup_ocr.py`) / Только по запросу
 

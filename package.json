@@ -4,6 +4,7 @@
   "private": true,
   "description": "Local node-graph workbench for cracking ARG puzzles (ciphers, images, audio, files, hashes) — by Dmytro",
   "author": "Dmytro",
+  "license": "MIT",
   "scripts": {
     "test": "node --test && python -m unittest discover -s tests -p \"test_*.py\"",
     "start": "python launcher.py"

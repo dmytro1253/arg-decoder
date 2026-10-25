@@ -14,7 +14,7 @@
   <img alt="мови" src="https://img.shields.io/badge/%D1%96%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81-EN%20%C2%B7%20RU%20%C2%B7%20UK-6a1b9a">
   <img alt="офлайн" src="https://img.shields.io/badge/%D0%BF%D1%80%D0%B0%D1%86%D1%8E%D1%94-%D0%BE%D1%84%D0%BB%D0%B0%D0%B9%D0%BD-2e7d32">
   <img alt="сервер" src="https://img.shields.io/badge/%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%BB%D0%B8%D1%88%D0%B5%20127.0.0.1-455a64">
-  <img alt="ліцензія" src="https://img.shields.io/badge/%D0%BB%D1%96%D1%86%D0%B5%D0%BD%D0%B7%D1%96%D1%8F-%D0%B2%D0%B8%D1%80%D1%96%D1%88%D0%B8%D1%82%D1%8C%20%D0%B0%D0%B2%D1%82%D0%BE%D1%80-lightgrey">
+  <img alt="ліцензія" src="https://img.shields.io/badge/%D0%BB%D1%96%D1%86%D0%B5%D0%BD%D0%B7%D1%96%D1%8F-MIT-2e7d32">
 </p>
 
 <p align="center">
@@ -269,7 +269,7 @@ web/vendor/                tesseract.js 5.1.1 (eng/rus/ukr), jsQR 1.4.0
 
 ## ⚖ Ліцензія та подяки
 
-**Ліцензію вибере автор.** Доки файл ліцензії не додано, усі права залишаються за автором. Вбудований розв'язувач Віженера поширюється за ліцензією MIT ([`vigenere/LICENSE`](vigenere/LICENSE)).
+**Ліцензія: [MIT](LICENSE)**, © 2026 Dmytro. Вбудовані сторонні компоненти й завантажувані дані зберігають власні ліцензії (нижче й у [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)).
 
 **Автор:** Dmytro.
 
@@ -278,6 +278,7 @@ web/vendor/                tesseract.js 5.1.1 (eng/rus/ukr), jsQR 1.4.0
 | [tesseract.js](https://github.com/naptha/tesseract.js) + core | 5.1.1 | Apache-2.0 | локальний OCR |
 | [tessdata_fast](https://github.com/tesseract-ocr/tessdata_fast) (eng, rus, ukr) | 4.1.0 | Apache-2.0 | мовні дані OCR |
 | [jsQR](https://github.com/cozmo/jsQR) | 1.4.0 | Apache-2.0 | QR-коди |
+| [7-Zip WebAssembly](https://github.com/use-strict/7z-wasm) (7-Zip 24.09) | 1.2.0 | LGPL-2.1+ з обмеженням unRAR | розпакування RAR/7z |
 
 Джерела даних і їхні ліцензії перелічено в [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
