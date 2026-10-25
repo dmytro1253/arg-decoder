@@ -184,6 +184,39 @@ class InstallTest(UpdaterBase):
                 last = updater.status()["last"]
                 self.assertEqual((last["state"], last["bad_files"]), ("rollback-failed", ["launcher.py"]))
 
+    def test_legacy_journal_without_hashes_is_checked_against_the_signed_old_build(self):
+        """Журнал обновлятора 1.3.0 без backup_sha: копия сверяется с подписанным build.json прошлой версии из неё же."""
+        backup_root = self.root / "runtime" / "update" / "backup"
+        journal_path = self.root / "runtime" / "update" / "journal.json"
+        for damage in (None, "file", "build-json", "no-build-json"):
+            with self.subTest(damage=damage):
+                shutil.rmtree(self.root, ignore_errors=True)
+                self.root.mkdir()
+                self.install(OLD, "1.3.0")
+                self.stage(NEW, "1.4.0")
+                updater.apply_pending(log=lambda m: None)
+                journal = json.loads(journal_path.read_text(encoding="utf-8"))
+                del journal["backup_sha"]   # как у 1.3.0
+                if damage == "no-build-json":
+                    journal["replaced"].remove("build.json")
+                journal_path.write_text(json.dumps(journal), encoding="utf-8")
+                saved = next(backup_root.iterdir())
+                if damage == "file":
+                    (saved / "launcher.py").write_bytes(b"old launcheX")
+                if damage == "build-json":   # подменить и список, и файл: подпись не сойдётся
+                    (saved / "build.json").write_bytes((saved / "build.json").read_bytes().replace(b"1.3.0", b"1.3.9"))
+                with mock.patch.object(updater, "APP_VERSION", "1.4.0"):
+                    if damage is None:
+                        self.assertEqual(updater.rollback(log=lambda m: None), "1.3.0")
+                    else:
+                        with self.assertRaisesRegex(updater.UpdateError, "повреждена|проверить её нельзя"):
+                            updater.rollback(log=lambda m: None)
+                        self.assertTrue(updater.verify_install()["ok"], "файлы не тронуты — осталась целая 1.4.0")
+                        self.assertEqual(updater.status()["last"]["state"], "rollback-failed")
+                if damage is None:
+                    self.assertTrue(updater.verify_install()["ok"])
+                    self.assertEqual(updater.build_info()["version"], "1.3.0")
+
     def test_rollback_reports_files_that_did_not_restore(self):
         self.install(OLD, "1.3.0")
         self.stage(NEW, "1.4.0")

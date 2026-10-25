@@ -1,5 +1,13 @@
 [
  {
+  "key": "▤ Ноды",
+  "pattern": false,
+  "en": "▤ Nodes",
+  "files": [
+   "web/index.html"
+  ]
+ },
+ {
   "key": "● Проверка YouTube: …",
   "pattern": false,
   "en": "● YouTube check: …",
@@ -131,6 +139,14 @@
   "key": "Обычно — 3 шага",
   "pattern": false,
   "en": "Normal — 3 steps",
+  "files": [
+   "web/index.html"
+  ]
+ },
+ {
+  "key": "Остальные кнопки, которые не поместились",
+  "pattern": false,
+  "en": "",
   "files": [
    "web/index.html"
   ]
@@ -305,6 +321,14 @@
  },
  {
   "key": "Сохранить весь проект с вложениями в один файл (Ctrl+S)",
+  "pattern": false,
+  "en": "",
+  "files": [
+   "web/index.html"
+  ]
+ },
+ {
+  "key": "Список нод для добавления",
   "pattern": false,
   "en": "",
   "files": [
@@ -28675,6 +28699,14 @@
  },
  {
   "key": "собран под NumPy 1.x — мост numpy↔torch выключен, движку это не мешает",
+  "pattern": false,
+  "en": "",
+  "files": [
+   "web/js/server-text.js"
+  ]
+ },
+ {
+  "key": "у копии прошлой версии нет записанных хешей, а подписанный список файлов отсутствует или повреждён — проверить её нельзя, файлы не тронуты",
   "pattern": false,
   "en": "",
   "files": [

@@ -49,6 +49,7 @@
     'нет адресов файлов обновления': 'no addresses of the update files', // i18n-ok: ответ сервера
   };
   EXACT['копия прошлой версии неполная или повреждена, файлы не тронуты'] = 'the backup of the previous version is incomplete or damaged; no files were changed'; // i18n-ok: ответ сервера
+  EXACT['у копии прошлой версии нет записанных хешей, а подписанный список файлов отсутствует или повреждён — проверить её нельзя, файлы не тронуты'] = 'the backup of the previous version has no recorded hashes, and its signed file list is missing or damaged: it cannot be checked; no files were changed'; // i18n-ok: ответ сервера
   EXACT['после отката файлы не совпали с копией прошлой версии'] = 'after the rollback, files do not match the backup of the previous version'; // i18n-ok: ответ сервера
   const PATTERNS = [
     [/^откат прерван ошибкой записи \((.*)\)$/, 'the rollback was interrupted by a write error ($1)'], // i18n-ok: ответ сервера

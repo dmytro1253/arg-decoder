@@ -571,14 +571,44 @@ def _restore_failed(journal, reason, files):
                       % (reason, ", ".join(files[:5]) + (" …+%d" % (len(files) - 5) if len(files) > 5 else "")))
 
 
+UNVERIFIABLE_BACKUP = "у копии прошлой версии нет записанных хешей, а подписанный список файлов отсутствует или повреждён — проверить её нельзя, файлы не тронуты"
+
+
+def _legacy_hashes(journal, backup, to_restore):
+    """Журналы обновлятора 1.3.0 не хранят хеши копий. Их берём из подписанного build.json прошлой версии,
+    который лежит в той же копии: подпись должна сойтись, версия — совпасть с журналом, и каждый
+    восстанавливаемый файл должен быть в этом списке. Иначе None — копию проверить нечем."""
+    if BUILD_FILE not in to_restore or BUILD_SIG not in to_restore:
+        return None
+    try:
+        raw = (backup / BUILD_FILE).read_bytes()
+        old = verify_manifest(raw, (backup / BUILD_SIG).read_text(encoding="utf-8"))
+    except (OSError, UpdateError):
+        return None
+    if old["version"] != journal.get("from"):
+        return None
+    hashes = {f["path"]: f["sha256"] for f in old["files"]}
+    hashes[BUILD_FILE] = hashlib.sha256(raw).hexdigest()
+    hashes[BUILD_SIG] = sha256_file(backup / BUILD_SIG)
+    return hashes if all(rel in hashes for rel in to_restore) else None
+
+
 def _restore(journal):
     """Возвращает файлы прошлой версии. Сначала копия проверяется целиком (есть ли каждый файл и совпадает ли хеш),
     и только потом что-то меняется; после восстановления результат сверяется ещё раз."""
     if not _journal_ok(journal):
         raise UpdateError("журнал обновления повреждён — откат невозможен, переустанови программу из релиза")
     backup = ROOT / journal["backup"]
-    hashes = journal.get("backup_sha") if isinstance(journal.get("backup_sha"), dict) else {}
     to_restore = journal["replaced"] + journal["removed"]
+    if isinstance(journal.get("backup_sha"), dict):
+        hashes = journal["backup_sha"]
+    else:
+        hashes = _legacy_hashes(journal, backup, to_restore)
+        if hashes is None:
+            _restore_failed(journal, UNVERIFIABLE_BACKUP, to_restore)
+    missing_hash = [rel for rel in to_restore if rel not in hashes]
+    if missing_hash:
+        _restore_failed(journal, UNVERIFIABLE_BACKUP, missing_hash)
     damaged = [rel for rel in to_restore
                if not (backup / rel).is_file() or (rel in hashes and sha256_file(backup / rel) != hashes[rel])]
     if damaged:

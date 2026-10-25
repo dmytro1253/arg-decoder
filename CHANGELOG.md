@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.2 — narrow windows, rollback of 1.3.0 updates
+
+- Narrow windows: top-bar buttons that do not fit move, one by one from the end, into a "⋯" menu (the same buttons, not copies), so the language switch, the server status and the side-panel button never go off-screen. The "by Dmytro" label and the status text shrink first; the status becomes a coloured dot with the text in its tooltip.
+- Below 900 px the node list no longer disappears: the "▤ Nodes" button opens it over the canvas, and it closes after a node is added. Between 900 and 1200 px both side panels are narrower.
+- Rollback of an update installed by the 1.3.0 updater (its journal has no recorded hashes): the backup is checked against the signed `build.json` of the previous version stored in the same backup (signature, version and every file's SHA-256). If that list is missing or does not verify, the rollback refuses and changes nothing, instead of restoring unchecked files.
+
 ## 1.3.1 — backup and rollback fixes
 
 - Previous project: cancelling New, Open or Previous project no longer overwrites the existing backup. The snapshot is prepared in a free slot and becomes the backup only after the replacement is confirmed; cancelling deletes it.

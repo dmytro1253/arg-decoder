@@ -371,10 +371,30 @@ table.stats td:first-child { color: var(--muted); white-space: nowrap; }
 ::-webkit-scrollbar-thumb { background: #26322c; border-radius: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
 
+/* ---------- узкое окно: лишние кнопки уходят в «⋯» (layout.js), панели становятся выдвижными ---------- */
+.topbar > * { flex-shrink: 0; }
+.topbar > .spacer { flex-shrink: 1; min-width: 0; }
+.topbar.compact { gap: 8px; padding: 0 10px; }
+.topbar.compact .logo-by { display: none; }
+/* Остаётся только цветная точка (зелёная — сервер работает); полный текст — в подсказке. */
+.topbar.compact #server-status { width: 10px; height: 10px; padding: 0; border-radius: 50%; font-size: 0; border-color: currentColor; background: currentColor; opacity: 0.85; }
+.toolbar .btn { white-space: nowrap; }
+#btn-palette { display: none; }
+.more-menu { left: auto; right: 0; width: 240px; display: flex; flex-direction: column; gap: 2px; }
+.more-menu.hidden { display: none; }
+.more-menu .btn { width: 100%; text-align: left; border-color: transparent; background: transparent; }
+.more-menu .btn:hover { background: var(--panel-2); }
+.more-menu .btn.icon::after { content: '  ' attr(title); font-size: 12px; color: var(--muted); }
+@media (max-width: 1200px) {
+  .palette { width: 180px; }
+  .side { width: 320px; }
+}
 @media (max-width: 900px) {
-  .palette { display: none; }
-  .side { position: absolute; right: 0; top: 48px; bottom: 0; z-index: 40; width: min(360px, 100vw); }
-  .toolbar .btn:not(#btn-presets) { display: none; }
+  #btn-palette { display: inline-flex; align-items: center; }
+  .layout { position: relative; }
+  .palette { display: none; position: absolute; left: 0; top: 0; bottom: 0; z-index: 41; width: min(260px, 85vw); box-shadow: 12px 0 30px rgba(0, 0, 0, 0.5); }
+  .palette.open { display: block; }
+  .side { position: absolute; right: 0; top: 0; bottom: 0; z-index: 40; width: min(360px, 100vw); box-shadow: -12px 0 30px rgba(0, 0, 0, 0.5); }
 }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }

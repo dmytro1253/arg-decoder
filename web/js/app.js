@@ -364,6 +364,7 @@
     });
     G.API.ping();
     if (G.Updates) G.Updates.init();
+    if (G.Layout) G.Layout.init();
   }
 
   // ---------- запуск ----------

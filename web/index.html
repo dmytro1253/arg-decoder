@@ -23,16 +23,21 @@
         <button class="btn" id="btn-presets" data-t="Examples ▾" data-t-title="Open an example on a new board" title="Открыть пример на новой доске">Примеры ▾</button>
         <div class="menu hidden" id="preset-menu"></div>
       </div>
+      <button class="btn toggle" id="btn-palette" aria-pressed="false" data-t="▤ Nodes" data-t-title="List of nodes to add" title="Список нод для добавления">▤ Ноды</button>
       <button class="btn" id="btn-new" data-t="New" data-t-title="New project (the current one is replaced after confirmation)" title="Новый проект (текущий заменяется после подтверждения)">Новый</button>
       <button class="btn hidden" id="btn-restore" data-t="Previous project" data-t-title="Bring back the project that was replaced by New or Open" title="Вернуть проект, заменённый кнопками «Новый» или «Открыть»">Прошлый проект</button>
       <button class="btn" id="btn-open" data-t="Open" data-t-title="Open a project (.argproj.json) or an old graph (.json)" title="Открыть проект (.argproj.json) или старый граф (.json)">Открыть</button>
       <button class="btn" id="btn-save" data-t="Save" data-t-title="Save the whole project with attachments to one file (Ctrl+S)" title="Сохранить весь проект с вложениями в один файл (Ctrl+S)">Сохранить</button>
-      <button class="btn" id="btn-undo" data-t-title="Undo (Ctrl+Z)" title="Отменить (Ctrl+Z)">↶</button>
-      <button class="btn" id="btn-redo" data-t-title="Redo (Ctrl+Y)" title="Повторить (Ctrl+Y)">↷</button>
+      <button class="btn icon" id="btn-undo" data-t-title="Undo (Ctrl+Z)" title="Отменить (Ctrl+Z)">↶</button>
+      <button class="btn icon" id="btn-redo" data-t-title="Redo (Ctrl+Y)" title="Повторить (Ctrl+Y)">↷</button>
       <button class="btn" id="btn-layout" data-t="Arrange" data-t-title="Arrange nodes into chains" title="Расставить ноды по цепочкам">Упорядочить</button>
       <button class="btn" id="btn-fit" data-t="Show all" data-t-title="Show all nodes and drawings" title="Показать все ноды и рисунки">Показать всё</button>
       <button class="btn toggle" id="btn-draw" aria-pressed="false" data-t="✏ Draw" data-t-title="Drawing mode: pencil, arrows, frames, labels, pictures" title="Режим рисования: карандаш, стрелки, рамки, подписи, картинки">✏ Рисование</button>
       <button class="btn toggle" id="btn-sga" aria-pressed="false" data-t="⌨ Keyboards" data-t-title="On-screen keyboards: SGA, Braille, Morse, runes, Greek, pigpen, special characters" title="Экранные клавиатуры: SGA, Брайль, Морзе, руны, греческий, пигпен, спецсимволы">⌨ Клавиатуры</button>
+      <div class="menu-wrap hidden" id="more-wrap">
+        <button class="btn" id="btn-more" aria-haspopup="true" aria-expanded="false" data-t-title="More buttons that did not fit" title="Остальные кнопки, которые не поместились">⋯</button>
+        <div class="menu more-menu hidden" id="more-menu"></div>
+      </div>
     </div>
     <div class="spacer"></div>
     <div class="lang-switch" role="group" aria-label="Язык" data-t-aria="Language">
@@ -144,6 +149,7 @@
   <script src="js/solver.js"></script>
   <script src="js/api.js"></script>
   <script src="js/updates.js"></script>
+  <script src="js/layout.js"></script>
   <!-- [4] ноды и улики -->
   <script src="js/node-types.js"></script>
   <script src="js/artifacts.js"></script>
