@@ -49,6 +49,21 @@
       "The MP3 name is itself a hint: hex, then a shift of −1. A person takes the file name from the page, so this is a dependent stage. The sound itself is decoded by the SSTV node (Scottie S1, the mode is detected from the line period)."),
     "https://crowscrowscrows.com/report/sounds/74647075756a66.mp3", null, "scottie", { auto: { input: "74647075756a66", expect: 'scottie', top: 1 } });
   solve("auto");
+  // Сам звук: SSTV Scottie S1 без VIS-заголовка. Оригинальные MP3 недоступны — звук синтезирован заново
+  // с той же особенностью (нет VIS) и картинкой телефонной клавиатуры, одной из трёх картинок этапа.
+  (function langeskovSstv() {
+    const b = new Board();
+    const wav = b.add('artifact', 0, 0, { sample: 'sstv-scottie-keypad' });
+    b.then(b.then(wav, 'sstv_audio', { mode: 'auto' }), 'view');
+    b.note(0, 1, sourceNote(
+      T('Звук из MP3 этой ARG — картинка в SSTV. Особенность: в начале нет VIS-кода, по которому программы обычно узнают режим. Нода «SSTV из звука» тогда меряет период строк (428 мс — Scottie S1) и пишет это предупреждением; имя файла 74647075756a66 подсказывало тот же ответ (соседний пример). Здесь звук сделан заново: оригиналы недоступны, поэтому картинка — телефонная клавиатура, нарисованная по описанию этапа.',
+        'The MP3s of this ARG hold SSTV pictures. Their quirk: no VIS code at the start, which programs normally use to detect the mode. The "SSTV from audio" node then measures the line period (428 ms means Scottie S1) and says so in a warning; the file name 74647075756a66 hinted at the same answer (the neighbouring example). The sound here was made anew: the originals are unavailable, so the picture is a phone keypad drawn after the stage description.'),
+      T('этап boot.mp3 / signature.mp3 / 74647075756a66.mp3 (досье Dr. Langeskov); звук синтезирован, tools/make_tour_samples.js', 'the boot.mp3 / signature.mp3 / 74647075756a66.mp3 stage (Dr. Langeskov dossier); the audio is synthesised, tools/make_tour_samples.js'),
+      T('реконструкция: режим и отсутствие VIS как в оригинале, картинка нарисована заново', 'a reconstruction: the mode and the missing VIS as in the original, the picture redrawn')));
+    define({ id: 'dl-sstv', arg: 'langeskov', title: T('Dr. Langeskov: SSTV без VIS (Scottie S1)', 'Dr. Langeskov: SSTV without VIS (Scottie S1)'),
+      desc: T('Звук → режим по периоду строк → картинка клавиатуры', 'Audio → mode from the line period → a keypad picture'),
+      manual: T('Звук декодирует нода; ответ — картинка в «Результате»', 'The node decodes the audio; the answer is a picture in the Result node') }, b);
+  })();
   simple("kf2-compound", "kf2", T("Killing Floor 2: составное сообщение", "Killing Floor 2: a compound message"), T("Текст — Цезарь −3, путь — Цезарь −6: строки решаются по отдельности", "The text is Caesar −3, the path Caesar −6: the lines are solved separately"), "L krsh wklv phvvdjh pdnhv lw rxw! Kruclqh lv xs wr qr jrrg dqg wkh zruog qhhgv wr nqrz! Zlwk dqb oxfn brx'oo ghflskhu wklv dqg ilqg wkh foxhv L'oo eh ohdylqj. Brx duh wkh rqob krsh zh kdyh wr vwrs wklv ehiruh lw lv wrr odwh!\nlxusglxoktj/znkyzgxz.vtm", [['op:segment_map', { plan: JSON.stringify([[{ op: 'caesar', params: { alpha: 'en', n: -3 } }], [{ op: 'caesar', params: { alpha: 'en', n: -6 } }]]) }]],
     T("Две строки зашифрованы разными сдвигами. Авто-поиск находит это сам: решает строки отдельно и собирает результат с исходным переводом строки. Вырезанный кусок пути — не решение всего сообщения.",
       "The two lines use different shifts. The auto search finds this by itself: it solves the lines separately and joins the result with the original line break. A cut-out piece of the path is not a solution of the whole message."),

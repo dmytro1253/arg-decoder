@@ -66,6 +66,13 @@
       const all = h('button', 'btn small accent', T('Открыть все примеры (' + own.length + ')', 'Open all examples (' + own.length + ')'));
       all.onclick = () => deps.openPresets(own);
       into.appendChild(all);
+      // Каждый пример — отдельной строкой: в меню «Примеры» они лежат в своих группах по технике (OCR, SGA…).
+      for (const x of own) {
+        const row = h('button', 'dos-link-row');
+        row.append(h('b', '', x.title), h('span', 'muted small', (x.group ? x.group + ' · ' : '') + (x.desc || '')));
+        row.onclick = () => deps.openPreset(x);
+        into.appendChild(row);
+      }
     }
   }
 

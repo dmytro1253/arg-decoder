@@ -54,7 +54,7 @@
     ],
     techniques: [tech(T('Кодировки', 'Encodings'), 'binary / hex / Base64 / Base32 / ASCII85'), tech('SSTV', 'Scottie S1'), tech(T('Склейка файлов', 'File join'), '.pdfaa + .wav'), tech(T('Наложение картинок', 'Image overlay'), 'signature.png + noise')],
     open: [T('Наложение signature.png и mayflower-noise.png и смысл raw-PCM из BMP не подтверждены.', 'The overlay of signature.png and mayflower-noise.png and the meaning of the BMP raw PCM are not confirmed.')],
-    presets: ['dl-binary', 'dl-hex', 'dl-base64', 'dl-base32', 'dl-ascii85', 'dl-scottie'],
+    presets: ['dl-binary', 'dl-hex', 'dl-base64', 'dl-base32', 'dl-ascii85', 'dl-scottie', 'dl-sstv'],
   });
 
   D.register({

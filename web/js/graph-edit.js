@@ -196,6 +196,18 @@
   P.undo = function () { return this.restoreHistory(-1); };
   P.redo = function () { return this.restoreHistory(1); };
 
+  // Перекрываются ли ноды (после асинхронных результатов ноды вырастают: список архива, картинка, OCR).
+  P.hasOverlap = function () {
+    const boxes = [...this.graph.nodes.values()].map((n) => { const el = this.nodeEls.get(n.id); return el ? { x: n.x, y: n.y, w: el.offsetWidth, h: el.offsetHeight } : null; }).filter(Boolean);
+    for (let i = 0; i < boxes.length; i++) {
+      for (let j = i + 1; j < boxes.length; j++) {
+        const a = boxes[i], b = boxes[j];
+        if (a.x < b.x + b.w - 4 && b.x < a.x + a.w - 4 && a.y < b.y + b.h - 4 && b.y < a.y + a.h - 4) return true;
+      }
+    }
+    return false;
+  };
+
   // ---------- авто-раскладка ----------
   // Столбцы по глубине (самый длинный путь от источника), внутри столбца — по порядку связей.
   P.autoLayout = function () {

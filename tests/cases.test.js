@@ -3,6 +3,24 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const { loadFull } = require('./load');
+const fs = require('node:fs');
+const path = require('node:path');
+const vm = require('node:vm');
+
+// Пример со звуком или картинкой (params.sample): образец кладётся в хранилище, звук декодируется заранее — как в браузере.
+async function withSamples(ctx, preset) {
+  const nodes = [];
+  for (const n of preset.nodes) {
+    if (!(n.params && n.params.sample)) { nodes.push(n); continue; }
+    const box = { self: {} };
+    vm.runInNewContext(fs.readFileSync(path.join(__dirname, '..', 'web', 'samples', n.params.sample + '.js'), 'utf8'), box);
+    const s = box.self.ArgSamples[n.params.sample];
+    const id = await ctx.Artifacts.addDataUrl('data:' + s.mime + ';base64,' + s.data, s.name, s.mime);
+    if (ctx.Artifacts.get(id).kind === 'audio') await ctx.AudioIO.load(ctx.Artifacts.handle(id));
+    nodes.push({ ...n, params: { artifact: id } });
+  }
+  return nodes;
+}
 
 for (const lang of ['en', 'ru']) {
   const ctx = loadFull(lang);
@@ -22,9 +40,10 @@ for (const lang of ['en', 'ru']) {
   });
 
   for (const preset of cases) {
-    test(`[${lang}] пример «${preset.id}» вычисляется`, () => {
+    test(`[${lang}] пример «${preset.id}» вычисляется`, async () => {
+      ctx.ImageData = ctx.ImageData || class { constructor(data, width, height) { Object.assign(this, { data, width, height }); } };
       const g = new ctx.Graph();
-      const report = g.load({ nodes: preset.nodes, links: preset.links });
+      const report = g.load({ nodes: await withSamples(ctx, preset), links: preset.links });
       assert.equal(report.skipped.length, 0, 'пропущены ноды');
       assert.equal(report.warnings.length, 0, 'предупреждения загрузки: ' + report.warnings.map((w) => w.message).join('; '));
       const res = g.evaluate();

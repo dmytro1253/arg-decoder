@@ -138,17 +138,22 @@
 
     // --- мышь ---
     let drag = null;
-    stage.addEventListener('wheel', (e) => { e.preventDefault(); const r = stage.getBoundingClientRect(); zoomAt(e.deltaY < 0 ? 1.25 : 1 / 1.25, e.clientX - r.left, e.clientY - r.top); }, { passive: false });
+    // Точка мыши в координатах сцены. Холст графа масштабирован (transform: scale), поэтому экранные пиксели
+    // переводятся обратно в собственные: иначе при масштабе ≠ 100% выделение «уезжало» вниз и вправо.
+    const local = (e) => {
+      const r = stage.getBoundingClientRect();
+      const kx = r.width ? stage.offsetWidth / r.width : 1, ky = r.height ? stage.offsetHeight / r.height : 1;
+      return { px: (e.clientX - r.left) * kx, py: (e.clientY - r.top) * ky };
+    };
+    stage.addEventListener('wheel', (e) => { e.preventDefault(); const { px, py } = local(e); zoomAt(e.deltaY < 0 ? 1.25 : 1 / 1.25, px, py); }, { passive: false });
     stage.addEventListener('mousedown', (e) => {
       if (e.button !== 0) return;
-      const r = stage.getBoundingClientRect();
-      const px = e.clientX - r.left, py = e.clientY - r.top;
+      const { px, py } = local(e);
       drag = { px, py, ox: st.ox, oy: st.oy, moved: false, sel: st.selecting, start: toImage(px, py) };
       e.preventDefault();
     });
     window.addEventListener('mousemove', (e) => {
-      const r = stage.getBoundingClientRect();
-      const px = e.clientX - r.left, py = e.clientY - r.top;
+      const { px, py } = local(e);
       if (drag) {
         if (Math.abs(px - drag.px) + Math.abs(py - drag.py) > 3) drag.moved = true;
         if (drag.sel) {

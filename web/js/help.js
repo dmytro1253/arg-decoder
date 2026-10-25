@@ -64,6 +64,14 @@
     return !preset.profile || preset.profile === 'neutral' || preset.profile === active ? preset : null;
   }
 
+  /** Примеры, где есть нода этого типа: сначала короткие учебные (по одной технике), потом остальные. */
+  function examplesFor(type) {
+    if (!type || !G.Presets) return [];
+    const list = G.Presets.filter((p) => (p.nodes || []).some((n) => n.type === type));
+    const rank = (p) => (/^tour-/.test(p.id) ? 0 : 1) * 1000 + (p.nodes || []).length;
+    return list.sort((a, b) => rank(a) - rank(b));
+  }
+
   // ---------- карточка ----------
   let card = null;
   let cardType = null;
@@ -135,7 +143,10 @@
 
     const foot = el('div', 'help-foot');
     foot.appendChild(linkRow(e));
-    const preset = presetFor(e.demo);
+    // Пример из справки, иначе — короткий пример, где эта нода уже стоит и подключена.
+    const found = examplesFor(type);
+    const demo = presetFor(e.demo);
+    const preset = demo || found[0] || null;
     if (preset && G.Help.openExample) {
       const btn = el('button', 'btn small accent', T('Открыть пример', 'Open example'));
       btn.title = preset.title;
@@ -143,6 +154,18 @@
       foot.appendChild(btn);
     }
     box.appendChild(foot);
+    const more = found.filter((p) => p !== preset).slice(0, 3);
+    if (more.length && G.Help.openExample) {
+      const list = el('div', 'help-sec help-more');
+      list.appendChild(el('div', 'help-label', T('Ещё примеры с этой нодой', 'More examples with this node') + ' (' + (found.length - (found.includes(preset) ? 1 : 0)) + ')'));
+      for (const p of more) {
+        const b = el('button', 'help-ex-link', p.title);
+        b.title = p.desc || '';
+        b.onclick = () => { close(); G.Help.openExample(p); };
+        list.appendChild(b);
+      }
+      box.appendChild(list);
+    }
     return box;
   }
 
@@ -181,5 +204,5 @@
     if (btn) btn.focus({ preventScroll: true });
   }
 
-  G.Help = { lookup, short, wikiUrl, toggle, close, presetFor, openExample: null };
+  G.Help = { lookup, short, wikiUrl, toggle, close, presetFor, examplesFor, openExample: null };
 })(typeof self !== 'undefined' ? self : this);

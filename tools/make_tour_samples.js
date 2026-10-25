@@ -62,13 +62,46 @@ function sampleFile(id, name, bytes, comment) {
     + ", mime: 'audio/wav', data: '" + bytes.toString('base64') + "' };\n";
 }
 
+// Телефонная клавиатура 3×4 своим шрифтом 5×7 — картинка для SSTV Scottie S1 без VIS (реконструкция этапа
+// Dr. Langeskov: оригинальные картинки недоступны, рисунок сделан заново).
+const KEY_FONT = {
+  1: ['..1..', '.11..', '..1..', '..1..', '..1..', '..1..', '.111.'], 2: ['.111.', '1...1', '....1', '...1.', '..1..', '.1...', '11111'],
+  3: ['1111.', '....1', '....1', '.111.', '....1', '....1', '1111.'], 4: ['...1.', '..11.', '.1.1.', '1..1.', '11111', '...1.', '...1.'],
+  5: ['11111', '1....', '1111.', '....1', '....1', '1...1', '.111.'], 6: ['.111.', '1....', '1....', '1111.', '1...1', '1...1', '.111.'],
+  7: ['11111', '....1', '...1.', '..1..', '.1...', '.1...', '.1...'], 8: ['.111.', '1...1', '1...1', '.111.', '1...1', '1...1', '.111.'],
+  9: ['.111.', '1...1', '1...1', '.1111', '....1', '....1', '.111.'], 0: ['.111.', '1...1', '1..11', '1.1.1', '11..1', '1...1', '.111.'],
+  '*': ['.....', '1.1.1', '.111.', '11111', '.111.', '1.1.1', '.....'], '#': ['.1.1.', '.1.1.', '11111', '.1.1.', '11111', '.1.1.', '.1.1.'],
+};
+const KEYPAD_LINES = 150;   // передаётся только верх картинки, где клавиатура: так звук короче (64 с)
+
+function keypadImage(width, height) {
+  const data = new Uint8ClampedArray(width * height * 4);
+  const put = (x, y, c) => { x = Math.floor(x); y = Math.floor(y); if (x < 0 || y < 0 || x >= width || y >= height) return; const o = (y * width + x) * 4; data[o] = c[0]; data[o + 1] = c[1]; data[o + 2] = c[2]; data[o + 3] = 255; };
+  for (let y = 0; y < height; y++) for (let x = 0; x < width; x++) put(x, y, [40, 46, 58]);
+  const keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '*', '0', '#'];
+  const KW = 64, KH = 30, GAP = 6, X0 = (width - (3 * KW + 2 * GAP)) / 2, Y0 = 8, SCALE = 3;
+  keys.forEach((k, i) => {
+    const kx = X0 + (i % 3) * (KW + GAP), ky = Y0 + Math.floor(i / 3) * (KH + GAP);
+    for (let y = 0; y < KH; y++) for (let x = 0; x < KW; x++) put(kx + x, ky + y, x < 2 || y < 2 || x >= KW - 2 || y >= KH - 2 ? [150, 160, 175] : [225, 228, 232]);
+    const g = KEY_FONT[k], gx = kx + (KW - 5 * SCALE) / 2, gy = ky + (KH - 7 * SCALE) / 2;
+    for (let r = 0; r < 7; r++) for (let c = 0; c < 5; c++) if (g[r][c] === '1') for (let dy = 0; dy < SCALE; dy++) for (let dx = 0; dx < SCALE; dx++) put(gx + c * SCALE + dx, gy + r * SCALE + dy, [20, 24, 30]);
+  });
+  return { width, height, data };
+}
+
 function build() {
   const SSTV = loadSstv();
   const m = SSTV.MODES.robot36;
   const img = qrImage(m.width, m.height);
   const sig = synth.sstv(SSTV.MODES, 'robot36', img, SSTV_RATE, m.height, { noise: 0.015, seed: 36 });
   const fixtures = path.join(ROOT, 'tests', 'fixtures', 'audio');
+  // Scottie S1 без VIS-заголовка: VIS и стартовая синхронизация вырезаны, режим узнаётся по периоду строк.
+  const sc = SSTV.MODES.scottie1;
+  const pad = synth.sstv(SSTV.MODES, 'scottie1', keypadImage(sc.width, sc.height), SSTV_RATE, KEYPAD_LINES, { noise: 0.015, seed: 60 });
+  const noVis = pad.samples.subarray(Math.round(1.2 * pad.sampleRate));
   return {
+    'sstv-scottie-keypad': sampleFile('sstv-scottie-keypad', 'sstv-scottie.wav', wav8(noVis, pad.sampleRate),
+      'SSTV Scottie S1 без VIS (8 кГц, 8 бит): телефонная клавиатура, реконструкция этапа Dr. Langeskov'),
     'sstv-robot36': sampleFile('sstv-robot36', 'sstv-robot36.wav', wav8(sig.samples, sig.sampleRate),
       'SSTV Robot 36 (8 кГц, 8 бит): картинка с QR-кодом «' + img.text + '»'),
     'morse-oldroot': sampleFile('morse-oldroot', 'morse-oldroot.wav', fs.readFileSync(path.join(fixtures, 'synthetic-morse-OLDROOT-700hz.wav')),
@@ -85,4 +118,4 @@ if (require.main === module) {
   }
 }
 
-module.exports = { build };
+module.exports = { build, keypadImage };

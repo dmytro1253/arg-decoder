@@ -253,6 +253,7 @@ a { color: var(--accent); }
 .out-media.hidden { display: none; }
 .out-image { display: block; max-width: 100%; max-height: 220px; margin: 0 auto; image-rendering: pixelated; }
 .node.big .out-image { max-height: 420px; }
+.out-save { display: block; margin: 6px auto 0; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .node.has-error .out-text { color: var(--danger); }
 .out-links { display: flex; flex-wrap: wrap; gap: 4px 8px; padding: 0 8px; }
 .out-links:not(:empty) { padding: 4px 8px 6px; }
@@ -449,7 +450,7 @@ table.stats td:first-child { color: var(--muted); white-space: nowrap; }
 .dbg-files td { font-size: 11px; }
 .dbg-errors { width: 100%; font: 11.5px/1.4 var(--font-mono); background: #0c110f; color: #ffb3b3; border: 1px solid var(--border); border-radius: 6px; padding: 6px; resize: vertical; }
 
-.art-preview { max-width: 100%; max-height: 220px; border-radius: 6px; border: 1px solid var(--border); background: #000; }
+.art-preview { display: block; max-width: 100%; max-height: 220px; width: auto; height: auto; object-fit: contain; margin: 0 auto; border-radius: 6px; border: 1px solid var(--border); background: #000; }
 
 /* ---------- категории пакетов расширений ---------- */
 :root {

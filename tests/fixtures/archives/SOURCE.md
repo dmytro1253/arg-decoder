@@ -17,3 +17,10 @@ The passwords are documented in libarchive's `test_read_format_rar_encryption.c`
 - `../sombra-binary.txt` — the binary dump published during the Sombra ARG (Overwatch, 2016), as transcribed on the
   Game Detectives wiki (https://wiki.gamedetectives.net/w/Sombra_ARG); copied from the 2026-10-23 audit material.
 - `../ocr-lines.png` — synthetic image from the 2026-10-24 OCR review (a 20-digit number with the short lines 42 and 007).
+
+## Own sample
+
+- `vault-lighthouse.rar` — made for the program example with WinRAR 7 (`rar a -ma5 -hplighthouse`): RAR5 with encrypted
+  headers, password `lighthouse`, four parts `east.txt`, `north.txt`, `south.txt`, `west.txt`. Joined clockwise from north
+  (N, E, S, W) they form Base64 of the text "The keeper left one last entry: the lamp still works. Light it at 02:00 and
+  wait for the answer."

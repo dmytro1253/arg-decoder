@@ -243,12 +243,23 @@
   })();
   (function () {
     const b = new Board();
-    b.then(b.then(b.add('artifact', 0, 0, { sample: 'rar5-locked' }), 'file_archive7z', { output: 'list', password: 'password' }), 'view');
-    media({ id: 'tour-rar-password', group: 'files', title: T('RAR с паролем (7-Zip)', 'A password-protected RAR (7-Zip)'), desc: T('RAR5 с зашифрованными именами, пароль password → 4 файла', 'RAR5 with encrypted names, password password → 4 files'),
-      expectBrowser: [], manual: T('7-Zip работает в браузере (WebAssembly)', '7-Zip runs in the browser (WebAssembly)') }, b,
-    T('В RAR5 с зашифрованными заголовками без пароля не видно даже имён файлов. Нода 7-Zip с паролем открывает список; «Запись (артефакт)» достаёт нужный файл.',
-      'In a RAR5 with encrypted headers even the file names are hidden without the password. The 7-Zip node with the password opens the list; "Entry (artifact)" extracts a file.'),
-    T('тесты libarchive (BSD-2-Clause), test_read_format_rar5_encrypted_filenames', 'the libarchive tests (BSD-2-Clause), test_read_format_rar5_encrypted_filenames'));
+    const rar = b.add('artifact', 0, 0, { sample: 'rar5-vault' });
+    b.then(rar, 'file_archive7z', { output: 'list', password: 'lighthouse' }, 0, 1);
+    // Части по сторонам света, по часовой стрелке от севера: N, E, S, W (в архиве они лежат по алфавиту).
+    // Четыре извлечения — в ряд (ноды 7-Zip высокие), под ними склейка и расшифровка.
+    const parts = ['north.txt', 'east.txt', 'south.txt', 'west.txt'].map((entry, i) => b.add('file_archive7z', 1 + i, 1, { output: 'extract', entry, password: 'lighthouse' }));
+    parts.forEach((p) => b.link(rar, p, 0));
+    const joined = b.add('file_concat', 1, 3, { name: 'message.b64' });
+    parts.forEach((p, i) => b.link(p, joined, i));
+    const text = b.then(b.then(joined, 'file_to_bytes', { as: 'utf8' }), 'op:base64_decode');
+    b.then(text, 'view');
+    media({ id: 'tour-rar-password', group: 'files', noteRow: 2, title: T('RAR с паролем: четыре части → послание', 'A password RAR: four parts → a message'),
+      desc: T('Пароль lighthouse → north, east, south, west → Base64 → текст', 'Password lighthouse → north, east, south, west → Base64 → text'),
+      expectBrowser: ['The keeper left one last entry: the lamp still works. Light it at 02:00 and wait for the answer.'],
+      manual: T('7-Zip работает в браузере (WebAssembly)', '7-Zip runs in the browser (WebAssembly)') }, b,
+    T('vault.rar — RAR5 с зашифрованными заголовками: без пароля не видно даже имён файлов. Пароль lighthouse (маяк — разгадка прошлых примеров) открывает список: east, north, south, west. По отдельности каждая часть — бессмысленный обрывок Base64. Стороны света читают по часовой стрелке от севера: север, восток, юг, запад — в таком порядке части подключены к «Склейке файлов». Склеенный Base64 раскодируется в последнюю запись смотрителя.',
+      'vault.rar is a RAR5 with encrypted headers: without the password even the file names are hidden. The password lighthouse (the answer of the previous examples) opens the list: east, north, south, west. Each part alone is a meaningless piece of Base64. Compass points are read clockwise from north: north, east, south, west, and that is the order in which the parts go into "Join files". The joined Base64 decodes into the keeper’s last entry.'),
+    T('сделано для программы (WinRAR, tests/fixtures/archives/vault-lighthouse.rar)', 'made for the program (WinRAR, tests/fixtures/archives/vault-lighthouse.rar)'));
   })();
   (function () {
     const b = new Board();

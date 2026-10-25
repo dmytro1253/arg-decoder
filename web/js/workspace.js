@@ -5,6 +5,7 @@
   const P = G.Project;
   const T = G.T;
   const SAVE_DELAY = 400;
+  const RELAYOUT_MS = 10000;   // сколько после открытия примера следить за выросшими нодами
   const CLOSED_LIMIT = P.MAX_CLOSED;
 
   class Workspace {
@@ -169,7 +170,18 @@
       }
       const board = this.addBoard({ name: P.uniqueName(this.project, preset.title), graph: { nodes: preset.nodes, links: preset.links }, presetId: preset.id || '', fit: true });
       // Раскладываем без наложений: заготовки примеров рассчитаны на сетку, а реальные ноды разной высоты.
-      requestAnimationFrame(() => requestAnimationFrame(() => { this.view.autoLayout(); this.scheduleSave(); }));
+      // Ноды с асинхронным результатом (архив, звук, OCR) вырастают позже — тогда раскладываем ещё раз.
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        this.view.autoLayout();
+        this.scheduleSave();
+        const root = this.view.root, until = Date.now() + RELAYOUT_MS;
+        const onEval = () => requestAnimationFrame(() => {
+          if (Date.now() > until || this.project.activeBoardId !== board.id) { root.removeEventListener('graph-evaluated', onEval); return; }
+          if (this.view.hasOverlap()) { this.view.autoLayout(); this.scheduleSave(); }
+        });
+        root.addEventListener('graph-evaluated', onEval);
+        setTimeout(() => root.removeEventListener('graph-evaluated', onEval), RELAYOUT_MS);
+      }));
       return board;
     }
 

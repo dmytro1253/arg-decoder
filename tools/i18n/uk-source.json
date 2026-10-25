@@ -6122,6 +6122,22 @@
   ]
  },
  {
+  "key": "Разборы ARG",
+  "pattern": false,
+  "en": "ARG walkthroughs",
+  "files": [
+   "web/js/examples-menu.js"
+  ]
+ },
+ {
+  "key": "Техники и обучение",
+  "pattern": false,
+  "en": "Techniques and practice",
+  "files": [
+   "web/js/examples-menu.js"
+  ]
+ },
+ {
   "key": " байт, ",
   "pattern": false,
   "en": " bytes, ",
@@ -8497,6 +8513,14 @@
   ]
  },
  {
+  "key": "⬇ Скачать ",
+  "pattern": false,
+  "en": "⬇ Download ",
+  "files": [
+   "web/js/graph-view.js"
+  ]
+ },
+ {
   "key": "В граф",
   "pattern": false,
   "en": "To graph",
@@ -8707,6 +8731,14 @@
   "key": "Слой формата снят точно, без угадывания, но результат не подтверждён как ответ: он короткий, не читается или сам похож на следующий слой. Проверь варианты ниже.",
   "pattern": false,
   "en": "The format layer was decoded exactly, with no guessing, but the result is not confirmed as the answer: it is short, unreadable or looks like another layer. Check the candidates below.",
+  "files": [
+   "web/js/graph-view.js"
+  ]
+ },
+ {
+  "key": "Сохранить этот файл на компьютер",
+  "pattern": false,
+  "en": "Save this file to the computer",
   "files": [
    "web/js/graph-view.js"
   ]
@@ -15790,6 +15822,14 @@
   ]
  },
  {
+  "key": "Ещё примеры с этой нодой",
+  "pattern": false,
+  "en": "More examples with this node",
+  "files": [
+   "web/js/help.js"
+  ]
+ },
+ {
   "key": "Закрыть (Esc)",
   "pattern": false,
   "en": "Close (Esc)",
@@ -16821,6 +16861,14 @@
   ]
  },
  {
+  "key": "как на картинке",
+  "pattern": false,
+  "en": "as in the picture",
+  "files": [
+   "web/js/image/nodes-recog.js"
+  ]
+ },
+ {
   "key": "кириллица (раскладка ЙЦУКЕН)",
   "pattern": false,
   "en": "Cyrillic (ЙЦУКЕН layout)",
@@ -16965,6 +17013,14 @@
   ]
  },
  {
+  "key": "склеить в одну (без пробелов)",
+  "pattern": false,
+  "en": "join into one (no spaces)",
+  "files": [
+   "web/js/image/nodes-recog.js"
+  ]
+ },
+ {
   "key": "Сначала подключи изображение",
   "pattern": false,
   "en": "Connect an image first",
@@ -16976,6 +17032,14 @@
   "key": "строк",
   "pattern": false,
   "en": "lines",
+  "files": [
+   "web/js/image/nodes-recog.js"
+  ]
+ },
+ {
+  "key": "Строки на выходе",
+  "pattern": false,
+  "en": "Lines in the output",
   "files": [
    "web/js/image/nodes-recog.js"
   ]
@@ -16994,6 +17058,14 @@
   "key": "уверенность",
   "pattern": false,
   "en": "confidence",
+  "files": [
+   "web/js/image/nodes-recog.js"
+  ]
+ },
+ {
+  "key": "через пробел",
+  "pattern": false,
+  "en": "separated by spaces",
   "files": [
    "web/js/image/nodes-recog.js"
   ]
@@ -26636,6 +26708,30 @@
   ]
  },
  {
+  "key": "Звук → режим по периоду строк → картинка клавиатуры",
+  "pattern": false,
+  "en": "Audio → mode from the line period → a keypad picture",
+  "files": [
+   "web/js/presets-arg-c.js"
+  ]
+ },
+ {
+  "key": "Звук декодирует нода; ответ — картинка в «Результате»",
+  "pattern": false,
+  "en": "The node decodes the audio; the answer is a picture in the Result node",
+  "files": [
+   "web/js/presets-arg-c.js"
+  ]
+ },
+ {
+  "key": "Звук из MP3 этой ARG — картинка в SSTV. Особенность: в начале нет VIS-кода, по которому программы обычно узнают режим. Нода «SSTV из звука» тогда меряет период строк (428 мс — Scottie S1) и пишет это предупреждением; имя файла 74647075756a66 подсказывало тот же ответ (соседний пример). Здесь звук сделан заново: оригиналы недоступны, поэтому картинка — телефонная клавиатура, нарисованная по описанию этапа.",
+  "pattern": false,
+  "en": "The MP3s of this ARG hold SSTV pictures. Their quirk: no VIS code at the start, which programs normally use to detect the mode. The \"SSTV from audio\" node then measures the line period (428 ms means Scottie S1) and says so in a warning; the file name 74647075756a66 hinted at the same answer (the neighbouring example). The sound here was made anew: the originals are unavailable, so the picture is a phone keypad drawn after the stage description.",
+  "files": [
+   "web/js/presets-arg-c.js"
+  ]
+ },
+ {
   "key": "Имя MP3 само по себе подсказка: hex, затем сдвиг на −1. Само имя файла человек берёт со страницы — это зависимый этап. Сам звук декодируется нодой SSTV (Scottie S1, режим определяется по периоду строк).",
   "pattern": false,
   "en": "The MP3 name is itself a hint: hex, then a shift of −1. A person takes the file name from the page, so this is a dependent stage. The sound itself is decoded by the SSTV node (Scottie S1, the mode is detected from the line period).",
@@ -26692,6 +26788,14 @@
   ]
  },
  {
+  "key": "реконструкция: режим и отсутствие VIS как в оригинале, картинка нарисована заново",
+  "pattern": false,
+  "en": "a reconstruction: the mode and the missing VIS as in the original, the picture redrawn",
+  "files": [
+   "web/js/presets-arg-c.js"
+  ]
+ },
+ {
   "key": "Ручное решение с ключом. Исторический ключ содержит лишнюю N (ANTONWOULDBEPROUND); без неё хвост портится — исправлять «опечатку» нельзя, она часть шифра. Слепой подбор этого 48-буквенного текста с 17-буквенным ключом не решает: данных мало, и программа честно говорит «ответ не определён».",
   "pattern": false,
   "en": "A manual solution with a key. The historical key has an extra N (ANTONWOULDBEPROUND); without it the tail breaks, and the “typo” must not be fixed because it is part of the cipher. A blind search does not solve this 48-letter text with a 17-letter key: there is too little data, and the program honestly says “answer not determined”.",
@@ -26719,6 +26823,14 @@
   "key": "Точная транскрипция содержит два пробела после «e» (55 символов); версия с одним пробелом теряет символ и не решается — это ошибка транскрипции, а не программы. Ключ в ноде — найденный подбором порядок [9,0,5,10,1,8,3,6,11,4,7,2], записанный буквами. Ответ «…mods page!» — точный результат перестановки; часто цитируют «mod pages».",
   "pattern": false,
   "en": "The exact transcription has two spaces after “e” (55 characters); the one-space version loses a character and does not solve, which is a transcription error, not a program error. The key in the node is the found order [9,0,5,10,1,8,3,6,11,4,7,2] written as letters. The answer “…mods page!” is the exact result; “mod pages” is often quoted.",
+  "files": [
+   "web/js/presets-arg-c.js"
+  ]
+ },
+ {
+  "key": "этап boot.mp3 / signature.mp3 / 74647075756a66.mp3 (досье Dr. Langeskov); звук синтезирован, tools/make_tour_samples.js",
+  "pattern": false,
+  "en": "the boot.mp3 / signature.mp3 / 74647075756a66.mp3 stage (Dr. Langeskov dossier); the audio is synthesised, tools/make_tour_samples.js",
   "files": [
    "web/js/presets-arg-c.js"
   ]
@@ -26767,6 +26879,14 @@
   "key": "Dr. Langeskov: hex → путь к звуку",
   "pattern": false,
   "en": "Dr. Langeskov: hex → a sound path",
+  "files": [
+   "web/js/presets-arg-c.js"
+  ]
+ },
+ {
+  "key": "Dr. Langeskov: SSTV без VIS (Scottie S1)",
+  "pattern": false,
+  "en": "Dr. Langeskov: SSTV without VIS (Scottie S1)",
   "files": [
    "web/js/presets-arg-c.js"
   ]
@@ -27055,6 +27175,14 @@
   ]
  },
  {
+  "key": "высокая: цифры совпадают с примером «Catbox: пары +23»",
+  "pattern": false,
+  "en": "high: the digits match the “Catbox: pairs +23” example",
+  "files": [
+   "web/js/presets-images.js"
+  ]
+ },
+ {
   "key": "картинка из кейса mslan; строка совпадает с примером «Пары +23 → CP1251 → русский латиницей»",
   "pattern": false,
   "en": "an image from the mslan case; the line matches the example “Pairs +23 → CP1251 → Russian in Latin”",
@@ -27066,6 +27194,30 @@
   "key": "Картинки: SGA и OCR",
   "pattern": false,
   "en": "Images: SGA and OCR",
+  "files": [
+   "web/js/presets-images.js"
+  ]
+ },
+ {
+  "key": "кейс mslan, снимок экрана книги (прислан для тестов программы)",
+  "pattern": false,
+  "en": "the mslan case, a screenshot of the book (sent for the program tests)",
+  "files": [
+   "web/js/presets-images.js"
+  ]
+ },
+ {
+  "key": "Книга в игре: на странице длинное число, перенесённое на пять строк. 1) OCR (только цифры) читает выделенную область — нажми «Распознать». Значок ↵ в выводе — это только показ переноса строки, в данных его нет. 2) Авто-поиск видит, что строки — одно перенесённое число, склеивает их сам и решает: пары цифр → +23 → URL → ссылка Catbox. Если нужна сразу одна строка, в OCR есть «Строки на выходе: склеить в одну».",
+  "pattern": false,
+  "en": "An in-game book: the page holds a long number wrapped over five lines. 1) OCR (digits only) reads the selected region: press Recognise. The ↵ sign in the output only shows a line break; it is not in the data. 2) Auto sees that the lines are one wrapped number, joins them by itself and solves it: digit pairs → +23 → URL → a Catbox link. For a single line straight away, OCR has “Lines in the output: join into one”.",
+  "files": [
+   "web/js/presets-images.js"
+  ]
+ },
+ {
+  "key": "Нужна картинка и запуск OCR кнопкой «Распознать»; сами цифры авто-поиск решает (пример catbox)",
+  "pattern": false,
+  "en": "Needs the image and an OCR run with the Recognise button; the digits themselves are solved by the auto search (the catbox example)",
   "files": [
    "web/js/presets-images.js"
   ]
@@ -27090,6 +27242,22 @@
   "key": "Почти невидимые цифры в небе → «тЫ Не СпАсешЬ НХ»",
   "pattern": false,
   "en": "Barely visible digits in the sky → “тЫ Не СпАсешЬ НХ”",
+  "files": [
+   "web/js/presets-images.js"
+  ]
+ },
+ {
+  "key": "Пять строк цифр → одна строка → пары +23 → ссылка Catbox",
+  "pattern": false,
+  "en": "Five lines of digits → one line → pairs +23 → a Catbox link",
+  "files": [
+   "web/js/presets-images.js"
+  ]
+ },
+ {
+  "key": "Страница книги: OCR → авто-поиск",
+  "pattern": false,
+  "en": "A book page: OCR → Auto",
   "files": [
    "web/js/presets-images.js"
   ]
@@ -27210,14 +27378,6 @@
   "key": "Битовая плоскость: где спрятаны данные",
   "pattern": false,
   "en": "Bit plane: where the data hides",
-  "files": [
-   "web/js/presets-tour.js"
-  ]
- },
- {
-  "key": "В RAR5 с зашифрованными заголовками без пароля не видно даже имён файлов. Нода 7-Zip с паролем открывает список; «Запись (артефакт)» достаёт нужный файл.",
-  "pattern": false,
-  "en": "In a RAR5 with encrypted headers even the file names are hidden without the password. The 7-Zip node with the password opens the list; \"Entry (artifact)\" extracts a file.",
   "files": [
    "web/js/presets-tour.js"
   ]
@@ -27375,6 +27535,14 @@
   ]
  },
  {
+  "key": "Пароль lighthouse → north, east, south, west → Base64 → текст",
+  "pattern": false,
+  "en": "Password lighthouse → north, east, south, west → Base64 → text",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
   "key": "Пример одной операции: ключ и параметры уже стоят в ноде",
   "pattern": false,
   "en": "An example of one operation: the key and parameters are already set in the node",
@@ -27386,6 +27554,14 @@
   "key": "Самый быстрый первый шаг с незнакомым файлом: вытащить из байтов всё, что похоже на текст. Фильтр key|step оставляет нужные строки — они видны даже без распаковки архива.",
   "pattern": false,
   "en": "The fastest first step with an unknown file: pull everything that looks like text out of the bytes. The key|step filter keeps the useful lines; they show even without unpacking the archive.",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "сделано для программы (WinRAR, tests/fixtures/archives/vault-lighthouse.rar)",
+  "pattern": false,
+  "en": "made for the program (WinRAR, tests/fixtures/archives/vault-lighthouse.rar)",
   "files": [
    "web/js/presets-tour.js"
   ]
@@ -27427,14 +27603,6 @@
   "key": "Ссылки в ARG часто «обезврежены» (hxxp, [.], пробелы) или перевёрнуты. «Поиск ссылок» находит их и ID, похожие на YouTube, Drive, Catbox, Pastebin, и восстанавливает адрес; кнопка «проверить» узнаёт через локальный сервер, существует ли страница.",
   "pattern": false,
   "en": "ARG links are often defanged (hxxp, [.], spaces) or reversed. \"Link finder\" finds them and IDs that look like YouTube, Drive, Catbox, Pastebin, and restores the address; the check button asks the local server whether the page exists.",
-  "files": [
-   "web/js/presets-tour.js"
-  ]
- },
- {
-  "key": "тесты libarchive (BSD-2-Clause), test_read_format_rar5_encrypted_filenames",
-  "pattern": false,
-  "en": "the libarchive tests (BSD-2-Clause), test_read_format_rar5_encrypted_filenames",
   "files": [
    "web/js/presets-tour.js"
   ]
@@ -27536,17 +27704,9 @@
   ]
  },
  {
-  "key": "RAR с паролем (7-Zip)",
+  "key": "RAR с паролем: четыре части → послание",
   "pattern": false,
-  "en": "A password-protected RAR (7-Zip)",
-  "files": [
-   "web/js/presets-tour.js"
-  ]
- },
- {
-  "key": "RAR5 с зашифрованными именами, пароль password → 4 файла",
-  "pattern": false,
-  "en": "RAR5 with encrypted names, password password → 4 files",
+  "en": "A password RAR: four parts → a message",
   "files": [
    "web/js/presets-tour.js"
   ]
@@ -27571,6 +27731,14 @@
   "key": "SSTV: картинка из звука → QR",
   "pattern": false,
   "en": "SSTV: a picture from audio → QR",
+  "files": [
+   "web/js/presets-tour.js"
+  ]
+ },
+ {
+  "key": "vault.rar — RAR5 с зашифрованными заголовками: без пароля не видно даже имён файлов. Пароль lighthouse (маяк — разгадка прошлых примеров) открывает список: east, north, south, west. По отдельности каждая часть — бессмысленный обрывок Base64. Стороны света читают по часовой стрелке от севера: север, восток, юг, запад — в таком порядке части подключены к «Склейке файлов». Склеенный Base64 раскодируется в последнюю запись смотрителя.",
+  "pattern": false,
+  "en": "vault.rar is a RAR5 with encrypted headers: without the password even the file names are hidden. The password lighthouse (the answer of the previous examples) opens the list: east, north, south, west. Each part alone is a meaningless piece of Base64. Compass points are read clockwise from north: north, east, south, west, and that is the order in which the parts go into \"Join files\". The joined Base64 decodes into the keeper’s last entry.",
   "files": [
    "web/js/presets-tour.js"
   ]
@@ -28346,14 +28514,6 @@
   ]
  },
  {
-  "key": "Номера циклов",
-  "pattern": false,
-  "en": "Loop numbers",
-  "files": [
-   "web/js/profile.js"
-  ]
- },
- {
   "key": "Пары цифр +23",
   "pattern": false,
   "en": "Digit pairs +23",
@@ -28493,14 +28653,6 @@
   "key": "Спойлер к финалу",
   "pattern": false,
   "en": "Finale spoiler",
-  "files": [
-   "web/js/profile.js"
-  ]
- },
- {
-  "key": "Табличка 836 в «Белом пространстве» (около 0:43) — номер цикла, который идёт в этом видео. За все видео видны циклы 836, 837, 838 и 839; пятое видео так и называется «839». Объяснение — Polus_Landau.",
-  "pattern": false,
-  "en": "The 836 sign in “White space” (around 0:43) is the number of the loop shown in that video. Across all the videos the loops 836, 837, 838 and 839 appear; the fifth video is even called “839”. Explanation by Polus_Landau.",
   "files": [
    "web/js/profile.js"
   ]
@@ -29525,6 +29677,14 @@
   "key": "составное: строки решены по отдельности",
   "pattern": false,
   "en": "compound: lines solved separately",
+  "files": [
+   "web/js/solver.js"
+  ]
+ },
+ {
+  "key": "строки склеены в одну",
+  "pattern": false,
+  "en": "lines joined into one",
   "files": [
    "web/js/solver.js"
   ]

@@ -4,7 +4,7 @@
 
 Every node, example, dossier and keyboard in the app, generated from the live registries by `tools/gen_functions_doc.js` (do not edit by hand). How the pieces work inside is described in [HOW-IT-WORKS.md](HOW-IT-WORKS.md).
 
-**133** operations (function nodes), **34** special nodes, **173** examples, **17** built-in dossiers.
+**133** operations (function nodes), **34** special nodes, **175** examples, **17** built-in dossiers.
 
 ## Contents
 
@@ -210,6 +210,7 @@ Recognises text locally, with no internet, when running through the local server
   - Language — options: **English**, Русский, Українська, English + Русский, Русский + English, Українська + English, EN + RU + UK
   - Digits only — default: off
   - Preprocessing — options: **auto (try several)**, as is + upscale, auto contrast, auto contrast + denoise, lift shadows (dark frames), black & white, invert
+  - Lines in the output — options: **as in the picture**, join into one (no spaces), separated by spaces
 
 #### Image: QR / barcode `img_qr`
 
@@ -1705,6 +1706,7 @@ Open any example from the **Examples** menu or with a link such as `http://127.0
 - **Dr. Langeskov: Base32 from two pieces** · `dl-base32` — Two interrupted Base32 runs from message 5346044, joined by hand<br>answer: `d I'm so happy with how it's turned out. Luckily we only lost a couple of violinists and b`
 - **Dr. Langeskov: ASCII85 → coordinates** · `dl-ascii85` — 1c6mG1,UpL2BXt32)RBQ1GA → 45.925596 8.559730<br>answer: `45.925596 8.559730`
 - **Dr. Langeskov: a file name → hex → Caesar −1** · `dl-scottie` — 74647075756a66 → tdpuujf → scottie (an SSTV mode hint)<br>answer: `scottie`
+- **Dr. Langeskov: SSTV without VIS (Scottie S1)** · `dl-sstv` — Audio → mode from the line period → a keypad picture<br>manual: The node decodes the audio; the answer is a picture in the Result node
 
 ### Killing Floor 2: From a Friend
 
@@ -1726,6 +1728,7 @@ Open any example from the **Examples** menu or with a link such as `http://127.0
 - **SGA photo: “the play nears its final act”** · `img-sga-poem` — gmtcf gjl[jlbn r abyfkmyjve frne → пьеса подходит к финальному акту<br>answer: `пьеса подходит к финальному акту скоро я уравновешу чаши весов сердце тьмы зовёт тебя след` · manual: Needs an image: recognition works on pixels, the auto search only works on text
 - **SGA photo: “the key is split into three parts”** · `img-sga-key` — nt,t ye;ty kbim rk.x → тебе нужен лишь ключ<br>answer: `тебе нужен лишь ключ он разбит на три части удачи` · manual: Needs an image: recognition works on pixels, the auto search only works on text
 - **Dark frame: brighten → OCR → pairs +23** · `img-vrfneo` — Barely visible digits in the sky → “тЫ Не СпАсешЬ НХ”<br>answer: `тЫ Не СпАсешЬ НХ` · manual: Needs the image and an OCR run with the Recognise button; the digits themselves are solved by the auto search (the ru-leet example)
+- **A book page: OCR → Auto** · `img-book-digits` — Five lines of digits → one line → pairs +23 → a Catbox link<br>manual: Needs the image and an OCR run with the Recognise button; the digits themselves are solved by the auto search (the catbox example)
 
 ### Audio and compressed data
 
@@ -1857,7 +1860,7 @@ Open any example from the **Examples** menu or with a link such as `http://127.0
 - **Picture metadata and data after the end** · `tour-png-meta` — logbook.png → a comment and 246 bytes after IEND<br>manual: The browser parses the picture; Auto works with text
 - **A ZIP inside a picture** · `tour-zip-in-png` — logbook.png → archive → logbook.txt → the line with key<br>manual: Nodes take the file apart; Auto works with text
 - **Strings from a file** · `tour-strings` — Readable phrases right in the file bytes<br>manual: Nodes take the file apart; Auto works with text
-- **A password-protected RAR (7-Zip)** · `tour-rar-password` — RAR5 with encrypted names, password password → 4 files<br>manual: 7-Zip runs in the browser (WebAssembly)
+- **A password RAR: four parts → a message** · `tour-rar-password` — Password lighthouse → north, east, south, west → Base64 → text<br>manual: 7-Zip runs in the browser (WebAssembly)
 - **An archive in two parts** · `tour-join-parts` — Two Base64 halves → ZIP → note.txt: the code 0451<br>answer: `Both halves were needed: the code is 0451.` · manual: Nodes take the file apart; Auto works with text
 
 ## Built-in dossiers
@@ -1878,7 +1881,7 @@ The **Profile** tab shows these dossiers; you can also write your own and keep t
 - **Searching For a World That Doesn’t Exist** (2025–2026, Minecraft / video / Google Drive / PDF) — 1 stages, 1 sources, 0 examples. In a very brief flash of the inventory, the first character of each item name is taken and the item count controls the case: one light block gives “1”, three zombie heads give an uppercase “Z”, vine gives “v”. The charac…
 - **I Love Bees** (2004, web / GPS / payphones / audio / physical media) — 1 stages, 1 sources, 0 examples. In August 2004 the site published first 220, then 210 GPS positions, then times. At the appointed moment the matching payphone rang; the right codeword marked success and released a new sound file.
 - **Killing Floor 2: From a Friend** (2017, Steam announcements / PNG / video / WAV / RAR) — 6 stages, 2 sources, 3 examples. An announcement with Caesar shifts (text −3, path −6) led to thestart.png; then a columnar transposition with a significant double space, a hidden part of an image, a spectrogram with Enigma, a Vigenère with an unusual k…
-- **Dr. Langeskov** (2015, the crowscrowscrows.com site / MP3 with SSTV / PNG / a PDF in parts) — 8 stages, 2 sources, 6 examples. Messages on the site hid binary, hex, Base64, Base32 and ASCII85 strings; the MP3s carried SSTV pictures (Scottie S1 without a VIS header), the file name 74647075756a66 was the hint scottie, and a PDF was cut into a “.pd…
+- **Dr. Langeskov** (2015, the crowscrowscrows.com site / MP3 with SSTV / PNG / a PDF in parts) — 8 stages, 2 sources, 7 examples. Messages on the site hid binary, hex, Base64, Base32 and ASCII85 strings; the MP3s carried SSTV pictures (Scottie S1 without a VIS header), the file name 74647075756a66 was the hint scottie, and a PDF was cut into a “.pd…
 - **76543** (2017–2018, Discord bot / web / a physical cache / QR) — 6 stages, 1 sources, 2 examples. A long Vigenère with the key argsevensixfivefourthree (found by the Python engine without hints), a phonetic alphabet in prose (BE2DA394), primes and arithmetic, a dark QR with erased finder patterns and the QR of a phys…
 - **Steam Winter 2015** (2015, Steam: a comic, cards, WAV, search) — 5 stages, 1 sources, 1 examples. A cover barcode, faint symbols on the cards (a Dungeon Master system), three WAVs with a spectral password and Japanese speech, a phonetic alphabet in the narration and the anagram BULLET HELL.
 

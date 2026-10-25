@@ -7,10 +7,10 @@
 </p>
 
 <p align="center">
-  <img alt="версия" src="https://img.shields.io/badge/%D0%B2%D0%B5%D1%80%D1%81%D0%B8%D1%8F-1.3.5-1976d2">
+  <img alt="версия" src="https://img.shields.io/badge/%D0%B2%D0%B5%D1%80%D1%81%D0%B8%D1%8F-1.3.6-1976d2">
   <img alt="платформы" src="https://img.shields.io/badge/Windows%20%7C%20macOS%20%7C%20Linux-3b4252">
   <img alt="python" src="https://img.shields.io/badge/python-3.9%2B-3776ab">
-  <img alt="тесты" src="https://img.shields.io/badge/%D1%82%D0%B5%D1%81%D1%82%D1%8B-797%20%D0%BF%D1%80%D0%BE%D1%85%D0%BE%D0%B4%D1%8F%D1%82-2e7d32">
+  <img alt="тесты" src="https://img.shields.io/badge/%D1%82%D0%B5%D1%81%D1%82%D1%8B-802%20%D0%BF%D1%80%D0%BE%D1%85%D0%BE%D0%B4%D1%8F%D1%82-2e7d32">
   <img alt="языки" src="https://img.shields.io/badge/UI-EN%20%C2%B7%20RU%20%C2%B7%20UK-6a1b9a">
   <img alt="офлайн" src="https://img.shields.io/badge/%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%D0%B5%D1%82-%D0%BE%D1%84%D0%BB%D0%B0%D0%B9%D0%BD-2e7d32">
   <img alt="сервер" src="https://img.shields.io/badge/%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D1%82%D0%BE%D0%BB%D1%8C%D0%BA%D0%BE%20127.0.0.1-455a64">
@@ -211,7 +211,7 @@ python server.py              # http://127.0.0.1:8765 opens in the browser
 
 ## 🧩 Примеры и досье
 
-В меню **Примеры** лежат **173 готовые доски** по задокументированным решениям реальных ARG (OldRoot, HERMatrix, Endermite, Cicada 3301, Portal, Sombra, Killing Floor 2, Dr. Langeskov, 76543, Steam Winter 2015 и другие), а также учебные наборы. Каждый пример сообщает, как он решается:
+В меню **Примеры** лежат **175 готовых досок** по задокументированным решениям реальных ARG (OldRoot, HERMatrix, Endermite, Cicada 3301, Portal, Sombra, Killing Floor 2, Dr. Langeskov, 76543, Steam Winter 2015 и другие), а также учебные наборы. Каждый пример сообщает, как он решается:
 
 | Метка | Значение |
 |---|---|
@@ -224,6 +224,8 @@ python server.py              # http://127.0.0.1:8765 opens in the browser
 
 - **Все операции** (86 примеров, в меню по группам): шифры с квадратом (Бифид, Трифид, ADFGVX, Плейфер…), шифры с ключом (Хилл, Энигма, Порта, бегущий ключ, RC4…), перестановки, символы и алфавиты (пигпен, руны, Брайль, стол зачарований), кодировки, числа и байты, скрытый текст (символы нулевой ширины, акростих, книжный шифр, ссылки), хеши и OpenSSL. Каждый пример — вход → нода → «Результат», а в заметке описание самой ноды и её параметры.
 - **Звук, картинки, файлы** (12 примеров): картинка **SSTV** (Robot 36) с QR-кодом, Морзе и DTMF из звука, сырые байты PCM; сообщение в младших битах пикселей, битовая плоскость, число, проступающее после XOR двух шумовых кадров; метаданные PNG, ZIP внутри PNG, строки из файла, RAR с паролем, архив из двух частей. Нода **«Результат»** показывает картинки и проигрывает звук.
+
+Меню разделено на **«Разборы ARG»** и **«Техники и обучение»**; каждая группа — папка, которая раскрывается по клику и остаётся раскрытой. Поиск находит примеры и по нодам внутри (наберите «SSTV», «OCR», «Бифид»), а в справке **?** у каждой ноды есть **«Открыть пример»** — доска, где эта нода уже подключена. У ноды **«Результат»** есть кнопка **«⬇ Скачать»** для любого файла: вырезанного архива, распакованного текста, обработанной картинки.
 
 На вкладке **Досье** показаны **17 встроенных досье** (по одному на ARG: период, платформа, этапы, приёмы, источники, открытые вопросы). Можно писать собственные досье; они хранятся в файле проекта.
 
@@ -270,7 +272,7 @@ python server.py              # http://127.0.0.1:8765 opens in the browser
 ## ✅ Тесты и разработка
 
 ```bash
-node --test                                              # 757 tests: engine, solver, examples, images, audio, files, OCR, archives, i18n
+node --test                                              # 762 tests: engine, solver, examples, images, audio, files, OCR, archives, i18n
 python -m unittest discover -s tests -p "test_*.py"      # server, data installer, Vigenère engine
 node tools/check_i18n.js                                 # interface strings outside T('ru', 'en')
 node tools/i18n_uk.js check                              # Ukrainian dictionary is complete

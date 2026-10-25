@@ -67,3 +67,9 @@
 .ex-all { font: inherit; font-size: 10.5px; text-transform: none; letter-spacing: 0; color: var(--accent); background: transparent; border: 1px solid var(--accent-dim); border-radius: 10px; padding: 0 8px; cursor: pointer; }
 .ex-all:hover { background: var(--accent-dim); color: var(--text); }
 .ex-empty { padding: 10px 9px; }
+/* Меню примеров: разделы и папки-группы */
+.ex-section { margin: 10px 4px 2px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.ex-folder { cursor: pointer; border-radius: 6px; padding: 5px 6px; text-transform: none; letter-spacing: 0; font-size: 12.5px; color: var(--text); }
+.ex-folder:hover { background: var(--panel-2); }
+.ex-folder.open { color: var(--accent); }
+.ex-folder-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

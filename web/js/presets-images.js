@@ -58,4 +58,24 @@
         'Needs the image and an OCR run with the Recognise button; the digits themselves are solved by the auto search (the ru-leet example)'),
     }, b);
   })();
+
+  // Страница книги: OCR читает пять строк цифр, авто-поиск сам склеивает их в одну и находит ссылку.
+  (function bookDigits() {
+    const b = new Board();
+    const img = b.add('artifact', 0, 0, { sample: 'book-digits' });
+    const ocr = b.then(img, 'img_ocr', { engine: 'auto', lang: 'eng', digits: true, preset: 'auto', lines: 'keep', rx: 370, ry: 122, rw: 480, rh: 190 });
+    b.then(ocr, 'view');
+    b.then(ocr, 'auto', { depth: '3' }, 0, 1);
+    b.note(0, 1, sourceNote(
+      T('Книга в игре: на странице длинное число, перенесённое на пять строк. 1) OCR (только цифры) читает выделенную область — нажми «Распознать». Значок ↵ в выводе — это только показ переноса строки, в данных его нет. 2) Авто-поиск видит, что строки — одно перенесённое число, склеивает их сам и решает: пары цифр → +23 → URL → ссылка Catbox. Если нужна сразу одна строка, в OCR есть «Строки на выходе: склеить в одну».',
+        'An in-game book: the page holds a long number wrapped over five lines. 1) OCR (digits only) reads the selected region: press Recognise. The ↵ sign in the output only shows a line break; it is not in the data. 2) Auto sees that the lines are one wrapped number, joins them by itself and solves it: digit pairs → +23 → URL → a Catbox link. For a single line straight away, OCR has “Lines in the output: join into one”.'),
+      T('кейс mslan, снимок экрана книги (прислан для тестов программы)', 'the mslan case, a screenshot of the book (sent for the program tests)'),
+      T('высокая: цифры совпадают с примером «Catbox: пары +23»', 'high: the digits match the “Catbox: pairs +23” example')));
+    push({
+      id: 'img-book-digits', title: T('Страница книги: OCR → авто-поиск', 'A book page: OCR → Auto'),
+      desc: T('Пять строк цифр → одна строка → пары +23 → ссылка Catbox', 'Five lines of digits → one line → pairs +23 → a Catbox link'),
+      expect: [], manual: T('Нужна картинка и запуск OCR кнопкой «Распознать»; сами цифры авто-поиск решает (пример catbox)',
+        'Needs the image and an OCR run with the Recognise button; the digits themselves are solved by the auto search (the catbox example)'),
+    }, b);
+  })();
 })(typeof self !== 'undefined' ? self : this);

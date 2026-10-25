@@ -79,6 +79,18 @@
   // Подготовка пробелов — явный шаг цепочки, оригинал не теряется. Пробелы бывают значимыми
   // (Морзе, мультитап, номера в книжном шифре), поэтому автопоиск пробует эти варианты
   // только в самом начале цепочки и как отдельные гипотезы.
+  // Один токен, разбитый на строки: в каждой строке нет пробелов, все строки из одного набора символов
+  // (цифры, hex, Base64/URL), и все, кроме последней, одной длины ±1 — так переносит книга или OCR.
+  const WRAP_SETS = [/^[0-9]+$/, /^[0-9a-fA-F]+$/, /^[A-Za-z0-9+/=_-]+$/];
+  function wrappedToken(body) {
+    const lines = body.split(/\r\n|\r|\n/).map((x) => x.trim()).filter(Boolean);
+    if (lines.length < 2 || body.length > 4000 || lines.some((x) => /\s/.test(x))) return false;
+    if (!WRAP_SETS.some((re) => lines.every((x) => re.test(x)))) return false;
+    const head = lines.slice(0, -1).map((x) => x.length);
+    return Math.min(...head) >= 6 && Math.max(...head) - Math.min(...head) <= 1 && lines[lines.length - 1].length <= Math.max(...head) + 1;
+  }
+  G.TextPrep = { wrappedToken };
+
   def({
     id: 'ws_prep', name: T('Подготовка пробелов', 'Whitespace preparation'), cat: 'Текст', prior: 2,
     desc: T('Обратимые варианты подготовки текста: обрезать края, привести переносы к LF, схлопнуть повторы, убрать все пробелы или только переносы строк. Невидимые символы нулевой ширины не трогает (для них есть отдельная нода).', 'Explicit text-preparation variants: trim the edges, normalise line breaks to LF, collapse repeats, remove all spaces or only line breaks. Zero-width characters are left alone (they have their own node).'),
@@ -103,6 +115,8 @@
       if (tokens.length >= 2 && body.length >= 6 && body.length <= 400 && tokens.every((x) => x.length <= 12)) {
         if (/[\r\n]/.test(body)) res.push({ mode: 'nolines' });
         res.push({ mode: 'nospace' });
+      } else if (wrappedToken(body)) {
+        res.push({ mode: 'nospace' });   // одна длинная строка, перенесённая по ширине страницы (OCR, книга, скриншот)
       }
       return res;
     },

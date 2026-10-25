@@ -5,7 +5,7 @@
 * lsb-lighthouse.png — сообщение в младших битах R, G, B (старший бит первым, по строкам), затем нулевой байт;
 * xor-a.png, xor-b.png — два шумовых кадра: по отдельности шум, XOR даёт число 7319;
 * photo-logbook.png — PNG с текстовым чанком tEXt и ZIP-архивом, дописанным после IEND;
-* rar5-locked.rar — копия tests/fixtures/archives/libarchive-rar5-encrypted-headers.rar (libarchive, BSD-2-Clause).
+* vault.rar — копия tests/fixtures/archives/vault-lighthouse.rar (RAR5, пароль lighthouse, четыре части; см. SOURCE.md).
 Всё детерминировано (свой ГПСЧ, фиксированные даты в ZIP).
 """
 import base64
@@ -150,9 +150,9 @@ def main():
     sample("xor-a", "noise-a.png", "image/png", a, "XOR двух картинок, кадр A (шум)")
     sample("xor-b", "noise-b.png", "image/png", b, "XOR двух картинок, кадр B (шум, XOR с A даёт 7319)")
     sample("photo-logbook", "logbook.png", "image/png", logbook_photo(), "PNG с tEXt и ZIP после IEND (logbook.txt)")
-    rar = (ROOT / "tests" / "fixtures" / "archives" / "libarchive-rar5-encrypted-headers.rar").read_bytes()
-    sample("rar5-locked", "locked.rar", "application/vnd.rar", rar,
-           "RAR5 с зашифрованными заголовками, пароль password (libarchive, BSD-2-Clause)")
+    rar = (ROOT / "tests" / "fixtures" / "archives" / "vault-lighthouse.rar").read_bytes()
+    sample("rar5-vault", "vault.rar", "application/vnd.rar", rar,
+           "RAR5 с зашифрованными заголовками, пароль lighthouse, четыре части north/east/south/west")
 
 
 if __name__ == "__main__":

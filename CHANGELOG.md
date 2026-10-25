@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.3.6 — OCR lines, folders, downloads, full RAR example
+
+- Auto: one long token wrapped over several lines (an OCR'd book page, a screenshot) is joined into one string as a second starting point that does not cost a search step. The five OCR lines of the mslan book now solve to the Catbox link like the single-line input. Ordinary multi-line text is not joined. The OCR node has "Lines in the output: as in the picture / join into one / separated by spaces"; the ↵ sign in node output only marks a line break and is not part of the data.
+- OCR and the other image nodes: drawing a region no longer starts below and to the right of the cursor when the board is zoomed (screen pixels were not converted back through the board scale).
+- File previews keep their proportions (a narrow screenshot was stretched to the node width).
+- The Result node has "⬇ Download" for any file it shows (a carved ZIP, an extracted text, a processed picture) and shows the text of a text file.
+- Examples menu: two parts, "ARG walkthroughs" and "Techniques and practice", with folder groups that remember being open; the search also matches the nodes inside an example. The ? help of every node opens an example with that node and lists more.
+- Examples: a book page (OCR → Auto, the mslan case, with the original screenshot); a password RAR5 decoded to the end (four parts north/east/south/west → Base64 → the message); Dr. Langeskov SSTV without a VIS header (Scottie S1, mode from the line period; the audio is a reconstruction). The mslan dossier lists its examples one by one; they stay in the technique groups of the menu.
+- Examples are laid out again when a node grows after an asynchronous result (archive listing, audio, OCR), so nodes no longer overlap.
+- mslan dossier: the 836 sign is no longer listed as unexplained (it is the loop number; loops 836–839 appear across the videos); the slot order 1-8-3-6 stays open.
+
 ## 1.3.5 — one example for every node, pictures in the Result node
 
 - 98 new examples, **one technique per example** (input → node → Result, with the node's own description and parameters in a note), grouped in the Examples menu: square ciphers, keyed ciphers, transpositions, symbols and alphabets, encodings, numbers and bytes, hidden text, hashes and OpenSSL, audio, images, files. Every operation and every special node now has an example (except the video frame viewer, which needs a real video); `tests/tour.test.js` fails if one is left without.

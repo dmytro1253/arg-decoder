@@ -53,6 +53,7 @@
       { key: 'lang', label: T('Язык', 'Language'), type: 'select', default: 'eng', options: LANGS },
       { key: 'digits', label: T('Только цифры', 'Digits only'), type: 'bool', default: false },
       { key: 'preset', label: T('Предобработка', 'Preprocessing'), type: 'select', default: 'auto', options: [['auto', T('авто (перебор)', 'auto (try several)')], ['plain', T('как есть + увеличение', 'as is + upscale')], ['contrast', T('автоконтраст', 'auto contrast')], ['denoise', T('автоконтраст + сглаживание', 'auto contrast + denoise')], ['dark', T('поднять тени (тёмные кадры)', 'lift shadows (dark frames)')], ['binary', T('чёрно-белое', 'black & white')], ['invert', T('инверсия', 'invert')]] },
+      { key: 'lines', label: T('Строки на выходе', 'Lines in the output'), type: 'select', default: 'keep', options: [['keep', T('как на картинке', 'as in the picture')], ['join', T('склеить в одну (без пробелов)', 'join into one (no spaces)')], ['space', T('через пробел', 'separated by spaces')]] },
     ].concat(N.REGION_PARAMS),
     compute([v], p, node) {
       const inp = N.input(v, p);
@@ -60,11 +61,13 @@
       node.state.inp = inp;
       const sig = [v, JSON.stringify(inp.region), p.engine, p.lang, p.digits, p.preset].join('|');
       node.state.sig = sig;
+      // Перенесённую по ширине страницы строку (цифры в книге) удобно сразу склеить для следующих нод.
+      const out = (t) => (p.lines === 'join' ? t.replace(/\s*\n\s*/g, '') : p.lines === 'space' ? t.replace(/\s*\n\s*/g, ' ') : t);
       const done = node.state.result;
-      if (done && done.sig === sig) return done.text;
+      if (done && done.sig === sig) return out(done.text);
       if (p.engine === 'auto' || p.engine === 'minecraft') {
         const r = pixelRead(inp.view);
-        if (r) { node.state.result = { sig, text: r.text, how: T('шрифт Minecraft', 'Minecraft font') + ' · ' + r.glyphs.length + ' ' + T('глифов', 'glyphs'), overlays: r.glyphs }; return r.text; }
+        if (r) { node.state.result = { sig, text: r.text, how: T('шрифт Minecraft', 'Minecraft font') + ' · ' + r.glyphs.length + ' ' + T('глифов', 'glyphs'), overlays: r.glyphs }; return out(r.text); }
         if (p.engine === 'minecraft') throw new Error(T('Шрифт Minecraft не распознан: выдели область с текстом (высота цифры 7 пикселей игры)', 'Minecraft font not recognised: select the text region (digits are 7 game pixels tall)'));
       }
       return undefined;

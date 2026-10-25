@@ -454,7 +454,39 @@
         const el = h(a.kind, 'out-image');
         el.controls = true; el.src = a.dataUrl;
         media.appendChild(el);
+      } else if (a.kind === 'text') {
+        const bytes = A.bytes(a.id);
+        const text = bytes ? new TextDecoder('utf-8').decode(bytes.subarray(0, MAX_PREVIEW)) : '';
+        pre.textContent = text + (bytes && bytes.length > MAX_PREVIEW ? ' …' : '');
       }
+      // Любой файл можно сохранить: промежуточный архив, распакованный текст, картинку после обработки.
+      const save = h('button', 'btn small out-save', T('⬇ Скачать ', '⬇ Download ') + (a.name || ''));
+      save.title = T('Сохранить этот файл на компьютер', 'Save this file to the computer');
+      save.onclick = () => this.downloadArtifact(handle);
+      media.appendChild(save);
+    }
+
+    // Скачивание файла-результата: исходные байты, а у картинок после обработки — PNG из пикселей.
+    downloadArtifact(handle) {
+      const A = G.Artifacts;
+      const a = A.get(A.idOf(handle));
+      if (!a) return;
+      const link = h('a');
+      link.download = a.name || 'file';
+      const done = (url, revoke) => { link.href = url; document.body.appendChild(link); link.click(); link.remove(); if (revoke) setTimeout(() => URL.revokeObjectURL(url), 1000); };
+      if (a.dataUrl) { done(a.dataUrl); return; }
+      let px = null;
+      try { px = a.kind === 'image' && G.ImgStore ? G.ImgStore.get(handle) : null; } catch (e) { px = null; }
+      if (px) {
+        const c = h('canvas');
+        c.width = px.width; c.height = px.height;
+        c.getContext('2d').putImageData(new ImageData(px.data, px.width, px.height), 0, 0);
+        if (!/\.png$/i.test(link.download)) link.download += '.png';
+        c.toBlob((blob) => blob && done(URL.createObjectURL(blob), true), 'image/png');
+        return;
+      }
+      const bytes = A.bytes(a.id);
+      if (bytes) done(URL.createObjectURL(new Blob([bytes], { type: a.mime || 'application/octet-stream' })), true);
     }
 
     // Предупреждения операции (потеря данных при разборе): значок ⚠ и текст под выводом.

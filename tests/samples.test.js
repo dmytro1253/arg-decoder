@@ -19,7 +19,7 @@ function sampleData(id) {
 }
 
 test('примеры с картинками есть, у каждого причина manual и заметка об источнике', () => {
-  assert.deepEqual([...images.map((p) => p.id)].sort(), ['audio-spectrogram', 'img-sga-key', 'img-sga-poem', 'img-vrfneo', 'tour-bit-plane', 'tour-dtmf', 'tour-lsb', 'tour-morse-audio', 'tour-png-meta', 'tour-rar-password', 'tour-sstv', 'tour-strings', 'tour-xor-images', 'tour-zip-in-png']);
+  assert.deepEqual([...images.map((p) => p.id)].sort(), ['audio-spectrogram', 'dl-sstv', 'img-book-digits', 'img-sga-key', 'img-sga-poem', 'img-vrfneo', 'tour-bit-plane', 'tour-dtmf', 'tour-lsb', 'tour-morse-audio', 'tour-png-meta', 'tour-rar-password', 'tour-sstv', 'tour-strings', 'tour-xor-images', 'tour-zip-in-png']);
   for (const p of images) {
     assert.ok(typeof p.manual === 'string' && p.manual.length > 15, p.id);
     assert.ok(p.nodes.some((n) => n.type === 'note' && /Source:/.test(n.params.text)), p.id);
@@ -27,7 +27,7 @@ test('примеры с картинками есть, у каждого при�
 });
 
 test('образцы в web/samples совпадают с фикстурами тестов', () => {
-  const pairs = { 'sga-poem': 'photo_2026-08-02_14-24-45.jpg', 'sga-key': 'photo_2026-10-18_23-16-05.jpg', vrfneo: 'vrfneo.jpg' };
+  const pairs = { 'sga-poem': 'photo_2026-08-02_14-24-45.jpg', 'sga-key': 'photo_2026-10-18_23-16-05.jpg', vrfneo: 'vrfneo.jpg', 'book-digits': 'mslan-book-digits.jpg' };
   for (const [id, fixture] of Object.entries(pairs)) {
     const s = sampleData(id);
     assert.equal(s.mime, 'image/jpeg');

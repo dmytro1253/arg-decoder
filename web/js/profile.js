@@ -169,7 +169,6 @@
       [T('Маска ID', 'ID mask'), T('_y_xPVyp_H_ → ответы на загадки + перебор → yygxPVyp8H0', '_y_xPVyp_H_ → riddle answers + brute force → yygxPVyp8H0')],
       [T('Склейка фрагментов', 'Joining fragments'), T('AgL + L2GD + LrgQ из описаний → AgLL2GDLrgQ', 'AgL + L2GD + LrgQ from the descriptions → AgLL2GDLrgQ')],
       [T('Прямой ID', 'Direct ID'), T('sQjZoZ5abcw — сначала проверить без преобразований', 'sQjZoZ5abcw — check it as is first')],
-      [T('Номера циклов', 'Loop numbers'), T('Табличка 836 в «Белом пространстве» (около 0:43) — номер цикла, который идёт в этом видео. За все видео видны циклы 836, 837, 838 и 839; пятое видео так и называется «839». Объяснение — Polus_Landau.', 'The 836 sign in “White space” (around 0:43) is the number of the loop shown in that video. Across all the videos the loops 836, 837, 838 and 839 appear; the fifth video is even called “839”. Explanation by Polus_Landau.')],
     ],
     chain: [
       [T('Найди меня', 'Find me'), 'AgLL2GDLrgQ', T('Склейка трёх фрагментов из описаний', 'Joining three fragments from the descriptions')],

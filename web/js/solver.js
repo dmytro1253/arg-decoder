@@ -292,6 +292,13 @@
     // Корни поиска: сам текст и кандидаты, вырезанные из него (hex, Base64… в логе).
     const root = { text: input, chain: [], a: inputA, dead: false, unjustified: 0, deterministic: true };
     beam.push(root);
+    // Одна длинная строка, перенесённая по ширине (OCR книги, скриншот): склеенный вариант — второй корень,
+    // без траты шага глубины, иначе на «пары цифр → +23 → URL» шагов уже не хватает.
+    if (G.TextPrep && G.TextPrep.wrappedToken(input.trim())) {
+      const joined = input.replace(/\s+/g, '');
+      const item = consider(joined, [{ op: 'ws_prep', params: { mode: 'nospace' } }], beam, root, {});
+      if (item) item.tags = [T('строки склеены в одну', 'lines joined into one')].concat(item.tags);
+    }
     if (G.Candidates && input.trim().length >= 20) {
       const total = input.trim().length;
       const all = G.Candidates.extract(input);
