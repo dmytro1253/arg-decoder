@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.3.0 — signed updates
+
+- Exact build: a release carries `build.json` (version, commit, size and SHA-256 of every program file) and `build.sig`, an Ed25519 signature made with the author's key; the public key is built into `updater.py`. The Debug tab shows the version, the kind of copy (signed release, Git clone, plain sources), commit, build id and signature, and checks every program file on request.
+- Update check: at start the page asks the local server, which asks GitHub at most once per 6 hours (can be turned off in Debug; `--offline` disables it). A bar offers the newer version with its release notes.
+- Safe install: the archive is trusted only through the signature, unpacked into `runtime/update/staging` and every file is compared with the signed list (extra files, `../` paths and the `data/`, `runtime/`, `.venv/` folders are refused, downgrades too). The launcher installs it before the server starts, after copying every replaced or deleted file into `runtime/update/backup` and writing a journal; any error rolls everything back, an interrupted install is rolled back at the next start, `--rollback` restores the previous version. Only files of the previous signed build are deleted; dictionaries and projects are never touched. Git clones are told to use `git pull`.
+- Launcher: `--update`, `--check-update`, `--verify`, `--rollback`; the interface's **Restart and install** asks the launcher to install and start the new version, and the page reloads itself. The start scripts are safe to replace while running.
+- Release builder `tools/release.py`: files from the HEAD commit (`git archive`, line endings by `.gitattributes`), version checks against `package.json` and this changelog, signature, and a self-check through the same verification users run.
+- The version lives in one place, `version.py`.
+
 ## 1.2.1 — fixes from the 2026-10-25 audit
 
 - Key bank: keys are saved in the project file and in autosave with their source and time, and come back after a reload (they used to be dropped); old projects with plain string keys open. Keys are shown as chips with × to delete; Enter adds a key. Fixed a CSS class clash with the on-screen keyboards.

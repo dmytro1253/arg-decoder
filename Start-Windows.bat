@@ -13,14 +13,18 @@ if not defined PY where python3 >nul 2>nul && python3 tools\pycheck.py >nul 2>nu
 if not defined PY call :bootstrap
 if not defined PY goto :nopython
 
-%PY% launcher.py %*
-if errorlevel 1 (
-    echo.
-    echo [!] Программа завершилась с ошибкой - подробности выше. Запусти ещё раз; не помогло - Start-Windows.bat --repair
-    echo [!] The program stopped with an error - see above. Run it again; if that fails - Start-Windows.bat --repair
-    pause
+rem Весь блок в скобках cmd читает сразу: обновление может заменить этот файл, пока программа работает.
+rem cmd reads the whole parenthesised block at once: an update may replace this file while the program runs.
+(
+    %PY% launcher.py %*
+    if errorlevel 1 (
+        echo.
+        echo [!] Программа завершилась с ошибкой - подробности выше. Запусти ещё раз; не помогло - Start-Windows.bat --repair
+        echo [!] The program stopped with an error - see above. Run it again; if that fails - Start-Windows.bat --repair
+        pause
+    )
+    goto :eof
 )
-goto :eof
 
 :bootstrap
 powershell -NoProfile -ExecutionPolicy Bypass -File "tools\bootstrap-python.ps1"

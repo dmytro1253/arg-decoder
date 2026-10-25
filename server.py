@@ -9,6 +9,7 @@ import functools
 import http.client
 import http.server
 import json
+import os
 import re
 import socket
 import sys
@@ -21,6 +22,7 @@ from pathlib import Path
 
 import backend
 import ocr_backend
+import updater
 
 WEB_DIR = Path(__file__).resolve().parent / "web"
 YT_ID = re.compile(r"^[A-Za-z0-9_-]{11}$")
@@ -28,6 +30,7 @@ OEMBED = "https://www.youtube.com/oembed?"
 TIMEOUT = 12
 USER_AGENT = "Mozilla/5.0 (ARG-Decoder local tool)"
 CACHE = {}
+RESTART = {"requested": False}
 CACHE_LOCK = threading.Lock()
 MAX_BODY = 64 * 1024
 OCR_MAX_BODY = 16 * 1024 * 1024   # изображение для локального OCR (Base64 PNG)
@@ -150,6 +153,12 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             return self.send_json({"ok": True, "version": backend.APP_VERSION})
         if parsed.path == "/api/diagnostics":
             return self.guarded(backend.diagnostics)
+        if parsed.path == "/api/update/status":
+            return self.guarded(updater.status)
+        if parsed.path == "/api/update/check":
+            return self.guarded(lambda: updater.check(force=query.get("force", [""])[0] == "1"))
+        if parsed.path == "/api/update/verify":
+            return self.guarded(updater.verify_install)
         if parsed.path == "/api/ocr/status":
             return self.guarded(ocr_backend.status)
         if parsed.path == "/api/vigenere/status":
@@ -189,6 +198,10 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             return self.guarded(lambda: backend.stop_job(query.get("id", [""])[0]))
         if parsed.path == "/api/ocr":
             return self.guarded(lambda: ocr_backend.recognize(body))
+        if parsed.path == "/api/update/download":
+            return self.guarded(start_update)
+        if parsed.path == "/api/update/restart":
+            return self.guarded(lambda: request_restart(self.server))
         return self.send_json({"error": "Нет такого адреса"}, 404)
 
     def guarded(self, fn):
@@ -210,6 +223,25 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def log_message(self, fmt, *args):
         if args and isinstance(args[0], str) and "/api/youtube" in args[0]:
             sys.stdout.write("  проверка: %s\n" % urllib.parse.unquote(str(args[0]).split("id=")[-1].split(" ")[0]))
+
+
+def start_update():
+    """Скачать и проверить обновление. Адреса берутся из своей проверки GitHub, а не из запроса страницы."""
+    info = updater.check()
+    if info.get("status") != "update" or not info.get("can_install"):
+        raise ValueError(info.get("mode_reason") or info.get("error") or "нет обновления, которое можно установить")
+    return updater.stage_async(info)
+
+
+def request_restart(server):
+    """Перезапуск для установки: сервер выходит с кодом RESTART_CODE, запускатор ставит обновление и запускает программу снова."""
+    if not updater.pending():
+        raise ValueError("обновление ещё не скачано и не проверено")
+    if os.environ.get("ARGDEC_LAUNCHER") != "1":
+        return {"ok": False, "manual": True, "message": "Программа запущена не через Start — закрой её окно и запусти снова: обновление установится при запуске"}
+    RESTART["requested"] = True
+    threading.Timer(0.3, server.shutdown).start()
+    return {"ok": True, "version": updater.pending().get("version")}
 
 
 def free_port(start):
@@ -246,6 +278,9 @@ def main():
         pass
     finally:
         server.server_close()
+    if RESTART["requested"]:
+        print("Перезапуск для установки обновления / Restarting to install the update…")
+        sys.exit(updater.RESTART_CODE)
 
 
 if __name__ == "__main__":

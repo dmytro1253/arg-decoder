@@ -7,10 +7,10 @@
 </p>
 
 <p align="center">
-  <img alt="version" src="https://img.shields.io/badge/version-1.2.1-1976d2">
+  <img alt="version" src="https://img.shields.io/badge/version-1.3.0-1976d2">
   <img alt="platforms" src="https://img.shields.io/badge/Windows%20%7C%20macOS%20%7C%20Linux-3b4252">
   <img alt="python" src="https://img.shields.io/badge/python-3.9%2B-3776ab">
-  <img alt="tests" src="https://img.shields.io/badge/tests-574%20passing-2e7d32">
+  <img alt="tests" src="https://img.shields.io/badge/tests-588%20passing-2e7d32">
   <img alt="languages" src="https://img.shields.io/badge/UI-EN%20%C2%B7%20RU%20%C2%B7%20UK-6a1b9a">
   <img alt="offline" src="https://img.shields.io/badge/works-offline-2e7d32">
   <img alt="server" src="https://img.shields.io/badge/server-127.0.0.1%20only-455a64">
@@ -47,7 +47,7 @@ ARG Decoder is a universal tool for alternate reality games. You paste a string 
 
 | Way | What to do |
 |---|---|
-| **Download a ZIP** (no Git needed) | On the GitHub page press **Code → Download ZIP**, or download the latest [release](https://github.com/dmytro1253/arg-decoder/releases). Unpack it anywhere, for example on the Desktop |
+| **Download a ZIP** (no Git needed) | Download `arg-decoder-X.Y.Z.zip` from the latest [release](https://github.com/dmytro1253/arg-decoder/releases) (it updates itself; **Code → Download ZIP** works too, but without the signed file list). Unpack it anywhere, for example on the Desktop |
 | **Clone with Git** | `git clone https://github.com/dmytro1253/arg-decoder.git` and `cd arg-decoder` |
 
 ### 2. Start it: one double-click installs everything
@@ -90,9 +90,25 @@ python server.py              # http://127.0.0.1:8765 opens in the browser
 | `python launcher.py --repair` | redo the whole setup |
 | `python launcher.py --offline` | never download anything |
 | `python launcher.py --check` | list the Pythons found and what they have |
+| `python launcher.py --update` | check for a new version, download it, verify the signature and install it |
+| `python launcher.py --check-update` | only say whether a new version exists |
+| `python launcher.py --verify` | compare every program file with the signed build list |
+| `python launcher.py --rollback` | bring back the version that was installed before the last update |
 | `python server.py --port 8798 --no-browser` | run the server on another port without opening a browser |
 
 Without Python at all you can open `web/index.html` directly: ciphers, images and examples work; the Python Vigenère engine, OCR and link checks need the local server.
+
+### 4. Updates
+
+The program knows its exact build: a release carries `build.json` (version, commit and the SHA-256 of every program file) and `build.sig`, an Ed25519 signature of that list made with the author's key. The **Debug** tab shows the version, commit, build id and signature, and **Check files** finds changed or missing files.
+
+At start the page asks the local server whether a newer release exists (GitHub is asked at most once per 6 hours; the check can be turned off in **Debug**, and `--offline` disables it). A bar offers **Update**:
+
+1. the server downloads the release archive and checks the signature of its file list with the public key built into the program; a forged or damaged archive is refused even if it is served by GitHub;
+2. the archive is unpacked into `runtime/update/staging`, and every file is compared with the signed list; extra files, `../` paths and the `data/`, `runtime/`, `.venv/` folders are refused;
+3. **Restart and install**: the launcher copies the files it replaces or deletes into `runtime/update/backup`, writes a journal, installs, and checks every file again. On any error everything is put back; an install interrupted by a power cut is rolled back at the next start. `python launcher.py --rollback` restores the previous version.
+
+Dictionaries, projects, `runtime/` and `.venv/` are never touched. Only files listed in the previous signed build are deleted. A Git clone is not updated from an archive: use `git pull`.
 
 <details>
 <summary><b>What the launcher does in detail</b></summary>
@@ -221,6 +237,7 @@ Almost everything is local. The server listens on `127.0.0.1` only, checks the `
 | First setup | first launch only | python.org (Python on Windows), PyPI (numpy, optional PyTorch), the GitHub release (dictionaries) |
 | OCR setup | first launch (or `launcher.py --ocr`) | PyPI (RapidOCR, ONNX Runtime), modelscope.cn (three ONNX models, SHA-256 checked) |
 | YouTube check | only when you press it | `youtube.com/oembed` |
+| Update check | at start, at most once per 6 hours (can be turned off in Debug) | `api.github.com` (release list), then the release files on `github.com` when you press Update |
 | Link check | only when you press it | a fixed list of known file and paste hosts; redirects are never followed |
 | Wikipedia in help cards | only when you click | your browser |
 
@@ -254,6 +271,8 @@ launcher.py                picks Python, installs dependencies, starts the serve
 setup_data.py              downloads and checks the dictionaries (SHA-256)
 setup_ocr.py / ocr_backend.py   local RapidOCR, installed by the first start (packages in runtime/ocr-python, models in data/ocr)
 server.py / backend.py     local server (127.0.0.1 only) and the Python Vigenère engine jobs
+updater.py / ed25519_ref.py   exact build, update check, signed install with rollback
+tools/release.py           builds and signs a release (author only)
 vigenere/                  built-in Vigenère solver (MIT, by Dmytro)
 data/                      corpora, EN/RU/UK dictionaries, language-model cache (~300 MB, downloaded)
 docs/                      HOW-IT-WORKS, FUNCTIONS (EN/RU/UK), screenshots

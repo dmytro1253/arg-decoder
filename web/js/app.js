@@ -363,6 +363,7 @@
         : T('Открой программу через «Запуск.bat», чтобы проверять ссылки. Всё остальное работает и так.', 'Start the program through the launcher to check links. Everything else works without it.');
     });
     G.API.ping();
+    if (G.Updates) G.Updates.init();
   }
 
   // ---------- запуск ----------

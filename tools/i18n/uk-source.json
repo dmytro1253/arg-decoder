@@ -1513,6 +1513,14 @@
   ]
  },
  {
+  "key": " — обновляется командой git pull",
+  "pattern": false,
+  "en": " — updated with git pull",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
   "key": " — полный движок Виженера недоступен",
   "pattern": false,
   "en": " — the full Vigenère engine is unavailable",
@@ -1521,9 +1529,81 @@
   ]
  },
  {
+  "key": " — точная сборка неизвестна",
+  "pattern": false,
+  "en": " — the exact build is unknown",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
   "key": " · версия установки ",
   "pattern": false,
   "en": " · setup version ",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": " · доступна ",
+  "pattern": false,
+  "en": " · available ",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": " · коммит ",
+  "pattern": false,
+  "en": " · commit ",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": " · подпись ",
+  "pattern": false,
+  "en": " · signature ",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": " · подпись сборки не сошлась",
+  "pattern": false,
+  "en": " · build signature mismatch",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": " · последняя",
+  "pattern": false,
+  "en": " · latest",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": " · сборка ",
+  "pattern": false,
+  "en": " · build ",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": " · файлов ",
+  "pattern": false,
+  "en": " · files ",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": " (нет)",
+  "pattern": false,
+  "en": " (missing)",
   "files": [
    "web/js/debug.js"
   ]
@@ -1541,7 +1621,8 @@
   "pattern": false,
   "en": " of ",
   "files": [
-   "web/js/debug.js"
+   "web/js/debug.js",
+   "web/js/updates.js"
   ]
  },
  {
@@ -1556,6 +1637,14 @@
   "key": " на месте",
   "pattern": false,
   "en": " present",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": " не совпадает со сборкой ",
+  "pattern": false,
+  "en": " does not match the build ",
   "files": [
    "web/js/debug.js"
   ]
@@ -1580,6 +1669,14 @@
   "key": " примеров, ",
   "pattern": false,
   "en": " examples, ",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": " совпадают с подписанной сборкой",
+  "pattern": false,
+  "en": " match the signed build",
   "files": [
    "web/js/debug.js"
   ]
@@ -1665,9 +1762,25 @@
   ]
  },
  {
+  "key": "Версия",
+  "pattern": false,
+  "en": "Version",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
   "key": "версия ",
   "pattern": false,
   "en": "version ",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "Версия кода",
+  "pattern": false,
+  "en": "Code version",
   "files": [
    "web/js/debug.js"
   ]
@@ -1753,9 +1866,25 @@
   ]
  },
  {
+  "key": "доступна ",
+  "pattern": false,
+  "en": "available ",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
   "key": "ещё не выполнялась (запуск не через Start)",
   "pattern": false,
   "en": "not done yet (not started with Start)",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "ещё не проверялось",
+  "pattern": false,
+  "en": "not checked yet",
   "files": [
    "web/js/debug.js"
   ]
@@ -1772,6 +1901,14 @@
   "key": "из первоисточников",
   "pattern": false,
   "en": "from the original sources",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "изменены или пропали: ",
+  "pattern": false,
+  "en": "changed or missing: ",
   "files": [
    "web/js/debug.js"
   ]
@@ -1812,6 +1949,30 @@
   "key": "Источник данных",
   "pattern": false,
   "en": "Data source",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "исходники",
+  "pattern": false,
+  "en": "source",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "исходники без подписанного списка файлов, версия ",
+  "pattern": false,
+  "en": "source files without a signed file list, version ",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "клон git, версия ",
+  "pattern": false,
+  "en": "git clone, version ",
   "files": [
    "web/js/debug.js"
   ]
@@ -1965,6 +2126,14 @@
   ]
  },
  {
+  "key": "Новая версия",
+  "pattern": false,
+  "en": "New version",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
   "key": "нужен локальный сервер",
   "pattern": false,
   "en": "needs the local server",
@@ -1976,6 +2145,14 @@
   "key": "Обязательные файлы",
   "pattern": false,
   "en": "Required files",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "откачено",
+  "pattern": false,
+  "en": "rolled back",
   "files": [
    "web/js/debug.js"
   ]
@@ -2045,9 +2222,49 @@
   ]
  },
  {
+  "key": "Последнее обновление",
+  "pattern": false,
+  "en": "Last update",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "прервано",
+  "pattern": false,
+  "en": "interrupted",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "Проверить обновления",
+  "pattern": false,
+  "en": "Check for updates",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "Проверить файлы",
+  "pattern": false,
+  "en": "Check files",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
   "key": "Проверки интерфейса",
   "pattern": false,
   "en": "Interface checks",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "проверять при запуске (раз в 6 часов, только GitHub)",
+  "pattern": false,
+  "en": "check at start (once per 6 hours, GitHub only)",
   "files": [
    "web/js/debug.js"
   ]
@@ -2077,9 +2294,57 @@
   ]
  },
  {
+  "key": "режим без интернета (--offline)",
+  "pattern": false,
+  "en": "offline mode (--offline)",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
   "key": "Резервная копия прошлого проекта",
   "pattern": false,
   "en": "Backup of the previous project",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "релиз",
+  "pattern": false,
+  "en": "release",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "релиз ",
+  "pattern": false,
+  "en": "release ",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "релизов программы ещё нет",
+  "pattern": false,
+  "en": "no program releases yet",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "Сборка",
+  "pattern": false,
+  "en": "Build",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "Сборка и обновления",
+  "pattern": false,
+  "en": "Build and updates",
   "files": [
    "web/js/debug.js"
   ]
@@ -2181,9 +2446,25 @@
   ]
  },
  {
+  "key": "установлено (откат: launcher.py --rollback)",
+  "pattern": false,
+  "en": "installed (undo: launcher.py --rollback)",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
   "key": "Файлы и хеши",
   "pattern": false,
   "en": "Files and hashes",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "Файлы программы",
+  "pattern": false,
+  "en": "Program files",
   "files": [
    "web/js/debug.js"
   ]
@@ -2213,6 +2494,14 @@
   ]
  },
  {
+  "key": "это последняя версия",
+  "pattern": false,
+  "en": "this is the latest version",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
   "key": "Языковые модели браузера",
   "pattern": false,
   "en": "Browser language models",
@@ -2224,6 +2513,14 @@
   "key": "Языковые модели Python",
   "pattern": false,
   "en": "Python language models",
+  "files": [
+   "web/js/debug.js"
+  ]
+ },
+ {
+  "key": "build.json есть, но подпись не сошлась: ",
+  "pattern": false,
+  "en": "build.json is present but its signature does not match: ",
   "files": [
    "web/js/debug.js"
   ]
@@ -28105,6 +28402,14 @@
   ]
  },
  {
+  "key": "в релизе нет подписанного архива обновления — скачай его со страницы релиза",
+  "pattern": false,
+  "en": "",
+  "files": [
+   "web/js/server-text.js"
+  ]
+ },
+ {
   "key": "готова",
   "pattern": false,
   "en": "",
@@ -28217,7 +28522,31 @@
   ]
  },
  {
+  "key": "нет адресов файлов обновления",
+  "pattern": false,
+  "en": "",
+  "files": [
+   "web/js/server-text.js"
+  ]
+ },
+ {
   "key": "нет движка",
+  "pattern": false,
+  "en": "",
+  "files": [
+   "web/js/server-text.js"
+  ]
+ },
+ {
+  "key": "нет обновления, которое можно установить",
+  "pattern": false,
+  "en": "",
+  "files": [
+   "web/js/server-text.js"
+  ]
+ },
+ {
+  "key": "нет прав на запись в папку программы — скачай новую версию со страницы релиза",
   "pattern": false,
   "en": "",
   "files": [
@@ -28241,6 +28570,14 @@
   ]
  },
  {
+  "key": "обновление ещё не скачано и не проверено",
+  "pattern": false,
+  "en": "",
+  "files": [
+   "web/js/server-text.js"
+  ]
+ },
+ {
   "key": "ожидает",
   "pattern": false,
   "en": "",
@@ -28257,7 +28594,31 @@
   ]
  },
  {
+  "key": "подпись не сходится — файл изменён или подделан",
+  "pattern": false,
+  "en": "",
+  "files": [
+   "web/js/server-text.js"
+  ]
+ },
+ {
+  "key": "подпись повреждена",
+  "pattern": false,
+  "en": "",
+  "files": [
+   "web/js/server-text.js"
+  ]
+ },
+ {
   "key": "построена из корпуса",
+  "pattern": false,
+  "en": "",
+  "files": [
+   "web/js/server-text.js"
+  ]
+ },
+ {
+  "key": "Программа запущена не через Start — закрой её окно и запусти снова: обновление установится при запуске",
   "pattern": false,
   "en": "",
   "files": [
@@ -28297,7 +28658,31 @@
   ]
  },
  {
+  "key": "у этой копии нет подписанного списка файлов (клон git или исходники)",
+  "pattern": false,
+  "en": "",
+  "files": [
+   "web/js/server-text.js"
+  ]
+ },
+ {
   "key": "Уже идёт подбор ключа — дождись его или останови",
+  "pattern": false,
+  "en": "",
+  "files": [
+   "web/js/server-text.js"
+  ]
+ },
+ {
+  "key": "это клон git — обнови командой git pull",
+  "pattern": false,
+  "en": "",
+  "files": [
+   "web/js/server-text.js"
+  ]
+ },
+ {
+  "key": "это не сборка ARG Decoder или формат новее, чем понимает эта версия",
   "pattern": false,
   "en": "",
   "files": [
@@ -28614,6 +28999,150 @@
   "en": "Python Vigenère solver: key ",
   "files": [
    "web/js/solver.js"
+  ]
+ },
+ {
+  "key": " МБ)",
+  "pattern": false,
+  "en": " MB)",
+  "files": [
+   "web/js/updates.js"
+  ]
+ },
+ {
+  "key": "Доступна версия {0} (у тебя {1}).",
+  "pattern": true,
+  "en": "Version ",
+  "files": [
+   "web/js/updates.js"
+  ]
+ },
+ {
+  "key": "Закрой окно программы и запусти Start снова — обновление установится при запуске.",
+  "pattern": false,
+  "en": "Close the program window and run Start again: the update is installed at start.",
+  "files": [
+   "web/js/updates.js"
+  ]
+ },
+ {
+  "key": "Обновить",
+  "pattern": false,
+  "en": "Update",
+  "files": [
+   "web/js/updates.js"
+  ]
+ },
+ {
+  "key": "Обновление {0} скачано и проверено.",
+  "pattern": true,
+  "en": "Update ",
+  "files": [
+   "web/js/updates.js"
+  ]
+ },
+ {
+  "key": "Обновление {0} скачано и проверено. Закрой окно программы и запусти Start снова — оно установится при запуске.",
+  "pattern": true,
+  "en": "Update ",
+  "files": [
+   "web/js/updates.js"
+  ]
+ },
+ {
+  "key": "Обновление не удалось: ",
+  "pattern": false,
+  "en": "The update failed: ",
+  "files": [
+   "web/js/updates.js"
+  ]
+ },
+ {
+  "key": "Перезапустить и установить",
+  "pattern": false,
+  "en": "Restart and install",
+  "files": [
+   "web/js/updates.js"
+  ]
+ },
+ {
+  "key": "Повторить",
+  "pattern": false,
+  "en": "Retry",
+  "files": [
+   "web/js/updates.js"
+  ]
+ },
+ {
+  "key": "Позже",
+  "pattern": false,
+  "en": "Later",
+  "files": [
+   "web/js/updates.js"
+  ]
+ },
+ {
+  "key": "Проверяю подпись и каждый файл…",
+  "pattern": false,
+  "en": "Checking the signature and every file…",
+  "files": [
+   "web/js/updates.js"
+  ]
+ },
+ {
+  "key": "программа не вернулась после перезапуска — запусти её снова (обновление установится при запуске или будет откачено)",
+  "pattern": false,
+  "en": "the program did not come back after the restart: start it again (the update is installed at start or rolled back)",
+  "files": [
+   "web/js/updates.js"
+  ]
+ },
+ {
+  "key": "сервер не ответил",
+  "pattern": false,
+  "en": "the server did not respond",
+  "files": [
+   "web/js/updates.js"
+  ]
+ },
+ {
+  "key": "Скачиваю обновление: ",
+  "pattern": false,
+  "en": "Downloading the update: ",
+  "files": [
+   "web/js/updates.js"
+  ]
+ },
+ {
+  "key": "Скачиваю обновление…",
+  "pattern": false,
+  "en": "Downloading the update…",
+  "files": [
+   "web/js/updates.js"
+  ]
+ },
+ {
+  "key": "Страница релиза",
+  "pattern": false,
+  "en": "Release page",
+  "files": [
+   "web/js/updates.js"
+  ]
+ },
+ {
+  "key": "Устанавливаю обновление и перезапускаю программу… Страница обновится сама.",
+  "pattern": false,
+  "en": "Installing the update and restarting… The page reloads by itself.",
+  "files": [
+   "web/js/updates.js"
+  ]
+ },
+ {
+  "key": "Что нового",
+  "pattern": false,
+  "en": "What's new",
+  "files": [
+   "web/js/updates.js"
   ]
  },
  {

@@ -36,6 +36,17 @@
     'Нет такого адреса': 'No such address', // i18n-ok: ответ сервера
     'Неверный YouTube ID': 'Invalid YouTube ID', // i18n-ok: ответ сервера
     'Этот сайт нельзя проверить автоматически — открой ссылку сам': 'This site cannot be checked automatically: open the link yourself', // i18n-ok: ответ сервера
+    'это клон git — обнови командой git pull': 'this is a git clone: update it with git pull', // i18n-ok: ответ сервера
+    'нет прав на запись в папку программы — скачай новую версию со страницы релиза': 'no write access to the program folder: download the new version from the release page', // i18n-ok: ответ сервера
+    'в релизе нет подписанного архива обновления — скачай его со страницы релиза': 'the release has no signed update archive: download it from the release page', // i18n-ok: ответ сервера
+    'обновление ещё не скачано и не проверено': 'the update is not downloaded and verified yet', // i18n-ok: ответ сервера
+    'нет обновления, которое можно установить': 'there is no update that can be installed', // i18n-ok: ответ сервера
+    'Программа запущена не через Start — закрой её окно и запусти снова: обновление установится при запуске': 'The program was not started with Start: close its window and start it again; the update is installed at start', // i18n-ok: ответ сервера
+    'подпись не сходится — файл изменён или подделан': 'the signature does not match: the file was changed or forged', // i18n-ok: ответ сервера
+    'подпись повреждена': 'the signature is damaged', // i18n-ok: ответ сервера
+    'у этой копии нет подписанного списка файлов (клон git или исходники)': 'this copy has no signed file list (a git clone or source files)', // i18n-ok: ответ сервера
+    'это не сборка ARG Decoder или формат новее, чем понимает эта версия': 'this is not an ARG Decoder build, or its format is newer than this version understands', // i18n-ok: ответ сервера
+    'нет адресов файлов обновления': 'no addresses of the update files', // i18n-ok: ответ сервера
   };
   const PATTERNS = [
     [/^Нет моделей OCR: (.*) — запусти «python setup_ocr.py»$/, 'OCR models are missing: $1; run “python setup_ocr.py”'], // i18n-ok: ответ сервера
@@ -50,6 +61,14 @@
     [/^YouTube ответил HTTP (\d+)$/, 'YouTube answered HTTP $1'], // i18n-ok: ответ сервера
     [/^Нет связи с YouTube: (.*)$/, 'No connection to YouTube: $1'], // i18n-ok: ответ сервера
     [/^Нет связи: (.*)$/, 'No connection: $1'], // i18n-ok: ответ сервера
+    [/^не удалось связаться с GitHub: (.*)$/, 'could not reach GitHub: $1'], // i18n-ok: ответ сервера
+    [/^подпись сделана неизвестным ключом «(.*)»$/, 'signed with an unknown key “$1”'], // i18n-ok: ответ сервера
+    [/^хеш файла (.*) не совпал$/, 'the hash of $1 does not match'], // i18n-ok: ответ сервера
+    [/^лишний файл в архиве: (.*)$/, 'an extra file in the archive: $1'], // i18n-ok: ответ сервера
+    [/^в архиве нет файлов: (.*)$/, 'files missing from the archive: $1'], // i18n-ok: ответ сервера
+    [/^архив повреждён: (.*)$/, 'the archive is damaged: $1'], // i18n-ok: ответ сервера
+    [/^архив обновления больше допустимого \((\d+) МБ\)$/, 'the update archive is larger than allowed ($1 MB)'], // i18n-ok: ответ сервера
+    [/^подписанная сборка (\S+) не новее установленной (\S+)$/, 'the signed build $1 is not newer than the installed $2'], // i18n-ok: ответ сервера
   ];
 
   /** Строка сервера на языке интерфейса. */

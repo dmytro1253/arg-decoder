@@ -23,7 +23,7 @@ ROOT = Path(__file__).resolve().parent
 DATA_DIR = ROOT / "data"
 os.environ.setdefault("VIGENERE_DATA", str(DATA_DIR))
 
-APP_VERSION = "1.2.1"
+from version import APP_VERSION  # noqa: E402 — одна версия на всю программу
 STARTED = time.time()
 WARM_ALPHABETS = ["en-26", "ru-33", "ru-32"]
 HASH_CHUNK = 4 * 1024 * 1024
@@ -212,6 +212,15 @@ def _setup_info():
             "python_version": done.get("python_version"), "date": done.get("date")}
 
 
+def _build_info():
+    """Точная сборка (релиз с подписью, клон git или исходники) — из updater."""
+    try:
+        import updater
+        return updater.build_info()
+    except Exception as exc:  # noqa: BLE001 — диагностика не должна падать
+        return {"kind": "unknown", "version": APP_VERSION, "error": str(exc)}
+
+
 def _data_source():
     """Откуда данные: архив релиза (совпадает с манифестом), первоисточники (отметка) или неполная установка."""
     try:
@@ -247,6 +256,7 @@ def diagnostics():
         "hashing": STATE["hashing"],
         "models": STATE["models"],
         "setup": _setup_info(),
+        "build": _build_info(),
         "datasource": _data_source(),
         "ocr": _ocr_status(),
         "jobs": [{"id": j["id"], "status": j["status"]} for j in _jobs_snapshot()],

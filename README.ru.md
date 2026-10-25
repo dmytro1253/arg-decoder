@@ -7,10 +7,10 @@
 </p>
 
 <p align="center">
-  <img alt="версия" src="https://img.shields.io/badge/%D0%B2%D0%B5%D1%80%D1%81%D0%B8%D1%8F-1.2.1-1976d2">
+  <img alt="версия" src="https://img.shields.io/badge/%D0%B2%D0%B5%D1%80%D1%81%D0%B8%D1%8F-1.3.0-1976d2">
   <img alt="платформы" src="https://img.shields.io/badge/Windows%20%7C%20macOS%20%7C%20Linux-3b4252">
   <img alt="python" src="https://img.shields.io/badge/python-3.9%2B-3776ab">
-  <img alt="тесты" src="https://img.shields.io/badge/%D1%82%D0%B5%D1%81%D1%82%D1%8B-574%20%D0%BF%D1%80%D0%BE%D1%85%D0%BE%D0%B4%D1%8F%D1%82-2e7d32">
+  <img alt="тесты" src="https://img.shields.io/badge/%D1%82%D0%B5%D1%81%D1%82%D1%8B-588%20%D0%BF%D1%80%D0%BE%D1%85%D0%BE%D0%B4%D1%8F%D1%82-2e7d32">
   <img alt="языки" src="https://img.shields.io/badge/UI-EN%20%C2%B7%20RU%20%C2%B7%20UK-6a1b9a">
   <img alt="офлайн" src="https://img.shields.io/badge/%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%D0%B5%D1%82-%D0%BE%D1%84%D0%BB%D0%B0%D0%B9%D0%BD-2e7d32">
   <img alt="сервер" src="https://img.shields.io/badge/%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D1%82%D0%BE%D0%BB%D1%8C%D0%BA%D0%BE%20127.0.0.1-455a64">
@@ -47,7 +47,7 @@ ARG Decoder — универсальный инструмент для игр в
 
 | Способ | Что сделать |
 |---|---|
-| **Скачать ZIP** (Git не нужен) | На странице GitHub нажмите **Code → Download ZIP** или скачайте последний [релиз](https://github.com/dmytro1253/arg-decoder/releases). Распакуйте куда угодно, например на рабочий стол |
+| **Скачать ZIP** (Git не нужен) | Скачайте `arg-decoder-X.Y.Z.zip` из последнего [релиза](https://github.com/dmytro1253/arg-decoder/releases) (он обновляется сам; **Code → Download ZIP** тоже подходит, но без подписанного списка файлов). Распакуйте куда угодно, например на рабочий стол |
 | **Клонировать через Git** | `git clone https://github.com/dmytro1253/arg-decoder.git` и `cd arg-decoder` |
 
 ### 2. Запустите: один двойной щелчок устанавливает всё
@@ -90,9 +90,25 @@ python server.py              # http://127.0.0.1:8765 opens in the browser
 | `python launcher.py --repair` | выполнить всю настройку заново |
 | `python launcher.py --offline` | ничего не скачивать |
 | `python launcher.py --check` | показать найденные Python и что в них есть |
+| `python launcher.py --update` | проверить новую версию, скачать, сверить подпись и установить |
+| `python launcher.py --check-update` | только узнать, есть ли новая версия |
+| `python launcher.py --verify` | сверить каждый файл программы с подписанным списком сборки |
+| `python launcher.py --rollback` | вернуть версию, стоявшую до последнего обновления |
 | `python server.py --port 8798 --no-browser` | запустить сервер на другом порту, не открывая браузер |
 
 Совсем без Python можно открыть `web/index.html` напрямую: шифры, изображения и примеры работают; движку Виженера на Python, OCR и проверке ссылок нужен локальный сервер.
+
+### 4. Обновления
+
+Программа знает свою точную сборку: в релизе лежат `build.json` (версия, коммит и SHA-256 каждого файла программы) и `build.sig` — подпись Ed25519 этого списка ключом автора. Вкладка **Отладка** показывает версию, коммит, номер сборки и подпись, а кнопка **Проверить файлы** находит изменённые и пропавшие файлы.
+
+При запуске страница спрашивает локальный сервер, нет ли релиза новее (GitHub спрашивается не чаще раза в 6 часов; проверку можно выключить в **Отладке**, а `--offline` отключает её). Появляется полоса с кнопкой **Обновить**:
+
+1. сервер скачивает архив релиза и проверяет подпись списка файлов открытым ключом, встроенным в программу; поддельный или повреждённый архив отклоняется, даже если его отдаёт GitHub;
+2. архив распаковывается в `runtime/update/staging`, и каждый файл сверяется с подписанным списком; лишние файлы, пути `../` и папки `data/`, `runtime/`, `.venv/` отклоняются;
+3. **Перезапустить и установить**: запускатор копирует заменяемые и удаляемые файлы в `runtime/update/backup`, пишет журнал, устанавливает и снова проверяет каждый файл. При любой ошибке всё возвращается назад; установка, прерванная выключением питания, откатывается при следующем запуске. `python launcher.py --rollback` возвращает прошлую версию.
+
+Словари, проекты, `runtime/` и `.venv/` не трогаются. Удаляются только файлы из списка прошлой подписанной сборки. Клон Git архивом не обновляется: используйте `git pull`.
 
 <details>
 <summary><b>Что лаунчер делает подробно</b></summary>
@@ -221,6 +237,7 @@ python server.py              # http://127.0.0.1:8765 opens in the browser
 | Первая настройка | только при первом запуске | python.org (Python в Windows), PyPI (numpy, необязательный PyTorch), релиз на GitHub (словари) |
 | Установка OCR | первый запуск (или `launcher.py --ocr`) | PyPI (RapidOCR, ONNX Runtime), modelscope.cn (три модели ONNX, сверка SHA-256) |
 | Проверка YouTube | только когда вы нажмёте | `youtube.com/oembed` |
+| Проверка обновлений | при запуске, не чаще раза в 6 часов (выключается в «Отладке») | `api.github.com` (список релизов), затем файлы релиза на `github.com`, когда вы нажмёте «Обновить» |
 | Проверка ссылки | только когда вы нажмёте | фиксированный список известных файловых хостингов и пастбинов; перенаправления никогда не выполняются |
 | Википедия в справочных карточках | только когда вы щёлкнете | ваш браузер |
 
@@ -253,6 +270,8 @@ Enable-GPU-Windows.bat     PyTorch with CUDA (optional)
 launcher.py                picks Python, installs dependencies, starts the server
 setup_data.py              downloads and checks the dictionaries (SHA-256)
 server.py / backend.py     local server (127.0.0.1 only) and the Python Vigenère engine jobs
+updater.py / ed25519_ref.py   exact build, update check, signed install with rollback
+tools/release.py           builds and signs a release (author only)
 vigenere/                  built-in Vigenère solver (MIT, by Dmytro)
 data/                      corpora, EN/RU/UK dictionaries, language-model cache (~300 MB, downloaded)
 docs/                      HOW-IT-WORKS, FUNCTIONS (EN/RU/UK), screenshots

@@ -19,3 +19,5 @@ node_modules/
 
 # Рабочие файлы перевода (не нужны программе) / translation work files
 /tools/i18n/chunks/
+/build.json
+/build.sig

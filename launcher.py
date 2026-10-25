@@ -9,6 +9,10 @@
     python launcher.py --offline  не скачивать ничего из интернета
     python launcher.py --gpu      дополнительно поставить PyTorch с CUDA (≈2.5 ГБ)
     python launcher.py --check    только показать найденные Python и выйти
+    python launcher.py --update   проверить, скачать и установить новую версию (подпись проверяется)
+    python launcher.py --check-update   только узнать, есть ли новая версия
+    python launcher.py --verify   сверить файлы программы с подписанным списком сборки
+    python launcher.py --rollback вернуть версию, стоявшую до последнего обновления
 """
 import glob
 import json
@@ -26,8 +30,9 @@ IS_WIN = os.name == "nt"
 RUNTIME = ROOT / "runtime"
 EMBED_PY = RUNTIME / "python" / "python.exe"
 SETUP_DONE = RUNTIME / "setup-done.json"
+RESTART_CODE = 75   # = updater.RESTART_CODE: сервер просит установить скачанное обновление
 SETUP_VERSION = 2   # 2: локальный OCR (RapidOCR) ставится вместе с программой
-OWN_ARGS = ("--gpu", "--ocr", "--no-ocr", "--check", "--repair", "--offline")
+OWN_ARGS = ("--gpu", "--ocr", "--no-ocr", "--check", "--repair", "--offline", "--update", "--check-update", "--verify", "--rollback")
 # Короткая проверка движка: модель загружается и Виженер расшифровывает известный пример.
 SELFTEST = (
     "import os,sys,json;sys.path.insert(0,os.getcwd())\n"
@@ -227,6 +232,45 @@ def choose_python(args):
     return py
 
 
+def update_step(args):
+    """Обновление до старта сервера: откат прерванной установки, установка скачанного, команды --update и др.
+    True — файлы программы заменены, и запускать нужно уже новый launcher.py."""
+    sys.path.insert(0, str(ROOT))
+    try:
+        import updater
+    except Exception as exc:  # noqa: BLE001 — сломанное обновление не должно мешать запуску
+        say("[!] Модуль обновления не загрузился: %s" % exc)
+        return False
+    if "--verify" in args:
+        res = updater.verify_install()
+        say("[%s] Файлы программы: %s" % ("✓" if res["ok"] else "!", "все %d совпадают с подписанной сборкой %s" % (res["checked"], res.get("version"))
+            if res["ok"] else res.get("reason") or "изменены %s; нет %s" % (", ".join(res["modified"][:10]) or "—", ", ".join(res["missing"][:10]) or "—")))
+        sys.exit(0 if res["ok"] else 1)
+    try:
+        if "--rollback" in args:
+            updater.rollback(say)
+            return True
+        updater.recover(say)
+        if "--check-update" in args or "--update" in args:
+            info = updater.check(force=True)
+            say("[*] Установлена %s; %s" % (info["current"], {
+                "update": "доступна %s — %s" % (info.get("latest"), info.get("page") or ""),
+                "current": "это последняя версия", "none": "релизов программы ещё нет", "offline": "режим без интернета",
+            }.get(info["status"], info.get("error", ""))))
+            if "--check-update" in args:
+                sys.exit(0)
+            if info["status"] == "update":
+                if not info.get("can_install"):
+                    say("[!] " + (info.get("mode_reason") or "это обновление нельзя установить автоматически"))
+                else:
+                    say("[*] Скачиваю и проверяю подпись / Downloading and verifying…")
+                    updater.stage(info)
+        return updater.apply_pending(say)
+    except updater.UpdateError as exc:
+        say("[!] Обновление: %s" % exc)
+        return False
+
+
 def main():
     # Консоль может быть в cp1251/cp866 — непечатаемые символы заменяем, а не падаем.
     for stream in (sys.stdout, sys.stderr):
@@ -238,6 +282,12 @@ def main():
     if "--check" in args:
         choose_python(args | {"--check"})
         return
+    if "--offline" in args:
+        os.environ["ARGDEC_OFFLINE"] = "1"
+    if update_step(args):
+        # Файлы заменены — дальше работает уже новый запускатор (у него может быть новая установка).
+        rest = [a for a in sys.argv[1:] if a not in ("--update", "--rollback")]
+        sys.exit(subprocess.call([sys.executable, str(ROOT / "launcher.py")] + rest, cwd=str(ROOT)))
     done = None if ("--repair" in args or "--gpu" in args) else read_setup()
     py = done["python"] if done else setup(args)
     if "--gpu" in args:
@@ -245,12 +295,20 @@ def main():
     if "--ocr" in args and done:
         # Повторная установка RapidOCR (при первой настройке он уже ставится): пакеты в runtime/ocr-python, модели в data/ocr.
         install_ocr(py, args)
-    env = dict(os.environ, PYTHONIOENCODING="utf-8", VIGENERE_DATA=str(ROOT / "data"))
+    env = dict(os.environ, PYTHONIOENCODING="utf-8", VIGENERE_DATA=str(ROOT / "data"), ARGDEC_LAUNCHER="1")
     extra = [a for a in sys.argv[1:] if a not in OWN_ARGS]
     try:
         code = subprocess.call([py, str(ROOT / "server.py")] + extra, env=env, cwd=str(ROOT))
     except KeyboardInterrupt:
         code = 0
+    if code == RESTART_CODE:
+        # Интерфейс скачал и проверил обновление и попросил перезапуск: ставим и запускаем новую версию
+        # без нового окна браузера — открытая страница сама перезагрузится.
+        updated = update_step(set())
+        rest = [a for a in sys.argv[1:] if a != "--update"] + ([] if "--no-browser" in sys.argv else ["--no-browser"])
+        if not updated:
+            say("[!] Обновление не установлено — запускаю прежнюю версию / starting the previous version")
+        sys.exit(subprocess.call([sys.executable, str(ROOT / "launcher.py")] + rest, cwd=str(ROOT)))
     sys.exit(code)
 
 

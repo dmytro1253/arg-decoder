@@ -55,7 +55,7 @@ The user double-clicks one file. What happens next (`Start-Windows.bat`, `launch
    * runs `setup_data.py`: reads `data.manifest.json` (file names, sizes, SHA-256), downloads `arg-decoder-data-v1.zip` from the release URL in `config/release.json` with resume (`.part` file + HTTP `Range`), progress and four retries, checks the archive hash, extracts only flat `data/<name>` entries (anything with `..` or sub-folders is ignored), and checks every extracted file against the manifest. If the release is unreachable it falls back to building the data from the original public sources (`vigenere/download_data.py`);
    * runs a self-test: the engine must decrypt `LMVCCIKB` with the key `LUCY` to `ASTEROID`;
    * writes `runtime/setup-done.json` and starts the server.
-4. **Flags.** `--repair` redoes everything, `--offline` never touches the network, `--gpu` adds PyTorch with CUDA, `--check` only verifies.
+4. **Flags.** `--repair` redoes everything, `--offline` never touches the network, `--gpu` adds PyTorch with CUDA, `--check` only verifies. Updates: `--update`, `--check-update`, `--verify` (program files against the signed build list) and `--rollback` (see the README, "Updates").
 5. **Warm-up.** When the server starts, `backend.py` loads the language models in the background (from the `.npz` cache, about 1–1.5 s each), hashes the dictionaries and probes CUDA. The **Debug** tab shows all of it.
 
 The model cache file name contains a *content signature*: SHA-256 of the first and last megabyte of each source file plus its size (`vigenere/core.py: data_signature`). A changed dictionary therefore rebuilds the model, while copying the folder to another computer keeps the cache valid.

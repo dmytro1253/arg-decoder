@@ -2,6 +2,9 @@
 # ARG Decoder — by Dmytro. Двойной клик в Finder (первый раз: правый клик → «Открыть»).
 # Double-click in Finder (the first time: right-click → Open).
 # Первый запуск сам ставит numpy и словари, дальше программа запускается сразу.
+# Всё в фигурных скобках: bash читает блок целиком, и обновление может заменить этот файл во время работы.
+# Everything is in braces: bash reads the block at once, so an update may replace this file while it runs.
+{
 cd "$(dirname "$0")" || exit 1
 PY=""
 for cand in python3 /opt/homebrew/bin/python3 /usr/local/bin/python3 /Library/Frameworks/Python.framework/Versions/Current/bin/python3; do
@@ -16,3 +19,5 @@ else
   open "web/index.html"
   read -r -p "Enter…"
 fi
+exit
+}

@@ -34,7 +34,7 @@
   // ---------- самопроверка интерфейса: модули, данные и короткие контрольные примеры ----------
   const MODULES = ['Codec', 'CipherOps', 'Scorer', 'Links', 'Solver', 'SolverEvidence', 'SolverEngines', 'SolverCrackers', 'VigenereCrack',
     'VigenereAuto', 'VigPython', 'Graph', 'GraphView', 'NodeTypes', 'Presets', 'Dossiers', 'KeyBank', 'Profiles', 'Ocr', 'PixelFont', 'Qr',
-    'Decompress', 'Enigma', 'Samples', 'I18n', 'API'];
+    'Decompress', 'Enigma', 'Samples', 'I18n', 'API', 'Updates'];
 
   function selfTest() {
     const checks = [];
@@ -153,7 +153,79 @@
     const ds = s && s.datasource;
     const dsText = !ds ? '—' : ds.source === 'release' ? T('архив релиза ', 'release archive ') + (ds.version || '') : ds.source === 'sources' ? T('из первоисточников', 'from the original sources') : T('неполные', 'incomplete');
     grid.appendChild(card(!ds ? 'wait' : ds.source === 'release' || ds.source === 'sources' ? 'ok' : 'bad', T('Словари', 'Dictionaries'), dsText));
+    grid.appendChild(versionCard(s));
     box.appendChild(grid);
+  }
+
+  // Карточка «Версия»: сборка и есть ли новая версия (по последней проверке страницы, без нового запроса к GitHub).
+  function versionCard(s) {
+    const b = s && s.build;
+    const c = G.Updates && G.Updates.check;
+    if (!b) return card('wait', T('Версия', 'Version'), '—');
+    if (b.kind === 'unverified') return card('bad', T('Версия', 'Version'), b.version + T(' · подпись сборки не сошлась', ' · build signature mismatch'));
+    if (c && c.status === 'update') return card('warn', T('Версия', 'Version'), b.version + T(' · доступна ', ' · available ') + c.latest);
+    const kind = { release: T('релиз', 'release'), git: 'git', source: T('исходники', 'source') }[b.kind] || b.kind;
+    return card('ok', T('Версия', 'Version'), b.version + ' · ' + kind + (c && c.status === 'current' ? T(' · последняя', ' · latest') : ''));
+  }
+
+  const short = (commit) => (commit ? String(commit).slice(0, 10) : '—');
+
+  function buildText(b) {
+    if (b.kind === 'release') return T('релиз ', 'release ') + b.version + T(' · коммит ', ' · commit ') + short(b.commit) + T(' · сборка ', ' · build ') + b.id + T(' · файлов ', ' · files ') + b.files + T(' · подпись ', ' · signature ') + b.key + ' ✓';
+    if (b.kind === 'git') return T('клон git, версия ', 'git clone, version ') + b.version + T(' · коммит ', ' · commit ') + short(b.commit) + T(' — обновляется командой git pull', ' — updated with git pull');
+    if (b.kind === 'unverified') return T('build.json есть, но подпись не сошлась: ', 'build.json is present but its signature does not match: ') + srv(b.error || '');
+    if (b.kind === 'source') return T('исходники без подписанного списка файлов, версия ', 'source files without a signed file list, version ') + b.version + T(' — точная сборка неизвестна', ' — the exact build is unknown');
+    return srv(b.error || b.kind);
+  }
+
+  function checkText(c) {
+    if (!c) return T('ещё не проверялось', 'not checked yet');
+    const when = c.checked ? ' · ' + new Date(c.checked * 1000).toLocaleString(LOCALE) : '';
+    if (c.status === 'update') return T('доступна ', 'available ') + c.latest + when;
+    if (c.status === 'current') return T('это последняя версия', 'this is the latest version') + when;
+    if (c.status === 'none') return T('релизов программы ещё нет', 'no program releases yet') + when;
+    if (c.status === 'offline') return T('режим без интернета (--offline)', 'offline mode (--offline)');
+    return srv(c.error || c.status);
+  }
+
+  let integrity = null;
+
+  function renderBuild(box, s) {
+    section(box, T('Сборка и обновления', 'Build and updates'));
+    const b = s && s.build;
+    if (!b) { box.appendChild(row(null, T('Сборка', 'Build'), T('нужен локальный сервер', 'needs the local server'))); return; }
+    box.appendChild(row(b.kind === 'unverified' ? false : b.kind === 'release' ? true : null, T('Сборка', 'Build'), buildText(b)));
+    if (b.kind === 'release' && b.consistent === false) box.appendChild(row(false, T('Версия кода', 'Code version'), b.code_version + T(' не совпадает со сборкой ', ' does not match the build ') + b.version));
+    if (integrity) {
+      const bad = integrity.modified.concat(integrity.missing.map((p) => p + T(' (нет)', ' (missing)')));
+      box.appendChild(row(integrity.ok ? true : integrity.checked ? false : null, T('Файлы программы', 'Program files'), integrity.ok
+        ? T('все ', 'all ') + integrity.checked + T(' совпадают с подписанной сборкой', ' match the signed build')
+        : integrity.checked ? T('изменены или пропали: ', 'changed or missing: ') + bad.slice(0, 12).join(', ') + (bad.length > 12 ? ' …+' + (bad.length - 12) : '') : srv(integrity.reason || '')));
+    }
+    const U = G.Updates;
+    const c = U && U.check;
+    box.appendChild(row(c ? (c.status === 'error' ? false : c.status === 'update' ? null : true) : null, T('Новая версия', 'New version'), checkText(c)));
+    const st = U && U.status;
+    if (st && st.last) box.appendChild(row(st.last.state === 'done' ? true : st.last.state === 'rolled-back' ? null : false, T('Последнее обновление', 'Last update'),
+      st.last.from + ' → ' + st.last.to + ' · ' + (st.last.date || '') + ' · ' + ({ done: T('установлено (откат: launcher.py --rollback)', 'installed (undo: launcher.py --rollback)'), 'rolled-back': T('откачено', 'rolled back'), applying: T('прервано', 'interrupted') }[st.last.state] || st.last.state)));
+    const actions = h('div', 'dbg-actions');
+    const verifyBtn = h('button', 'btn small', T('Проверить файлы', 'Check files'));
+    verifyBtn.onclick = async () => {
+      verifyBtn.disabled = true;
+      try { integrity = await G.API.get('/api/update/verify'); } catch (e) { integrity = { ok: false, checked: 0, modified: [], missing: [], reason: e.message }; }
+      render();
+    };
+    const checkBtn = h('button', 'btn small', T('Проверить обновления', 'Check for updates'));
+    checkBtn.onclick = async () => { checkBtn.disabled = true; if (U) await U.runCheck(true); render(); };
+    const auto = h('label', 'small');
+    const box2 = h('input');
+    box2.type = 'checkbox';
+    box2.checked = !U || U.autoEnabled();
+    box2.onchange = () => U && U.setAuto(box2.checked);
+    auto.append(box2, document.createTextNode(' ' + T('проверять при запуске (раз в 6 часов, только GitHub)', 'check at start (once per 6 hours, GitHub only)')));
+    actions.append(verifyBtn, checkBtn, auto);
+    if (!G.API.online) { verifyBtn.disabled = true; checkBtn.disabled = true; }
+    box.appendChild(actions);
   }
 
   function renderServer(box, s) {
@@ -246,6 +318,7 @@
     summary(box);
     section(box, T('Проверки интерфейса', 'Interface checks'));
     for (const c of last.selftest) box.appendChild(row(c.ok, c.name, c.detail));
+    renderBuild(box, s);
     renderServer(box, s);
     renderRecognition(box, s, last.browser);
     renderData(box, s);
