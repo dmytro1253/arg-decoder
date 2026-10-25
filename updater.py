@@ -346,7 +346,9 @@ def extract_verified(zpath, manifest, raw, sig_text, dest):
             rel = info.filename[len(top):]
             if rel in (BUILD_FILE, BUILD_SIG):
                 data = z.read(info)
-                if data != (raw if rel == BUILD_FILE else sig_text.encode("utf-8")):
+                # Подпись сравнивается по значению: концы строк в текстовом файле могли смениться при выпуске.
+                same = data == raw if rel == BUILD_FILE else data.decode("utf-8", "replace").strip() == sig_text.strip()
+                if not same:
                     raise UpdateError("%s в архиве не совпадает с подписанным" % rel)
                 (dest / rel).write_bytes(data)
                 continue
@@ -370,7 +372,7 @@ def extract_verified(zpath, manifest, raw, sig_text, dest):
         raise UpdateError("в архиве нет файлов: %s" % ", ".join(missing[:5]))
     if not (dest / BUILD_FILE).is_file():
         (dest / BUILD_FILE).write_bytes(raw)
-        (dest / BUILD_SIG).write_text(sig_text, encoding="utf-8")
+        (dest / BUILD_SIG).write_bytes(sig_text.encode("utf-8"))
 
 
 def stage(info, fetch_bytes=None, fetch_file=None):

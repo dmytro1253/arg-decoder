@@ -118,7 +118,7 @@ def build():
             info.compress_type = zipfile.ZIP_DEFLATED
             z.writestr(info, data)
     (DIST / (name + ".build.json")).write_bytes(raw)
-    (DIST / (name + ".build.sig")).write_text(sig, encoding="utf-8")
+    (DIST / (name + ".build.sig")).write_bytes(sig.encode("utf-8"))   # байтами: без CRLF на Windows
     with tempfile.TemporaryDirectory() as tmp:   # проверяем своё же: архив проходит ту же проверку, что у пользователя
         updater.extract_verified(zpath, manifest, raw, sig, Path(tmp) / "staging")
     print("Собрано: %s (%d файлов, %.1f МБ), сборка %s, коммит %s" % (zpath, len(files), zpath.stat().st_size / 1048576, updater.build_id(raw), commit[:10]))

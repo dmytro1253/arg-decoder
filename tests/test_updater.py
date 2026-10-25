@@ -126,6 +126,8 @@ class ManifestTest(UpdaterBase):
             "вне папки": make_zip(self.tmp / "x3.zip", files, "1.4.0", raw, sig, extra={"../escape.txt": b"x"}),
             "нет файлов": make_zip(self.tmp / "x4.zip", {"a.txt": b"hello"}, "1.4.0", raw, sig),
         }
+        crlf = make_zip(self.tmp / "crlf.zip", files, "1.4.0", raw, sig.replace("\n", "\r\n"))   # подпись с CRLF из Windows
+        updater.extract_verified(crlf, manifest, raw, sig, self.tmp / "st")
         for reason, zpath in cases.items():
             with self.assertRaisesRegex(updater.UpdateError, reason):
                 updater.extract_verified(zpath, manifest, raw, sig, self.tmp / "st")
