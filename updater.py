@@ -474,6 +474,19 @@ def _copy_atomic(src, dst, executable=False):
     os.replace(tmp, dst)
 
 
+def _drop_bytecode(paths):
+    """Удаляет __pycache__ записанных .py: у старого и нового файла может совпасть размер и секунда изменения,
+    и тогда Python загрузил бы устаревший байт-код вместо нового кода."""
+    for rel in paths:
+        if rel.endswith(".py"):
+            src = ROOT / rel
+            for pyc in src.parent.glob("__pycache__/%s.*.pyc" % src.stem):
+                try:
+                    pyc.unlink()
+                except OSError:
+                    pass   # кэш, который нельзя удалить, Python перепроверит при следующем изменении файла
+
+
 def _prune_empty_dirs(paths):
     for rel in paths:
         parent = (ROOT / rel).parent
@@ -534,6 +547,7 @@ def _apply(new, staging, log):
             _copy_atomic(staging / rel, ROOT / rel, new_paths[rel].get("exec", False))
         for rel in removed:
             (ROOT / rel).unlink()
+        _drop_bytecode(changed + removed)
         _prune_empty_dirs(removed)
         for rel in (BUILD_FILE, BUILD_SIG):
             _copy_atomic(staging / rel, ROOT / rel)
@@ -618,6 +632,7 @@ def _restore(journal):
             _copy_atomic(backup / rel, ROOT / rel, os.access(backup / rel, os.X_OK))
         for rel in journal["created"]:
             (ROOT / rel).unlink(missing_ok=True)
+        _drop_bytecode(to_restore + journal["created"])
         _prune_empty_dirs(journal["created"])
     except OSError as exc:
         _restore_failed(journal, "откат прерван ошибкой записи (%s)" % exc, to_restore)

@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-  <img alt="версія" src="https://img.shields.io/badge/%D0%B2%D0%B5%D1%80%D1%81%D1%96%D1%8F-1.3.2-1976d2">
+  <img alt="версія" src="https://img.shields.io/badge/%D0%B2%D0%B5%D1%80%D1%81%D1%96%D1%8F-1.3.3-1976d2">
   <img alt="платформи" src="https://img.shields.io/badge/Windows%20%7C%20macOS%20%7C%20Linux-3b4252">
   <img alt="python" src="https://img.shields.io/badge/python-3.9%2B-3776ab">
   <img alt="тести" src="https://img.shields.io/badge/%D1%82%D0%B5%D1%81%D1%82%D0%B8-595%20%D0%BF%D1%80%D0%BE%D1%85%D0%BE%D0%B4%D1%8F%D1%82%D1%8C-2e7d32">

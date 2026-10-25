@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.3 — no stale bytecode after an update or rollback
+
+- Installing an update and rolling it back now delete the `__pycache__` entries of every Python file they write or remove. When the old and new file had the same size and were written within the same second, Python could keep loading the old bytecode (found by updating a real 1.3.1 install to 1.3.2 and rolling back at once: the files were 1.3.1, the code still reported 1.3.2).
+
 ## 1.3.2 — narrow windows, rollback of 1.3.0 updates
 
 - Narrow windows: top-bar buttons that do not fit move, one by one from the end, into a "⋯" menu (the same buttons, not copies), so the language switch, the server status and the side-panel button never go off-screen. The "by Dmytro" label and the status text shrink first; the status becomes a coloured dot with the text in its tooltip.

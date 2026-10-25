@@ -145,7 +145,12 @@ class InstallTest(UpdaterBase):
         self.assertTrue(updater.verify_install()["ok"])
         self.stage(NEW, "1.4.0", exec_paths=("start.sh",))
         self.assertEqual(updater.pending()["version"], "1.4.0")
+        pyc = self.root / "__pycache__" / "launcher.cpython-312.pyc"   # байт-код старой версии
+        pyc.parent.mkdir()
+        pyc.write_bytes(b"stale")
         self.assertTrue(updater.apply_pending(log=lambda m: None))
+        self.assertFalse(pyc.exists(), "устаревший байт-код удалён после установки")
+        pyc.write_bytes(b"stale")
         for p, b in NEW.items():
             self.assertEqual((self.root / p).read_bytes(), b, p)
         self.assertFalse((self.root / "web" / "old.js").exists())
@@ -158,6 +163,7 @@ class InstallTest(UpdaterBase):
             self.assertEqual((info["kind"], info["version"], info["consistent"]), ("release", "1.4.0", True))
             self.assertTrue(updater.verify_install()["ok"])
             self.assertEqual(updater.rollback(log=lambda m: None), "1.3.0")
+        self.assertFalse(pyc.exists(), "и после отката")
         for p, b in OLD.items():
             self.assertEqual((self.root / p).read_bytes(), b, p)
         self.assertFalse((self.root / "web" / "new").exists())
