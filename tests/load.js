@@ -24,12 +24,13 @@ function loadEngine(extraFiles) {
 
 /**
  * Загружает ВСЕ браузерные скрипты из index.html (кроме vendor, debug, app, workspace) в контекст с заглушкой DOM.
+ * Из vendor берётся только jsQR: чистый JS без DOM, на нём работают примеры с QR.
  * Нужен тестам, которым требуется полный реестр операций, спец-нод и примеров.
  */
 function loadFull(lang) {
   const html = fs.readFileSync(path.join(WEB, '..', 'index.html'), 'utf8');
   const scripts = [...html.matchAll(/<script src="([^"]+)"/g)].map((m) => m[1])
-    .filter((s) => !s.startsWith('vendor') && !/(^|\/)(debug|app|workspace)\.js$/.test(s));
+    .filter((s) => (!s.startsWith('vendor') || s === 'vendor/jsqr/jsQR.js') && !/(^|\/)(debug|app|workspace)\.js$/.test(s));
   const stub = () => new Proxy(function () {}, { get: (t, k) => (k === Symbol.toPrimitive ? () => '' : stub()), apply: () => stub(), construct: () => stub() });
   const ctx = { atob, btoa, TextDecoder, TextEncoder, setTimeout, clearTimeout, console, Date, Math, URL, document: stub(), navigator: { language: lang || 'ru' } };
   ctx.self = ctx;

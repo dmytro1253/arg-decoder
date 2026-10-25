@@ -109,7 +109,7 @@
     ],
     techniques: [tech('hex → XOR', '23'), tech(T('Штрих-код → QR', 'Barcode → QR'), 'hex → binary → pixels'), tech('Base64 + OpenSSL', 'Salted__')],
     open: [T('Дальнейшее дешифрование Summer Games не решено; инструмент должен остановиться на распознанном контейнере.', 'Decrypting Summer Games further is unsolved; a tool should stop at the recognised container.'), T('Точное правило обработки пунктуации в XOR-стадии нужно восстановить из истории решения.', 'The exact punctuation handling of the XOR stage must be recovered from the solving history.')],
-    presets: ['so-base64-salted'],
+    presets: ['so-base64-salted', 'sombra-qr'],
   });
 
   D.register({

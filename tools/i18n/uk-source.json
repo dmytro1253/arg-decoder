@@ -26245,6 +26245,126 @@
   ]
  },
  {
+  "key": "111 групп по 16 бит. Ведущие нули групп (4/4/3) дают 12 + 12 + 13 = 37 значащих бит — ширина QR версии 5. Шаблоны поиска QR показывают порядок строк: в строке текста стоят строки QR L, 12 + L и 24 + L, короткая последняя строка — нижняя строка QR. Параметры выведены человеком из структуры дампа, без ответа; авто-поиск их не подбирает.",
+  "pattern": false,
+  "en": "111 groups of 16 bits. The leading zeros of the groups (4/4/3) give 12 + 12 + 13 = 37 significant bits, the width of a version-5 QR code. The QR finder patterns show the row order: a text line holds QR rows L, 12 + L and 24 + L, and the short last line is the bottom QR row. The parameters were derived by hand from the structure of the dump, without the answer; Auto does not find them.",
+  "files": [
+   "web/js/presets-extra.js"
+  ]
+ },
+ {
+  "key": "высокая: надпись задана при синтезе",
+  "pattern": false,
+  "en": "high: the text was set at synthesis",
+  "files": [
+   "web/js/presets-extra.js"
+  ]
+ },
+ {
+  "key": "высокая: QR читается целиком, без ремонта",
+  "pattern": false,
+  "en": "high: the QR code reads in full, without repair",
+  "files": [
+   "web/js/presets-extra.js"
+  ]
+ },
+ {
+  "key": "Группы битов → строки сетки → картинка → QR → испанское сообщение",
+  "pattern": false,
+  "en": "Bit groups → grid rows → image → QR → a Spanish message",
+  "files": [
+   "web/js/presets-extra.js"
+  ]
+ },
+ {
+  "key": "Звук и сжатые данные",
+  "pattern": false,
+  "en": "Audio and compressed data",
+  "files": [
+   "web/js/presets-extra.js"
+  ]
+ },
+ {
+  "key": "Ключ XOR выводится из заголовка zlib, сумма Adler-32 его подтверждает",
+  "pattern": false,
+  "en": "The XOR key comes from the zlib header, Adler-32 confirms it",
+  "files": [
+   "web/js/presets-extra.js"
+  ]
+ },
+ {
+  "key": "Надпись читает человек или OCR по сохранённой картинке",
+  "pattern": false,
+  "en": "A person or OCR on the saved picture reads the text",
+  "files": [
+   "web/js/presets-extra.js"
+  ]
+ },
+ {
+  "key": "Параметры геометрии заданы вручную; QR читается нодой",
+  "pattern": false,
+  "en": "The geometry parameters are set by hand; the QR node reads the code",
+  "files": [
+   "web/js/presets-extra.js"
+  ]
+ },
+ {
+  "key": "Сжатый слой под XOR. Ключ 2D выводит и авто-поиск: начало потока zlib (78 DA) известно заранее, а контрольная сумма Adler-32 подтверждает и ключ, и распаковку. Вставь Base64 в панель «Авто», чтобы проверить.",
+  "pattern": false,
+  "en": "A compressed layer under XOR. Auto derives the key 2D too: the start of a zlib stream (78 DA) is known in advance, and the Adler-32 checksum confirms both the key and the decompression. Paste the Base64 into the Auto panel to check.",
+  "files": [
+   "web/js/presets-extra.js"
+  ]
+ },
+ {
+  "key": "синтезирован для тестов программы (tests/fixtures/audio/synth.js)",
+  "pattern": false,
+  "en": "synthesised for the program tests (tests/fixtures/audio/synth.js)",
+  "files": [
+   "web/js/presets-extra.js"
+  ]
+ },
+ {
+  "key": "Синтетический звук: надпись PG56 нарисована частотами. В ARG так прячут пароли (Inscryption, Killing Floor 2). Выдели участок мышью, чтобы увеличить; кнопка PNG сохранит картинку для OCR.",
+  "pattern": false,
+  "en": "Synthetic audio: the text PG56 is drawn with frequencies. ARGs hide passwords like this (Inscryption, Killing Floor 2). Drag over a part to zoom in; the PNG button saves the picture for OCR.",
+  "files": [
+   "web/js/presets-extra.js"
+  ]
+ },
+ {
+  "key": "Текст в спектрограмме звука",
+  "pattern": false,
+  "en": "Text in an audio spectrogram",
+  "files": [
+   "web/js/presets-extra.js"
+  ]
+ },
+ {
+  "key": "Base64 → XOR → zlib → текст",
+  "pattern": false,
+  "en": "Base64 → XOR → zlib → text",
+  "files": [
+   "web/js/presets-extra.js"
+  ]
+ },
+ {
+  "key": "Sombra: бинарный дамп → QR",
+  "pattern": false,
+  "en": "Sombra: binary dump → QR",
+  "files": [
+   "web/js/presets-extra.js"
+  ]
+ },
+ {
+  "key": "WAV → спектрограмма → надпись PG56",
+  "pattern": false,
+  "en": "WAV → spectrogram → the text PG56",
+  "files": [
+   "web/js/presets-extra.js"
+  ]
+ },
+ {
   "key": "Вверху кадра есть строка цифр, которую глазом почти не видно. 1) «Поднять тени» и автоуровни вытягивают её из черноты. 2) OCR (tesseract, только цифры) читает выделенную область — нажми «Распознать» в ноде. 3) Дальше обычная цепочка кейса: пары цифр +23 → %-коды CP1251 → русский латиницей → «тЫ Не СпАсешЬ НХ».",
   "pattern": false,
   "en": "At the top of the frame there is a line of digits the eye can barely see. 1) “Shadow lift” and auto-levels pull it out of the black. 2) OCR (tesseract, digits only) reads the selected region: press “Recognise” in the node. 3) Then the usual chain of the case: digit pairs +23 → CP1251 %-codes → Russian in Latin letters → “тЫ Не СпАсешЬ НХ”.",

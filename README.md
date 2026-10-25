@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-  <img src="docs/screenshots/01-auto-and-graph.png" width="900" alt="ARG Decoder: a node graph on the canvas, the example guide and the auto-decrypt panel">
+  <img src="docs/screenshots/01-auto-and-graph.png" width="900" alt="ARG Decoder: the Sombra binary dump rebuilt into a QR code on the canvas, and Auto solving Base64 → XOR → zlib on the right">
 </p>
 
 <p align="center">
@@ -112,8 +112,8 @@ All screenshots are captures of the running program. Any example opens straight 
 <tr>
 <td width="50%"><img src="docs/screenshots/11-auto-python-engine.png" alt="Auto search with the Python Vigenère engine"><br>
 <b>Auto search with the Python engine.</b> <code>LMVCCIKB</code> without a key: the local Python solver finds <code>ASTEROID</code> (key <code>lucy</code>). The result is marked <i>likely</i>, not <i>confident</i>: eight letters are too few to prove a four-letter key.</td>
-<td width="50%"><img src="docs/screenshots/04-example-guide.png" alt="Example board with a step-by-step guide"><br>
-<b>Examples explain themselves.</b> Each example opens on its own board with a guide: where the cipher came from, every step with its result, the answer, source discrepancies, and whether it is solved blind, with a key or with context.</td>
+<td width="50%"><img src="docs/screenshots/04-xor-zlib.png" alt="Base64 → XOR → zlib → text as a graph"><br>
+<b>Compressed layers under XOR.</b> Base64 → XOR → zlib → text as a graph. Auto finds the same chain by itself: the zlib header gives the XOR key <code>2D</code>, and the Adler-32 checksum confirms it.</td>
 </tr>
 <tr>
 <td><img src="docs/screenshots/07-sga-photo.png" alt="SGA photo read glyph by glyph"><br>
@@ -134,10 +134,10 @@ All screenshots are captures of the running program. Any example opens straight 
 <b>Debug tab.</b> Modules, self-tests, Python, numpy, PyTorch, CUDA, model load times, dictionary hashes; one button copies a report.</td>
 </tr>
 <tr>
-<td><img src="docs/screenshots/02-image-shadow-lift-ocr.png" alt="Image pipeline"><br>
-<b>Image pipeline.</b> Levels, shadow lift, channels, bit planes, LSB, metadata, OCR, QR — every step keeps the original intact.</td>
-<td><img src="docs/screenshots/03-audio-spectrogram.png" alt="Spectrogram"><br>
-<b>Audio.</b> Spectrogram and waveform with selection, zoom and playback; Morse, DTMF and SSTV decoders.</td>
+<td><img src="docs/screenshots/02-sga-dark-photo.png" alt="SGA glyphs on a dark photo"><br>
+<b>SGA on a dark photo.</b> Otsu binarisation separates the enchanting-table glyphs from a dark background with a silhouette; the reader turns them back into Russian.</td>
+<td><img src="docs/screenshots/03-audio-spectrogram.png" alt="Text hidden in an audio spectrogram"><br>
+<b>Text hidden in audio.</b> The spectrogram shows the word PG56 drawn with frequencies. Drag to zoom, save a PNG for OCR; Morse, DTMF and SSTV decoders are next to it.</td>
 </tr>
 </table>
 

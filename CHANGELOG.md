@@ -10,6 +10,7 @@
 - OCR: short lines (42, 007, 0001) are no longer dropped; refinement works line by line and never loses lines; voting counts preprocessing families and confidence; stray fragments are dropped only without positional support and are reported; raw text, boxes and alternatives are kept; no character substitutions. Optional local RapidOCR (ONNX, experimental, `setup_ocr.py`) runs first in the auto order: Minecraft font → RapidOCR raw → RapidOCR contrast → tesseract.
 - New: Archive RAR/7z node (7-Zip 24.09 WebAssembly: RAR 4/5 with encrypted headers, 7z with AES, wrong passwords named), Enigma I/M3/M4, raw RC4, bit groups → grid rows (reproduces the Sombra QR), a Spanish language model for scoring.
 - New node *Decompress zlib / gzip / deflate*: format by the header or by hand, Adler-32 and CRC-32 checks, a result size limit, byte strings and files; in Auto it peels checksum-verified streams, and XOR keys of 1–3 bytes are derived from the zlib/gzip header as known plaintext. XOR, RC4 and the new node read a file artifact's bytes (XOR used to XOR the handle text).
+- New examples: Sombra binary dump → QR, Base64 → XOR → zlib → text, text in an audio spectrogram. README screenshots retaken without the example guide card.
 - Ukrainian: the EN/RU buttons work when the address has `?lang=uk`; accessible names and placeholders with line breaks are translated.
 
 ## 1.1.0 — after the 2026-10-23 audits

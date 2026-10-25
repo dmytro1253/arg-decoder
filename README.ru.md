@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-  <img src="docs/screenshots/01-auto-and-graph-ru.png" width="900" alt="ARG Decoder: граф нод на холсте, руководство по примеру и панель автодешифровки">
+  <img src="docs/screenshots/01-auto-and-graph-ru.png" width="900" alt="ARG Decoder: бинарный дамп Sombra, собранный в QR-код на холсте, а справа Auto решает Base64 → XOR → zlib">
 </p>
 
 <p align="center">
@@ -112,8 +112,8 @@ python server.py              # http://127.0.0.1:8765 opens in the browser
 <tr>
 <td width="50%"><img src="docs/screenshots/11-auto-python-engine-ru.png" alt="Автопоиск с движком Виженера на Python"><br>
 <b>Автопоиск с движком на Python.</b> <code>LMVCCIKB</code> без ключа: локальный решатель на Python находит <code>ASTEROID</code> (ключ <code>lucy</code>). Результат помечен как <i>вероятно</i>, а не <i>уверенно</i>: восьми букв мало, чтобы доказать четырёхбуквенный ключ.</td>
-<td width="50%"><img src="docs/screenshots/04-example-guide-ru.png" alt="Доска-пример с пошаговым руководством"><br>
-<b>Примеры объясняют себя сами.</b> Каждый пример открывается на своей доске с руководством: откуда взялся шифр, каждый шаг с результатом, ответ, расхождения в источниках и то, как решается пример: вслепую, с ключом или с контекстом.</td>
+<td width="50%"><img src="docs/screenshots/04-xor-zlib-ru.png" alt="Base64 → XOR → zlib → текст в виде графа"><br>
+<b>Сжатые слои под XOR.</b> Base64 → XOR → zlib → текст в виде графа. Auto находит ту же цепочку сам: заголовок zlib даёт ключ XOR <code>2D</code>, а контрольная сумма Adler-32 его подтверждает.</td>
 </tr>
 <tr>
 <td><img src="docs/screenshots/07-sga-photo-ru.png" alt="Фото SGA, прочитанное глиф за глифом"><br>
@@ -134,10 +134,10 @@ python server.py              # http://127.0.0.1:8765 opens in the browser
 <b>Вкладка отладки.</b> Модули, самотесты, Python, numpy, PyTorch, CUDA, время загрузки моделей, хеши словарей; одна кнопка копирует отчёт.</td>
 </tr>
 <tr>
-<td><img src="docs/screenshots/02-image-shadow-lift-ocr.png" alt="Конвейер обработки изображений"><br>
-<b>Конвейер изображений.</b> Уровни, подъём теней, каналы, битовые плоскости, LSB, метаданные, OCR, QR — каждый шаг сохраняет оригинал нетронутым.</td>
-<td><img src="docs/screenshots/03-audio-spectrogram.png" alt="Спектрограмма"><br>
-<b>Аудио.</b> Спектрограмма и осциллограмма с выделением, масштабом и воспроизведением; декодеры Морзе, DTMF и SSTV.</td>
+<td><img src="docs/screenshots/02-sga-dark-photo-ru.png" alt="Знаки SGA на тёмной фотографии"><br>
+<b>SGA на тёмной фотографии.</b> Бинаризация по Оцу отделяет знаки стола зачарований от тёмного фона с силуэтом, и читалка переводит их обратно в русский текст.</td>
+<td><img src="docs/screenshots/03-audio-spectrogram-ru.png" alt="Текст, спрятанный в спектрограмме звука"><br>
+<b>Текст, спрятанный в звуке.</b> На спектрограмме видна надпись PG56, нарисованная частотами. Выделите участок, чтобы увеличить, или сохраните PNG для OCR; рядом декодеры Морзе, DTMF и SSTV.</td>
 </tr>
 </table>
 

@@ -4,7 +4,7 @@
 
 Every node, example, dossier and keyboard in the app, generated from the live registries by `tools/gen_functions_doc.js` (do not edit by hand). How the pieces work inside is described in [HOW-IT-WORKS.md](HOW-IT-WORKS.md).
 
-**133** operations (function nodes), **34** special nodes, **72** examples, **17** built-in dossiers.
+**133** operations (function nodes), **34** special nodes, **75** examples, **17** built-in dossiers.
 
 ## Contents
 
@@ -1695,6 +1695,7 @@ Open any example from the **Examples** menu or with a link such as `http://127.0
 ### Sombra (Overwatch)
 
 - **Sombra: Base64 → Salted__ (unsolved)** · `so-base64-salted` — Stop at the OpenSSL container, not a “magic decrypt”<br>manual: A binary OpenSSL container: it needs a password that the sources do not give. Auto must not claim an “answer”.
+- **Sombra: binary dump → QR** · `sombra-qr` — Bit groups → grid rows → image → QR → a Spanish message<br>answer: `¿Estuvo eso facilito? Ahora que tengo su atención, déjenme se las pongo más difícil.` · manual: The geometry parameters are set by hand; the QR node reads the code
 
 ### Dr. Langeskov
 
@@ -1726,6 +1727,11 @@ Open any example from the **Examples** menu or with a link such as `http://127.0
 - **SGA photo: “the key is split into three parts”** · `img-sga-key` — nt,t ye;ty kbim rk.x → тебе нужен лишь ключ<br>answer: `тебе нужен лишь ключ он разбит на три части удачи` · manual: Needs an image: recognition works on pixels, the auto search only works on text
 - **Dark frame: brighten → OCR → pairs +23** · `img-vrfneo` — Barely visible digits in the sky → “тЫ Не СпАсешЬ НХ”<br>answer: `тЫ Не СпАсешЬ НХ` · manual: Needs the image and an OCR run with the Recognise button; the digits themselves are solved by the auto search (the ru-leet example)
 
+### Audio and compressed data
+
+- **Base64 → XOR → zlib → text** · `xor-zlib` — The XOR key comes from the zlib header, Adler-32 confirms it<br>answer: `The second fragment is hidden behind the clock tower; bring the brass key at dawn.`
+- **Text in an audio spectrogram** · `audio-spectrogram` — WAV → spectrogram → the text PG56<br>manual: A person or OCR on the saved picture reads the text
+
 ## Built-in dossiers
 
 The **Profile** tab shows these dossiers; you can also write your own and keep them in the project file.
@@ -1740,7 +1746,7 @@ The **Profile** tab shows these dossiers; you can also write your own and keep t
 - **Year Zero** (2007, USB / MP3 / video / web / physical media) — 7 stages, 1 sources, 1 examples. 14 Feb 2007: a USB at a concert, static at the end of a track forms an image in the spectrogram. 19 Feb: 2432.mp3, the spectrogram shows 1-216-333-1810. 22 Feb: a fast teaser frame → yearzero.nin.com/0024/. Then timecode…
 - **Oxenfree ARG** (2016, game / radio / phone / Twitter / web / audio / physical media) — 6 stages, 1 sources, 3 examples. Ten radio anomalies give callsigns and digits; sorting Able…Jig gives the phone (916)-936-3733. Then Morse by phone and in an SMS, stereo channels, reversed playback, an HTML alt with decimal bytes, and finally the anagr…
 - **Inscryption ARG** (2021, game / save files / web / floppies / physical media) — 4 stages, 1 sources, 1 examples. The string MYCOLOG1ST12\|P3RHAPS??\|BLOOD$L3TT3R8OX is not one cipher but three instructions to different sources. The key, joined with “\|”, is typed into the game console (Ctrl+C while Act 2 loads): decode log.txt, the…
-- **Sombra ARG (Overwatch)** (2016, Overwatch video / web / image) — 4 stages, 1 sources, 1 examples. A hex block in the Ana video at 1:16 + XOR 23 gives a repeating Spanish phrase and the piece “somb”; the second block gives “ra”. Vertical barcodes → hex → binary → pixels → QR. The Summer Games string is valid Base64 of…
+- **Sombra ARG (Overwatch)** (2016, Overwatch video / web / image) — 4 stages, 1 sources, 2 examples. A hex block in the Ana video at 1:16 + XOR 23 gives a repeating Spanish phrase and the piece “somb”; the second block gives “ra”. Vertical barcodes → hex → binary → pixels → QR. The Summer Games string is valid Base64 of…
 - **Searching For a World That Doesn’t Exist** (2025–2026, Minecraft / video / Google Drive / PDF) — 1 stages, 1 sources, 0 examples. In a very brief flash of the inventory, the first character of each item name is taken and the item count controls the case: one light block gives “1”, three zombie heads give an uppercase “Z”, vine gives “v”. The charac…
 - **I Love Bees** (2004, web / GPS / payphones / audio / physical media) — 1 stages, 1 sources, 0 examples. In August 2004 the site published first 220, then 210 GPS positions, then times. At the appointed moment the matching payphone rang; the right codeword marked success and released a new sound file.
 - **Killing Floor 2: From a Friend** (2017, Steam announcements / PNG / video / WAV / RAR) — 6 stages, 2 sources, 3 examples. An announcement with Caesar shifts (text −3, path −6) led to thestart.png; then a columnar transposition with a significant double space, a hidden part of an image, a spectrogram with Enigma, a Vigenère with an unusual k…
