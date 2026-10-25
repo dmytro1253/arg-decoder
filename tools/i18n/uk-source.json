@@ -28346,6 +28346,14 @@
   ]
  },
  {
+  "key": "Номера циклов",
+  "pattern": false,
+  "en": "Loop numbers",
+  "files": [
+   "web/js/profile.js"
+  ]
+ },
+ {
   "key": "Пары цифр +23",
   "pattern": false,
   "en": "Digit pairs +23",
@@ -28357,6 +28365,14 @@
   "key": "Подсказка автора",
   "pattern": false,
   "en": "Author’s hint",
+  "files": [
+   "web/js/profile.js"
+  ]
+ },
+ {
+  "key": "порядок слотов 1-8-3-6 в «Найди меня»",
+  "pattern": false,
+  "en": "the slot order 1-8-3-6 in “Find me”",
   "files": [
    "web/js/profile.js"
   ]
@@ -28482,9 +28498,9 @@
   ]
  },
  {
-  "key": "табличка 836, порядок слотов 1-8-3-6",
+  "key": "Табличка 836 в «Белом пространстве» (около 0:43) — номер цикла, который идёт в этом видео. За все видео видны циклы 836, 837, 838 и 839; пятое видео так и называется «839». Объяснение — Polus_Landau.",
   "pattern": false,
-  "en": "the 836 sign, slot order 1-8-3-6",
+  "en": "The 836 sign in “White space” (around 0:43) is the number of the loop shown in that video. Across all the videos the loops 836, 837, 838 and 839 appear; the fifth video is even called “839”. Explanation by Polus_Landau.",
   "files": [
    "web/js/profile.js"
   ]
