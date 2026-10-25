@@ -155,10 +155,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             return self.guarded(backend.diagnostics)
         if parsed.path == "/api/update/status":
             return self.guarded(updater.status)
-        if parsed.path == "/api/update/check":
-            return self.guarded(lambda: updater.check(force=query.get("force", [""])[0] == "1"))
-        if parsed.path == "/api/update/verify":
-            return self.guarded(updater.verify_install)
+        if parsed.path == "/api/update/check":   # ответ из кэша на 6 часов; принудительная проверка — POST
+            return self.guarded(updater.check)
         if parsed.path == "/api/ocr/status":
             return self.guarded(ocr_backend.status)
         if parsed.path == "/api/vigenere/status":
@@ -198,6 +196,10 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             return self.guarded(lambda: backend.stop_job(query.get("id", [""])[0]))
         if parsed.path == "/api/ocr":
             return self.guarded(lambda: ocr_backend.recognize(body))
+        if parsed.path == "/api/update/check":
+            return self.guarded(lambda: updater.check(force=True))
+        if parsed.path == "/api/update/verify":
+            return self.guarded(updater.verify_install)
         if parsed.path == "/api/update/download":
             return self.guarded(start_update)
         if parsed.path == "/api/update/restart":

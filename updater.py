@@ -56,6 +56,9 @@ TIMEOUT = 30
 CHUNK = 1 << 20
 VERSION_RE = re.compile(r"^v?(\d+)\.(\d+)\.(\d+)$")
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
+BAD_CHARS = re.compile(r'[<>"|?*\x00-\x1f~]')
+RESERVED = {"CON", "PRN", "AUX", "NUL"} | {"COM%d" % i for i in range(10)} | {"LPT%d" % i for i in range(10)}
+MAX_UNPACKED = 1 << 30      # сумма распакованных файлов сборки
 
 # Состояние фоновой загрузки — его читает интерфейс.
 STATE = {"phase": "idle", "version": None, "done": 0, "total": 0, "error": None}
@@ -107,7 +110,11 @@ def safe_path(path):
     parts = path.split("/")
     if path.startswith("/") or any(p in ("", ".", "..") for p in parts):
         return False
-    return parts[0] not in PROTECTED and path not in (BUILD_FILE, BUILD_SIG)
+    for part in parts:
+        # Windows: «data.» и «data » — это data, CON/NUL — устройства, а регистр не различается.
+        if part[-1] in ". " or BAD_CHARS.search(part) or part.split(".")[0].upper() in RESERVED:
+            return False
+    return parts[0].casefold() not in PROTECTED and path.casefold() not in (BUILD_FILE, BUILD_SIG)
 
 
 def sign_text(secret, key_id, raw):
@@ -332,6 +339,8 @@ def _download(url, target, limit):
 def extract_verified(zpath, manifest, raw, sig_text, dest):
     """Распаковывает архив сборки в dest, сверяя каждый файл с подписанным списком."""
     expected = {f["path"]: f for f in manifest["files"]}
+    if sum(f["bytes"] for f in manifest["files"]) > MAX_UNPACKED:
+        raise UpdateError("сборка больше допустимого размера")
     top = "%s-%s/" % (APP_ID, manifest["version"])
     found = set()
     if dest.exists():
@@ -345,6 +354,8 @@ def extract_verified(zpath, manifest, raw, sig_text, dest):
                 raise UpdateError("файл вне папки сборки: %s" % info.filename[:120])
             rel = info.filename[len(top):]
             if rel in (BUILD_FILE, BUILD_SIG):
+                if info.file_size > MAX_MANIFEST:
+                    raise UpdateError("%s в архиве слишком большой" % rel)
                 data = z.read(info)
                 # Подпись сравнивается по значению: концы строк в текстовом файле могли смениться при выпуске.
                 same = data == raw if rel == BUILD_FILE else data.decode("utf-8", "replace").strip() == sig_text.strip()
@@ -385,6 +396,7 @@ def stage(info, fetch_bytes=None, fetch_file=None):
     if not all(str(urls.get(k) or "").startswith(prefix) for k in ("zip", "manifest", "sig")):
         raise UpdateError("нет адресов файлов обновления")
     read = fetch_bytes or (lambda u: _read_url(u, MAX_MANIFEST))
+    (UPDATE_DIR / "pending.json").unlink(missing_ok=True)
     _set(phase="verifying", version=info.get("latest"), error=None, done=0, total=0)
     raw = read(urls["manifest"])
     sig_text = read(urls["sig"]).decode("utf-8", "replace")
@@ -411,8 +423,10 @@ def stage(info, fetch_bytes=None, fetch_file=None):
 
 def stage_async(info):
     """Запускает загрузку в фоне; ход виден через state()."""
-    if state()["phase"] in ("downloading", "verifying"):
-        return state()
+    with _lock:
+        if STATE["phase"] in ("downloading", "verifying"):
+            return dict(STATE)
+        STATE.update(phase="verifying", version=info.get("latest"), error=None, done=0, total=0)
 
     def run():
         try:
@@ -420,7 +434,6 @@ def stage_async(info):
         except (UpdateError, OSError, ValueError, urllib.error.URLError) as exc:
             _set(phase="error", error=str(exc))
             shutil.rmtree(UPDATE_DIR / "staging", ignore_errors=True)
-    _set(phase="verifying", version=info.get("latest"), error=None)
     threading.Thread(target=run, daemon=True).start()
     return state()
 
@@ -488,8 +501,10 @@ def apply_pending(log=print):
         discard_pending()
         raise UpdateError("подготовленное обновление отклонено: %s" % exc) from None
     log("[*] Устанавливаю обновление %s → %s / Installing update…" % (APP_VERSION, new["version"]))
-    _apply(new, staging, log)
-    discard_pending()
+    try:
+        _apply(new, staging, log)
+    finally:
+        discard_pending()   # и после отката: иначе неудачная установка повторялась бы при каждом запуске
     log("[✓] Обновление %s установлено / Update installed" % new["version"])
     return True
 
@@ -525,6 +540,7 @@ def _apply(new, staging, log):
     except (OSError, UpdateError) as exc:
         log("[!] Установка не удалась (%s) — возвращаю прошлую версию / rolling back" % exc)
         _restore(journal)
+        _prune_backups()
         raise UpdateError("установка не удалась и отменена: %s" % exc) from None
     journal["state"] = "done"
     _write_journal(journal)
@@ -532,14 +548,24 @@ def _apply(new, staging, log):
     _prune_backups()
 
 
+def _journal_ok(journal):
+    """Пути журнала — только файлы программы и папка копий внутри runtime/update/backup."""
+    backup = str(journal.get("backup", ""))
+    rels = [journal.get(k) for k in ("replaced", "created", "removed")]
+    if not re.match(r"^runtime/update/backup/[\w.-]+$", backup) or not all(isinstance(r, list) for r in rels):
+        return False
+    return all(safe_path(p) or p in (BUILD_FILE, BUILD_SIG) for r in rels for p in r)
+
+
 def _restore(journal):
+    if not _journal_ok(journal):
+        raise UpdateError("журнал обновления повреждён — откат невозможен, переустанови программу из релиза")
     backup = ROOT / journal["backup"]
     for rel in journal["replaced"] + journal["removed"]:
         if (backup / rel).is_file():
             _copy_atomic(backup / rel, ROOT / rel, os.access(backup / rel, os.X_OK))
     for rel in journal["created"]:
-        if safe_path(rel) or rel in (BUILD_FILE, BUILD_SIG):
-            (ROOT / rel).unlink(missing_ok=True)
+        (ROOT / rel).unlink(missing_ok=True)
     _prune_empty_dirs(journal["created"])
     journal["state"] = "rolled-back"
     _write_journal(journal)

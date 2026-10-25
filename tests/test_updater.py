@@ -105,7 +105,10 @@ class ManifestTest(UpdaterBase):
             updater.verify_manifest(raw, other)
 
     def test_unsafe_paths_rejected_even_when_signed(self):
-        for bad in ("../evil.py", "/etc/passwd", "data/words_en.txt", "runtime/x", ".git/config", "a\\b.py", "C:/x", "a//b", "build.json"):
+        for bad in ("../evil.py", "/etc/passwd", "data/words_en.txt", "runtime/x", ".git/config", "a\\b.py", "C:/x", "a//b", "build.json",
+                    # Windows: регистр, точка или пробел в конце, устройства, недопустимые символы
+                    "Data/words_en.txt", "RUNTIME/update/journal.json", ".GIT/config", "data./x", "data /x", "web/con.js", "web/NUL",
+                    "web/a.py.", "web/a.py ", "web/a?.js", "PROGRA~1/x", "Build.JSON"):
             self.assertFalse(updater.safe_path(bad), bad)
             _, raw, sig = make_build({bad: b"x"}, "1.4.0")
             with self.assertRaises(updater.UpdateError, msg=bad):
@@ -177,6 +180,26 @@ class InstallTest(UpdaterBase):
             self.assertEqual((self.root / p).read_bytes(), b, p)
         self.assertFalse((self.root / "web" / "new" / "feature.js").exists())
         self.assertTrue(updater.verify_install()["ok"])
+
+    def test_failed_install_is_not_retried_and_tampered_journal_is_refused(self):
+        self.install(OLD, "1.3.0")
+        self.stage(NEW, "1.4.0")
+        with mock.patch.object(updater, "_copy_atomic", side_effect=OSError("locked")):
+            with self.assertRaises((updater.UpdateError, OSError)):
+                updater.apply_pending(log=lambda m: None)
+        self.assertIsNone(updater.pending())
+        self.assertFalse(updater.apply_pending(log=lambda m: None))
+        outside = self.tmp / "outside.txt"
+        outside.write_bytes(b"keep me")
+        journal = {"state": "applying", "from": "1.3.0", "to": "1.4.0", "backup": "runtime/update/backup/x",
+                   "replaced": [], "created": [outside.as_posix()], "removed": []}
+        updater._write_journal(journal)
+        with self.assertRaisesRegex(updater.UpdateError, "журнал"):
+            updater.recover(log=lambda m: None)
+        updater._write_journal(dict(journal, created=[], backup="../../etc"))
+        with self.assertRaisesRegex(updater.UpdateError, "журнал"):
+            updater.recover(log=lambda m: None)
+        self.assertEqual(outside.read_bytes(), b"keep me")
 
     def test_interrupted_install_is_recovered_on_next_start(self):
         self.install(OLD, "1.3.0")

@@ -266,8 +266,11 @@ def update_step(args):
                     say("[*] Скачиваю и проверяю подпись / Downloading and verifying…")
                     updater.stage(info)
         return updater.apply_pending(say)
-    except updater.UpdateError as exc:
+    except (updater.UpdateError, OSError, ValueError) as exc:   # URLError — подкласс OSError
         say("[!] Обновление: %s" % exc)
+        return False
+    except Exception as exc:  # noqa: BLE001 — сбой обновления не должен мешать запуску прежней версии
+        say("[!] Обновление не удалось: %r" % exc)
         return False
 
 
@@ -305,7 +308,8 @@ def main():
         # Интерфейс скачал и проверил обновление и попросил перезапуск: ставим и запускаем новую версию
         # без нового окна браузера — открытая страница сама перезагрузится.
         updated = update_step(set())
-        rest = [a for a in sys.argv[1:] if a != "--update"] + ([] if "--no-browser" in sys.argv else ["--no-browser"])
+        once = ("--update", "--repair", "--gpu", "--ocr", "--rollback")
+        rest = [a for a in sys.argv[1:] if a not in once] + ([] if "--no-browser" in sys.argv else ["--no-browser"])
         if not updated:
             say("[!] Обновление не установлено — запускаю прежнюю версию / starting the previous version")
         sys.exit(subprocess.call([sys.executable, str(ROOT / "launcher.py")] + rest, cwd=str(ROOT)))

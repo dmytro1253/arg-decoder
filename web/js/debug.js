@@ -212,7 +212,7 @@
     const verifyBtn = h('button', 'btn small', T('Проверить файлы', 'Check files'));
     verifyBtn.onclick = async () => {
       verifyBtn.disabled = true;
-      try { integrity = await G.API.get('/api/update/verify'); } catch (e) { integrity = { ok: false, checked: 0, modified: [], missing: [], reason: e.message }; }
+      try { integrity = await G.API.post('/api/update/verify', {}); } catch (e) { integrity = { ok: false, checked: 0, modified: [], missing: [], reason: e.message }; }
       render();
     };
     const checkBtn = h('button', 'btn small', T('Проверить обновления', 'Check for updates'));

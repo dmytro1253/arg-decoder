@@ -47,7 +47,7 @@
     async runCheck(force) {
       if (!G.API.online) return null;
       try {
-        Updates.check = await G.API.get('/api/update/check' + (force ? '?force=1' : ''));
+        Updates.check = force ? await G.API.post('/api/update/check', {}) : await G.API.get('/api/update/check');
       } catch (e) {
         Updates.check = { status: 'error', error: e.message };
       }
